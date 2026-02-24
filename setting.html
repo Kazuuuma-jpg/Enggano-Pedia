@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pengaturan Akun – ADMIN ENGGANO</title>
+  <link rel="stylesheet" href="style2.css"/>
+  <style>
+    .pg-wrap{max-width:680px;margin:56px auto;padding:0 24px 100px}
+    .pg-badge-wrap{display:flex;justify-content:center;margin-bottom:32px}
+
+    /* Header */
+    .pg-header-card{background:linear-gradient(145deg,var(--ocean-dk) 0%,var(--ocean) 100%);border-radius:24px 24px 0 0;padding:38px 44px 34px;position:relative;overflow:hidden}
+    .pg-header-card::before{content:'';position:absolute;top:-50px;right:-50px;width:220px;height:220px;background:radial-gradient(circle,rgba(20,184,166,.2) 0%,transparent 70%);pointer-events:none}
+    .pg-header-card::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 22px);pointer-events:none}
+    .pg-header-inner{display:flex;align-items:center;gap:20px;position:relative;z-index:1}
+    .pg-header-text h2{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:700;color:#fff;margin-bottom:4px}
+    .pg-header-text p{font-size:.83rem;color:rgba(255,255,255,.55)}
+    .pg-header-icon{width:62px;height:62px;background:linear-gradient(135deg,rgba(20,184,166,.4),rgba(20,184,166,.15));border-radius:18px;display:grid;place-items:center;font-size:26px;border:2px solid rgba(20,184,166,.45);flex-shrink:0}
+    .pg-back-btn{margin-left:auto;display:flex;align-items:center;gap:7px;padding:9px 18px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:50px;color:rgba(255,255,255,.85);font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;text-decoration:none;transition:all .2s;flex-shrink:0}
+    .pg-back-btn:hover{background:rgba(255,255,255,.18);transform:translateX(-2px)}
+
+    /* Card & Tabs */
+    .pg-card{background:var(--white);border-radius:0 0 24px 24px;box-shadow:var(--shadow-lg);overflow:hidden}
+    .pg-tab-nav{display:flex;border-bottom:2px solid var(--sand-dk)}
+    .pg-tab-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:16px 10px;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:.84rem;font-weight:600;color:var(--text-lt);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s}
+    .pg-tab-btn:hover{color:var(--teal);background:rgba(13,148,136,.04)}
+    .pg-tab-btn.active{color:var(--teal);border-bottom-color:var(--teal);background:rgba(13,148,136,.05)}
+    .pg-panel{display:none;padding:36px 44px 44px}
+    .pg-panel.active{display:block}
+
+    /* Foto Profil */
+    .foto-section{display:flex;align-items:center;gap:28px;padding:24px;background:var(--sand);border-radius:16px;border:1.5px solid var(--sand-dk);margin-bottom:28px}
+    .foto-preview{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--ocean));display:grid;place-items:center;font-size:38px;border:3px solid rgba(13,148,136,.25);flex-shrink:0;overflow:hidden;position:relative}
+    .foto-preview img{width:100%;height:100%;object-fit:cover;display:none}
+    .foto-info h4{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:4px}
+    .foto-info p{font-size:.78rem;color:var(--text-lt);line-height:1.5;margin-bottom:14px}
+    .foto-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn-upload-foto{padding:9px 18px;background:var(--teal);color:#fff;border:none;border-radius:9px;font-family:'Outfit',sans-serif;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s}
+    .btn-upload-foto:hover{background:var(--ocean)}
+    .btn-hapus-foto{padding:9px 16px;background:transparent;color:var(--coral);border:1.5px solid var(--coral);border-radius:9px;font-family:'Outfit',sans-serif;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s}
+    .btn-hapus-foto:hover{background:rgba(224,80,80,.08)}
+    #input-foto{display:none}
+
+    /* Form */
+    .form-group{margin-bottom:20px}
+    .form-label{display:block;font-size:.77rem;font-weight:700;color:var(--text-md);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+    .form-label .req{color:var(--coral);margin-left:2px}
+    .input-wrap{position:relative}
+    .input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none}
+    .form-input{width:100%;padding:12px 16px 12px 42px;border:2px solid var(--sand-dk);border-radius:11px;font-family:'Outfit',sans-serif;font-size:.92rem;color:var(--text);background:var(--white);transition:all .2s;box-sizing:border-box}
+    .form-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.1)}
+    .form-input.error-field{border-color:#ef4444}
+    .form-hint{font-size:.74rem;color:var(--text-lt);margin-top:5px}
+    .form-hint.err{color:#ef4444}
+    .form-hint.ok{color:#059669}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+    /* Password strength */
+    .pw-bar-wrap{margin-top:8px}
+    .pw-bar{height:5px;border-radius:5px;background:var(--sand-dk);overflow:hidden;margin-bottom:5px}
+    .pw-bar-fill{height:100%;border-radius:5px;width:0%;transition:width .3s,background .3s}
+    .pw-bar-label{font-size:.73rem;color:var(--text-lt)}
+
+    /* Input password toggle */
+    .pw-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:15px;color:var(--text-lt);padding:0;line-height:1}
+
+    /* Save bar */
+    .form-actions{display:flex;gap:12px;margin-top:28px;padding-top:22px;border-top:1.5px solid var(--sand-dk)}
+    .btn-simpan{padding:13px 30px;background:linear-gradient(135deg,var(--teal),var(--ocean));color:#fff;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(13,148,136,.28)}
+    .btn-simpan:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(13,148,136,.38)}
+    .btn-batal{padding:13px 22px;border:2px solid var(--sand-dk);border-radius:12px;background:var(--sand);font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;color:var(--text-lt);cursor:pointer;transition:all .2s}
+    .btn-batal:hover{border-color:var(--text-lt);color:var(--text)}
+
+    /* Toast */
+    .save-toast{display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--teal);color:#fff;padding:13px 28px;border-radius:50px;font-size:.9rem;font-weight:600;box-shadow:0 8px 28px rgba(13,148,136,.4);z-index:9999;white-space:nowrap}
+
+    /* Logout Modal */
+    .logout-modal-backdrop{display:none;position:fixed;inset:0;background:rgba(7,45,64,.6);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;padding:20px}
+    .logout-modal-backdrop.open{display:flex}
+    .logout-modal{background:#fff;border-radius:20px;box-shadow:0 30px 80px rgba(7,45,64,.3);max-width:380px;width:100%;padding:36px 32px;text-align:center}
+    .logout-modal .lm-icon{font-size:44px;margin-bottom:16px}
+    .logout-modal h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:#072d40;margin-bottom:8px}
+    .logout-modal p{font-size:.875rem;color:#8fa3ad;line-height:1.6;margin-bottom:28px}
+    .logout-modal-btns{display:flex;gap:12px}
+    .btn-cancel-logout{flex:1;padding:13px;border:2px solid #e5e7eb;border-radius:12px;background:#f5f0e8;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;color:#6b7280;cursor:pointer}
+    .btn-confirm-logout{flex:1;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#e05050,#c0392b);font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;color:#fff;cursor:pointer}
+
+    /* Navbar Dropdown */
+    .akun-dropdown-wrap{position:relative}
+    .akun-trigger{display:flex;align-items:center;gap:8px;padding:8px 14px 8px 10px;background:rgba(20,184,166,.15);border:1.5px solid rgba(20,184,166,.4);border-radius:50px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.875rem;font-weight:600;cursor:pointer;transition:all .25s;white-space:nowrap}
+    .akun-trigger:hover{background:rgba(20,184,166,.28);border-color:rgba(20,184,166,.7)}
+    .akun-trigger.open{background:rgba(20,184,166,.3);border-color:rgba(20,184,166,.8)}
+    .akun-trigger .avatar{width:28px;height:28px;background:rgba(20,184,166,.3);border-radius:50%;display:grid;place-items:center;font-size:14px;border:1.5px solid rgba(20,184,166,.5)}
+    .dropdown-chevron{transition:transform .3s cubic-bezier(.34,1.56,.64,1);color:rgba(255,255,255,.8);flex-shrink:0}
+    .dropdown-chevron.rotated{transform:rotate(180deg)}
+    .akun-dropdown{position:absolute;top:calc(100% + 12px);right:0;width:280px;background:#fff;border-radius:20px;box-shadow:0 4px 6px rgba(0,0,0,.04),0 20px 60px rgba(7,45,64,.18),0 0 0 1px rgba(13,148,136,.12);overflow:hidden;z-index:1000;opacity:0;visibility:hidden;transform:translateY(-10px) scale(.97);transform-origin:top right;transition:opacity .22s,transform .22s cubic-bezier(.34,1.2,.64,1),visibility .22s}
+    .akun-dropdown.open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+    .akun-dropdown::before{content:'';position:absolute;top:-7px;right:22px;width:14px;height:14px;background:#fff;border-radius:3px;transform:rotate(45deg);box-shadow:-2px -2px 5px rgba(0,0,0,.04);z-index:-1}
+    .akun-dd-header{display:flex;align-items:center;gap:12px;padding:18px 18px 16px;background:linear-gradient(135deg,#072d40 0%,#0e6074 100%);position:relative;overflow:hidden}
+    .akun-dd-header::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 1px,transparent 1px,transparent 18px)}
+    .akun-dd-avatar{width:44px;height:44px;background:linear-gradient(135deg,rgba(20,184,166,.5),rgba(20,184,166,.2));border-radius:50%;display:grid;place-items:center;font-size:20px;border:2px solid rgba(20,184,166,.5);flex-shrink:0;position:relative;z-index:1}
+    .akun-dd-info{flex:1;min-width:0;position:relative;z-index:1}
+    .akun-dd-name{display:block;font-size:.9rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .akun-dd-email{display:block;font-size:.72rem;color:rgba(255,255,255,.55);margin-top:2px}
+    .akun-dd-badge{font-size:.65rem;font-weight:700;color:#14b8a6;background:rgba(20,184,166,.2);border:1px solid rgba(20,184,166,.4);padding:3px 8px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;position:relative;z-index:1}
+    .akun-dd-divider{height:1px;background:linear-gradient(90deg,transparent,#e5e7eb 20%,#e5e7eb 80%,transparent)}
+    .akun-dd-menu{padding:8px}
+    .akun-dd-item{display:flex;align-items:center;gap:13px;padding:11px 12px;border-radius:12px;text-decoration:none;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;font-family:'Outfit',sans-serif;transition:all .18s;position:relative;overflow:hidden}
+    .akun-dd-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,148,136,.08),rgba(13,148,136,.03));opacity:0;transition:opacity .18s;border-radius:12px}
+    .akun-dd-item:hover::before{opacity:1}
+    .akun-dd-item:hover{transform:translateX(2px)}
+    .dd-item-icon-wrap{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:17px;flex-shrink:0;transition:transform .2s}
+    .akun-dd-item:hover .dd-item-icon-wrap{transform:scale(1.1) rotate(-3deg)}
+    .dd-item-icon-wrap.blue{background:rgba(59,130,246,.1)}
+    .dd-item-icon-wrap.purple{background:rgba(139,92,246,.1)}
+    .dd-item-text{flex:1;min-width:0}
+    .dd-item-label{display:block;font-size:.875rem;font-weight:600;color:#1e3a4a;line-height:1.2}
+    .dd-item-desc{display:block;font-size:.72rem;color:#8fa3ad;margin-top:2px}
+    .dd-item-arrow{color:#c4d4da;font-size:12px;transition:transform .18s,color .18s}
+    .akun-dd-item:hover .dd-item-arrow{transform:translateX(3px);color:#14b8a6}
+    .akun-dd-logout-wrap{padding:6px 8px 10px;border-top:1px solid #f0f4f5;margin-top:2px}
+    .akun-dd-logout{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;border:1.5px solid rgba(224,80,80,.15);background:rgba(224,80,80,.04);cursor:pointer;width:100%;font-family:'Outfit',sans-serif;transition:all .2s}
+    .akun-dd-logout:hover{background:rgba(224,80,80,.1);border-color:rgba(224,80,80,.35);transform:translateY(-1px)}
+    .akun-dd-logout .dd-logout-icon{width:34px;height:34px;background:rgba(224,80,80,.1);border-radius:9px;display:grid;place-items:center;font-size:16px;flex-shrink:0}
+    .akun-dd-logout .dd-logout-text{font-size:.875rem;font-weight:700;color:#c0392b}
+    .akun-dd-logout .dd-logout-sub{font-size:.7rem;color:rgba(192,57,43,.6);display:block;margin-top:1px}
+
+    @media(max-width:600px){
+      .pg-wrap{margin:32px auto;padding:0 14px 80px}
+      .pg-header-card{padding:26px 20px 22px}
+      .pg-header-text h2{font-size:1.35rem}
+      .pg-back-btn span{display:none}
+      .pg-panel{padding:24px 18px 32px}
+      .form-row{grid-template-columns:1fr}
+      .foto-section{flex-direction:column;text-align:center}
+      .foto-actions{justify-content:center}
+      .akun-dropdown{width:260px;right:-10px}
+      .akun-trigger span:not(.avatar){display:none}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="home.html" class="nav-logo">
+    <div class="logo-icon" style="background:none;padding:0;overflow:hidden;"><img src="logo_web.jpeg" style="width:38px;height:38px;border-radius:10px;object-fit:cover;"/></div>
+    <div><div class="logo-text">Enggano Pedia</div><div class="logo-sub">Pariwisata</div></div>
+  </a>
+  <div class="nav-links">
+    <a href="home.html" class="nav-link"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span></a>
+    <a href="transport.html" class="nav-link"><span class="nav-icon">🚢</span><span class="nav-label">Transportasi</span></a>
+    <a href="destination.html" class="nav-link"><span class="nav-icon">🌴</span><span class="nav-label">Wisata</span></a>
+    <a href="product.html" class="nav-link"><span class="nav-icon">🛒</span><span class="nav-label">Produk</span></a>
+    <a href="homestay.html" class="nav-link active"><span class="nav-icon">🏨</span><span class="nav-label">Penginapan</span></a>
+  </div>
+  <div class="nav-right">
+    <div class="akun-dropdown-wrap" id="akunWrap">
+      <button class="akun-trigger" id="akunTrigger" onclick="event.stopPropagation();toggleDropdown()">
+        <div class="avatar">👤</div><span>Akun</span>
+        <svg class="dropdown-chevron" id="akunChevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="akun-dropdown" id="akunDropdown">
+        <div class="akun-dd-header">
+          <div class="akun-dd-avatar">👤</div>
+          <div class="akun-dd-info"><span class="akun-dd-name">Admin Enggano</span><span class="akun-dd-email">admin@enggano.id</span></div>
+          <span class="akun-dd-badge">Admin</span>
+        </div>
+        <div class="akun-dd-divider"></div>
+        <div class="akun-dd-menu">
+          <a href="account.html" class="akun-dd-item"><div class="dd-item-icon-wrap blue">👤</div><div class="dd-item-text"><span class="dd-item-label">Profil Saya</span><span class="dd-item-desc">Lihat informasi akun</span></div><span class="dd-item-arrow">›</span></a>
+          <a href="setting.html" class="akun-dd-item"><div class="dd-item-icon-wrap purple">⚙️</div><div class="dd-item-text"><span class="dd-item-label">Pengaturan</span><span class="dd-item-desc">Edit foto, data & password</span></div><span class="dd-item-arrow">›</span></a>
+        </div>
+        <div class="akun-dd-logout-wrap">
+          <button type="button" class="akun-dd-logout" onclick="event.stopPropagation();closeDropdown();openLogout()"><div class="dd-logout-icon">🚪</div><div><span class="dd-logout-text">Keluar dari Akun</span><span class="dd-logout-sub">Anda akan logout dari sesi ini</span></div></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="page-content">
+  <div class="pg-wrap">
+    <div class="pg-badge-wrap"><span class="hero-badge">⚙️ &nbsp;Pengaturan Akun</span></div>
+
+    <div class="pg-header-card">
+      <div class="pg-header-inner">
+        <div class="pg-header-icon">⚙️</div>
+        <div class="pg-header-text">
+          <h2>Pengaturan Akun</h2>
+          <p>Ubah foto profil, data diri, dan password akun Anda</p>
+        </div>
+        <a href="account.html" class="pg-back-btn">← <span>Profil Saya</span></a>
+      </div>
+    </div>
+
+    <div class="pg-card">
+      <div class="pg-tab-nav">
+        <button class="pg-tab-btn active" onclick="switchTab('foto',this)">🖼️ Foto Profil</button>
+        <button class="pg-tab-btn" onclick="switchTab('data',this)">✏️ Edit Data Diri</button>
+        <button class="pg-tab-btn" onclick="switchTab('password',this)">🔒 Ganti Password</button>
+      </div>
+
+      <!-- ═══ TAB 1: FOTO PROFIL ═══ -->
+      <div id="panel-foto" class="pg-panel active">
+        <div class="foto-section">
+          <div class="foto-preview" id="fotoPreview">👤<img id="fotoImg" src="" alt=""/></div>
+          <div class="foto-info">
+            <h4>Foto Profil Anda</h4>
+            <p>Format JPG, PNG, atau WEBP.<br/>Ukuran maksimal 2 MB. Rasio terbaik 1:1 (kotak).</p>
+            <div class="foto-actions">
+              <button class="btn-upload-foto" onclick="document.getElementById('input-foto').click()">📷 Pilih Foto Baru</button>
+              <button class="btn-hapus-foto" id="btnHapus" onclick="hapusFoto()" style="display:none">🗑️ Hapus Foto</button>
+            </div>
+            <input type="file" id="input-foto" accept="image/*" onchange="previewFoto(this)"/>
+          </div>
+        </div>
+
+        <div style="background:rgba(13,148,136,.06);border:1.5px solid rgba(13,148,136,.18);border-radius:12px;padding:14px 18px;font-size:.82rem;color:var(--text-md);line-height:1.6;">
+          💡 <strong>Tips:</strong> Gunakan foto wajah yang jelas dengan latar belakang netral agar terlihat profesional di halaman admin.
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-simpan" onclick="simpanFoto()">💾 Simpan Foto</button>
+          <button class="btn-batal" onclick="hapusFoto()">Batal</button>
+        </div>
+      </div>
+
+      <!-- ═══ TAB 2: EDIT DATA DIRI ═══ -->
+      <div id="panel-data" class="pg-panel">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nama Depan <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" class="form-input" id="edit-nama-depan" value="Admin" placeholder="Nama depan"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nama Belakang</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" class="form-input" id="edit-nama-belakang" value="Enggano" placeholder="Nama belakang"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Alamat Email <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">📧</span>
+            <input type="email" class="form-input" id="edit-email" value="admin@enggano.id" placeholder="email@domain.com" oninput="validasiEmail(this)"/>
+          </div>
+          <p class="form-hint" id="hint-email"></p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nomor HP <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">📱</span>
+            <input type="tel" class="form-input" id="edit-hp" value="+62 812-3456-7890" placeholder="+62 8xx-xxxx-xxxx" oninput="validasiHP(this)"/>
+          </div>
+          <p class="form-hint" id="hint-hp"></p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nomor WhatsApp</label>
+          <div class="input-wrap">
+            <span class="input-icon">💬</span>
+            <input type="tel" class="form-input" id="edit-wa" value="+62 812-3456-7890" placeholder="+62 8xx-xxxx-xxxx"/>
+          </div>
+          <p class="form-hint">Kosongkan jika sama dengan nomor HP</p>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-simpan" onclick="simpanData()">💾 Simpan Perubahan</button>
+          <button class="btn-batal" onclick="resetData()">Batal</button>
+        </div>
+      </div>
+
+      <!-- ═══ TAB 3: GANTI PASSWORD ═══ -->
+      <div id="panel-password" class="pg-panel">
+        <div class="form-group">
+          <label class="form-label">Password Saat Ini <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-input" id="pw-lama" placeholder="Masukkan password saat ini"/>
+            <button class="pw-toggle" type="button" onclick="togglePw('pw-lama',this)">👁️</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password Baru <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">🔑</span>
+            <input type="password" class="form-input" id="pw-baru" placeholder="Minimal 8 karakter" oninput="cekKekuatan(this.value)"/>
+            <button class="pw-toggle" type="button" onclick="togglePw('pw-baru',this)">👁️</button>
+          </div>
+          <div class="pw-bar-wrap">
+            <div class="pw-bar"><div class="pw-bar-fill" id="pw-fill"></div></div>
+            <span class="pw-bar-label" id="pw-label">—</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Konfirmasi Password Baru <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">🔑</span>
+            <input type="password" class="form-input" id="pw-konfirm" placeholder="Ulangi password baru" oninput="cekCocok()"/>
+            <button class="pw-toggle" type="button" onclick="togglePw('pw-konfirm',this)">👁️</button>
+          </div>
+          <p class="form-hint" id="hint-konfirm"></p>
+        </div>
+
+        <div style="background:var(--sand);border:1.5px solid var(--sand-dk);border-radius:12px;padding:14px 18px;font-size:.8rem;color:var(--text-md);line-height:1.7;margin-top:4px;">
+          <strong>Syarat password kuat:</strong><br/>
+          ✅ Minimal 8 karakter &nbsp;|&nbsp; ✅ Huruf besar (A-Z) &nbsp;|&nbsp; ✅ Angka (0-9) &nbsp;|&nbsp; ✅ Karakter spesial (!@#$)
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-simpan" onclick="simpanPassword()">🔒 Ubah Password</button>
+          <button class="btn-batal" onclick="resetPassword()">Batal</button>
+        </div>
+      </div>
+
+    </div><!-- /pg-card -->
+  </div>
+</div>
+
+<div class="logout-modal-backdrop" id="logoutModal">
+  <div class="logout-modal">
+    <div class="lm-icon">🚪</div>
+    <h3>Keluar dari Akun?</h3>
+    <p>Anda akan diarahkan kembali ke halaman utama. Sampai jumpa kembali!</p>
+    <div class="logout-modal-btns">
+      <button class="btn-cancel-logout" onclick="closeLogout()">Batal</button>
+      <button class="btn-confirm-logout" onclick="doLogout()">Ya, Keluar</button>
+    </div>
+  </div>
+</div>
+<div class="save-toast" id="toast"></div>
+
+<footer class="footer"><p>© 2025 <span>Enggano Pedia</span> · Pulau Enggano, Bengkulu Utara</p></footer>
+
+<script>
+  /* Tab */
+  function switchTab(name, btn) {
+    document.querySelectorAll('.pg-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.pg-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  /* Dropdown */
+  const akunWrap=document.getElementById('akunWrap'),akunTrigger=document.getElementById('akunTrigger'),akunDropdown=document.getElementById('akunDropdown'),akunChevron=document.getElementById('akunChevron');
+  let dropOpen=false;
+  function openDropdown(){dropOpen=true;akunDropdown.classList.add('open');akunTrigger.classList.add('open');akunChevron.classList.add('rotated')}
+  function closeDropdown(){dropOpen=false;akunDropdown.classList.remove('open');akunTrigger.classList.remove('open');akunChevron.classList.remove('rotated')}
+  function toggleDropdown(){dropOpen?closeDropdown():openDropdown()}
+  document.addEventListener('click',e=>{if(!akunWrap.contains(e.target))closeDropdown()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDropdown();closeLogout()}});
+
+  /* Logout */
+  function openLogout(){document.getElementById('logoutModal').classList.add('open')}
+  function closeLogout(){document.getElementById('logoutModal').classList.remove('open')}
+  function doLogout(){window.location.href='index.html'}
+  document.getElementById('logoutModal').addEventListener('click',function(e){if(e.target===this)closeLogout()});
+
+  /* Toast */
+  let toastT;
+  function showToast(msg,err=false){
+    const t=document.getElementById('toast');
+    t.textContent=msg;
+    t.style.background=err?'#e05050':'var(--teal)';
+    t.style.display='block';
+    clearTimeout(toastT);
+    toastT=setTimeout(()=>t.style.display='none',3000);
+  }
+
+  /* ── FOTO ── */
+  function previewFoto(input) {
+    if(!input.files||!input.files[0]) return;
+    const file=input.files[0];
+    if(file.size>2*1024*1024){showToast('❌ Ukuran foto maksimal 2 MB!',true);return;}
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=document.getElementById('fotoImg');
+      const preview=document.getElementById('fotoPreview');
+      img.src=e.target.result;
+      img.style.display='block';
+      preview.style.fontSize='0';
+      document.getElementById('btnHapus').style.display='inline-flex';
+    };
+    reader.readAsDataURL(file);
+  }
+  function hapusFoto(){
+    const img=document.getElementById('fotoImg');
+    const preview=document.getElementById('fotoPreview');
+    img.src=''; img.style.display='none';
+    preview.style.fontSize='38px';
+    document.getElementById('input-foto').value='';
+    document.getElementById('btnHapus').style.display='none';
+  }
+  function simpanFoto(){
+    const img=document.getElementById('fotoImg');
+    if(!img.src||img.style.display==='none'){showToast('⚠️ Pilih foto terlebih dahulu!',true);return;}
+    showToast('✅ Foto profil berhasil disimpan!');
+  }
+
+  /* ── DATA DIRI ── */
+  function validasiEmail(inp){
+    const h=document.getElementById('hint-email');
+    const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value);
+    h.textContent=inp.value?(ok?'✅ Email valid':'❌ Format email tidak valid'):'';
+    h.className='form-hint '+(ok?'ok':'err');
+    inp.className='form-input'+(ok||!inp.value?'':' error-field');
+  }
+  function validasiHP(inp){
+    const h=document.getElementById('hint-hp');
+    const ok=/^(\+62|62|0)[\s\-]?8[0-9]{8,11}$/.test(inp.value.replace(/\s/g,''));
+    h.textContent=inp.value?(ok?'✅ Nomor valid':'❌ Format: +62 8xx-xxxx-xxxx'):'';
+    h.className='form-hint '+(ok?'ok':'err');
+  }
+  function simpanData(){
+    const nama=document.getElementById('edit-nama-depan').value.trim();
+    const email=document.getElementById('edit-email').value.trim();
+    const hp=document.getElementById('edit-hp').value.trim();
+    if(!nama){showToast('⚠️ Nama depan wajib diisi!',true);return;}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showToast('❌ Email tidak valid!',true);return;}
+    if(!hp){showToast('⚠️ Nomor HP wajib diisi!',true);return;}
+    showToast('✅ Data diri berhasil disimpan!');
+  }
+  function resetData(){showToast('↩️ Perubahan dibatalkan')}
+
+  /* ── PASSWORD ── */
+  function togglePw(id,btn){
+    const inp=document.getElementById(id);
+    inp.type=inp.type==='password'?'text':'password';
+    btn.textContent=inp.type==='password'?'👁️':'🙈';
+  }
+  function cekKekuatan(val){
+    const fill=document.getElementById('pw-fill'),lbl=document.getElementById('pw-label');
+    let s=0;
+    if(val.length>=8)s++;
+    if(/[A-Z]/.test(val))s++;
+    if(/[0-9]/.test(val))s++;
+    if(/[^A-Za-z0-9]/.test(val))s++;
+    const lv=[
+      {p:'0%',c:'#e5e7eb',t:'—'},
+      {p:'25%',c:'#ef4444',t:'⚠️ Lemah — terlalu mudah ditebak'},
+      {p:'50%',c:'#f59e0b',t:'🔶 Cukup — bisa lebih kuat'},
+      {p:'75%',c:'#3b82f6',t:'🔷 Kuat'},
+      {p:'100%',c:'#10b981',t:'✅ Sangat Kuat'}
+    ][val.length===0?0:s];
+    fill.style.width=lv.p; fill.style.background=lv.c;
+    lbl.textContent=lv.t; lbl.style.color=lv.c==='#e5e7eb'?'var(--text-lt)':lv.c;
+  }
+  function cekCocok(){
+    const b=document.getElementById('pw-baru').value,k=document.getElementById('pw-konfirm').value,h=document.getElementById('hint-konfirm');
+    if(!k){h.textContent='';return;}
+    if(b===k){h.textContent='✅ Password cocok';h.className='form-hint ok';}
+    else{h.textContent='❌ Password tidak cocok';h.className='form-hint err';}
+  }
+  function simpanPassword(){
+    const lama=document.getElementById('pw-lama').value;
+    const baru=document.getElementById('pw-baru').value;
+    const konfirm=document.getElementById('pw-konfirm').value;
+    if(!lama){showToast('⚠️ Masukkan password saat ini!',true);return;}
+    if(baru.length<8){showToast('⚠️ Password baru minimal 8 karakter!',true);return;}
+    if(baru!==konfirm){showToast('❌ Konfirmasi password tidak cocok!',true);return;}
+    showToast('🔒 Password berhasil diubah!');
+    resetPassword();
+  }
+  function resetPassword(){
+    ['pw-lama','pw-baru','pw-konfirm'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('pw-fill').style.width='0%';
+    document.getElementById('pw-label').textContent='—';
+    document.getElementById('hint-konfirm').textContent='';
+  }
+
+  /* Buka tab dari hash */
+  if(window.location.hash==='#pengaturan'){switchTab('data',document.querySelectorAll('.pg-tab-btn')[1])}
+</script>
+</body>
+</html>

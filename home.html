@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beranda – Enggano Pedia</title>
+  <link rel="stylesheet" href="style2.css"/>
+  <style>
+    .hero { height: 100vh; max-height: 760px; }
+    .hero-bg { background-image: url('https://images.unsplash.com/photo-1537956965359-7573183d1f57?w=1600&q=80'); }
+    .hero-content { max-width: 700px; }
+    .hero-actions { display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:28px; }
+    .stats-bar { background:var(--ocean-dk);padding:24px 32px; }
+    .stats-inner { max-width:1200px;margin:0 auto;display:flex;justify-content:space-around;align-items:center;gap:16px;flex-wrap:wrap; }
+    .stat-item { text-align:center;color:var(--white); }
+    .stat-num { font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--teal-lt);display:block; }
+    .stat-label { font-size:.78rem;color:rgba(255,255,255,.55);letter-spacing:1.5px;text-transform:uppercase; }
+    .stat-divider { width:1px;height:40px;background:rgba(255,255,255,.12); }
+    .carousel-section { position:relative;margin-top:40px;overflow:hidden;padding:12px 0 18px; }
+    .carousel-section::before,.carousel-section::after { content:'';position:absolute;top:0;bottom:0;width:120px;z-index:4;pointer-events:none; }
+    .carousel-section::before { left:0;background:linear-gradient(to right,var(--section-bg,#f0ebe0) 0%,transparent 100%); }
+    .carousel-section::after  { right:0;background:linear-gradient(to left,var(--section-bg,#f0ebe0) 0%,transparent 100%); }
+    .carousel-track { display:flex;gap:20px;padding:8px 160px;width:max-content;animation:carouselSlide 32s linear infinite;will-change:transform; }
+    @keyframes carouselSlide { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+    .highlight-card { border-radius:18px;overflow:hidden;position:relative;width:320px;height:360px;flex-shrink:0;cursor:pointer;text-decoration:none;box-shadow:0 8px 30px rgba(0,0,0,.18);transition:transform .4s cubic-bezier(.25,.8,.25,1),box-shadow .4s ease; }
+    .highlight-card:hover { transform:translateY(-8px) scale(1.025);box-shadow:0 22px 52px rgba(0,0,0,.32); }
+    .highlight-card img { width:100%;height:100%;object-fit:cover;transition:transform .7s ease; }
+    .highlight-card:hover img { transform:scale(1.1); }
+    .highlight-card .overlay { position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,32,46,.92) 0%,rgba(4,32,46,.1) 55%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:26px;transition:background .4s ease; }
+    .highlight-card:hover .overlay { background:linear-gradient(0deg,rgba(4,32,46,.96) 0%,rgba(4,32,46,.35) 65%,transparent 100%); }
+    .highlight-card .hc-tag { display:inline-flex;align-items:center;gap:5px;padding:4px 12px;background:rgba(20,184,166,.2);border:1px solid rgba(20,184,166,.55);border-radius:30px;color:#5eead4;font-size:.68rem;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:10px;width:fit-content;backdrop-filter:blur(8px); }
+    .highlight-card h3 { font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:#fff;font-weight:700;line-height:1.25;margin-bottom:6px; }
+    .highlight-card p  { font-size:.81rem;color:rgba(255,255,255,.68);line-height:1.55;transform:translateY(5px);opacity:.8;transition:transform .35s ease,opacity .35s ease; }
+    .highlight-card:hover p { transform:translateY(0);opacity:1; }
+    .transport-section { background:linear-gradient(135deg,var(--ocean-dk) 0%,var(--ocean) 100%);padding:60px 32px; }
+    .transport-inner { max-width:1200px;margin:0 auto; }
+    .transport-inner .section-title { color:var(--white); }
+    .transport-inner .section-sub { color:rgba(255,255,255,.55);margin-bottom:36px; }
+    .transport-cards { display:grid;grid-template-columns:1fr 1fr;gap:20px; }
+    @media(max-width:580px){ .transport-cards{grid-template-columns:1fr;} }
+    .transport-card { background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:28px;display:flex;align-items:center;gap:20px;text-decoration:none;transition:var(--trans);cursor:pointer; }
+    .transport-card:hover { background:rgba(255,255,255,.13);border-color:rgba(20,184,166,.4);transform:translateY(-3px); }
+    .transport-card .tc-icon { width:60px;height:60px;background:linear-gradient(135deg,var(--teal),var(--ocean-lt));border-radius:14px;display:grid;place-items:center;font-size:26px;flex-shrink:0; }
+    .transport-card .tc-info h3 { font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--white);font-weight:600;margin-bottom:4px; }
+    .transport-card .tc-info p  { font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.5; }
+    .transport-card .tc-arrow   { margin-left:auto;color:var(--teal-lt);font-size:20px;flex-shrink:0; }
+    .info-banner { background:linear-gradient(135deg,var(--teal),var(--teal-lt));padding:40px 32px;text-align:center; }
+    .info-banner h2 { font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.2rem);color:var(--white);margin-bottom:10px; }
+    .info-banner p  { color:rgba(255,255,255,.82);font-size:.95rem;margin-bottom:22px; }
+    .btn-daftar-mitra { display:flex;align-items:center;gap:7px;padding:8px 18px;background:linear-gradient(135deg,var(--gold,#c9962a),#e8b84b);border-radius:30px;color:#fff !important;font-size:.82rem;font-weight:700;letter-spacing:.4px;text-decoration:none;transition:all .25s ease;white-space:nowrap;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(201,150,42,.35); }
+    .btn-daftar-mitra:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,150,42,.5); }
+    .mitra-pending-badge { display:flex;align-items:center;gap:7px;padding:8px 16px;background:rgba(201,150,42,.15);border:1.5px solid rgba(201,150,42,.4);border-radius:30px;color:#e8c96a;font-size:.78rem;font-weight:600;white-space:nowrap;cursor:default; }
+    .mitra-pending-badge .countdown-pill { background:rgba(201,150,42,.3);border-radius:20px;padding:2px 8px;font-size:.72rem;font-weight:700;color:#fde68a;min-width:32px;text-align:center; }
+    .mitra-aktif-badge { display:flex;align-items:center;gap:7px;padding:8px 16px;background:rgba(20,184,166,.15);border:1.5px solid rgba(20,184,166,.4);border-radius:30px;color:#5eead4;font-size:.78rem;font-weight:700;white-space:nowrap;animation:badgePop .5s cubic-bezier(.34,1.56,.64,1) both; }
+    @keyframes badgePop { from{opacity:0;transform:scale(.8)} to{opacity:1;transform:scale(1)} }
+    .akun-dropdown-wrap { position:relative; }
+    .akun-trigger { display:flex;align-items:center;gap:8px;padding:8px 14px 8px 10px;background:rgba(20,184,166,.15);border:1.5px solid rgba(20,184,166,.4);border-radius:50px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.875rem;font-weight:600;cursor:pointer;transition:all .25s ease;white-space:nowrap; }
+    .akun-trigger:hover { background:rgba(20,184,166,.28);border-color:rgba(20,184,166,.7);box-shadow:0 4px 18px rgba(20,184,166,.25); }
+    .akun-trigger.open  { background:rgba(20,184,166,.3);border-color:rgba(20,184,166,.8); }
+    .akun-trigger .avatar { width:28px;height:28px;background:rgba(20,184,166,.3);border-radius:50%;display:grid;place-items:center;font-size:14px;border:1.5px solid rgba(20,184,166,.5); }
+    .dropdown-chevron { transition:transform .3s cubic-bezier(.34,1.56,.64,1);color:rgba(255,255,255,.8);flex-shrink:0; }
+    .dropdown-chevron.rotated { transform:rotate(180deg); }
+    .akun-dropdown { position:absolute;top:calc(100% + 12px);right:0;width:280px;background:#fff;border-radius:20px;box-shadow:0 4px 6px rgba(0,0,0,.04),0 20px 60px rgba(7,45,64,.18),0 0 0 1px rgba(13,148,136,.12);overflow:hidden;z-index:1000;opacity:0;visibility:hidden;transform:translateY(-10px) scale(.97);transform-origin:top right;transition:opacity .22s ease,transform .22s cubic-bezier(.34,1.2,.64,1),visibility .22s ease; }
+    .akun-dropdown.open { opacity:1;visibility:visible;transform:translateY(0) scale(1); }
+    .akun-dropdown::before { content:'';position:absolute;top:-7px;right:22px;width:14px;height:14px;background:#fff;border-radius:3px;transform:rotate(45deg);box-shadow:-2px -2px 5px rgba(0,0,0,.04);z-index:-1; }
+    .akun-dd-header { display:flex;align-items:center;gap:12px;padding:18px 18px 16px;background:linear-gradient(135deg,#072d40 0%,#0e6074 100%);position:relative;overflow:hidden; }
+    .akun-dd-header::after { content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 1px,transparent 1px,transparent 18px); }
+    .akun-dd-avatar { width:44px;height:44px;background:linear-gradient(135deg,rgba(20,184,166,.5),rgba(20,184,166,.2));border-radius:50%;display:grid;place-items:center;font-size:20px;border:2px solid rgba(20,184,166,.5);flex-shrink:0;position:relative;z-index:1; }
+    .akun-dd-info { flex:1;min-width:0;position:relative;z-index:1; }
+    .akun-dd-name  { display:block;font-size:.9rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .akun-dd-email { display:block;font-size:.72rem;color:rgba(255,255,255,.55);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .akun-dd-badge { font-size:.65rem;font-weight:700;color:#14b8a6;background:rgba(20,184,166,.2);border:1px solid rgba(20,184,166,.4);padding:3px 8px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;position:relative;z-index:1; }
+    .akun-dd-divider { height:1px;background:linear-gradient(90deg,transparent,#e5e7eb 20%,#e5e7eb 80%,transparent); }
+    .akun-dd-menu { padding:8px; }
+    .akun-dd-item { display:flex;align-items:center;gap:13px;padding:11px 12px;border-radius:12px;text-decoration:none;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;font-family:'Outfit',sans-serif;transition:all .18s ease;position:relative;overflow:hidden; }
+    .akun-dd-item::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,148,136,.08),rgba(13,148,136,.03));opacity:0;transition:opacity .18s ease;border-radius:12px; }
+    .akun-dd-item:hover::before { opacity:1; }
+    .akun-dd-item:hover { transform:translateX(2px); }
+    .dd-item-icon-wrap { width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:17px;flex-shrink:0;transition:transform .2s ease; }
+    .akun-dd-item:hover .dd-item-icon-wrap { transform:scale(1.1) rotate(-3deg); }
+    .dd-item-icon-wrap.gold   { background:rgba(201,150,42,.12); }
+    .dd-item-icon-wrap.blue   { background:rgba(59,130,246,.1); }
+    .dd-item-icon-wrap.purple { background:rgba(139,92,246,.1); }
+    .dd-item-text { flex:1;min-width:0; }
+    .dd-item-label { display:block;font-size:.875rem;font-weight:600;color:#1e3a4a;line-height:1.2; }
+    .dd-item-desc  { display:block;font-size:.72rem;color:#8fa3ad;margin-top:2px; }
+    .dd-item-arrow { color:#c4d4da;font-size:12px;transition:transform .18s ease,color .18s ease; }
+    .akun-dd-item:hover .dd-item-arrow { transform:translateX(3px);color:#14b8a6; }
+    .akun-dd-logout-wrap { padding:6px 8px 10px;border-top:1px solid #f0f4f5;margin-top:2px; }
+    .akun-dd-logout { display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;border:1.5px solid rgba(224,80,80,.15);background:rgba(224,80,80,.04);cursor:pointer;width:100%;font-family:'Outfit',sans-serif;transition:all .2s ease; }
+    .akun-dd-logout:hover { background:rgba(224,80,80,.1);border-color:rgba(224,80,80,.35);transform:translateY(-1px);box-shadow:0 4px 14px rgba(224,80,80,.15); }
+    .akun-dd-logout .dd-logout-icon { width:34px;height:34px;background:rgba(224,80,80,.1);border-radius:9px;display:grid;place-items:center;font-size:16px;flex-shrink:0;transition:transform .2s ease; }
+    .akun-dd-logout:hover .dd-logout-icon { transform:scale(1.1); }
+    .akun-dd-logout .dd-logout-text { font-size:.875rem;font-weight:700;color:#c0392b; }
+    .akun-dd-logout .dd-logout-sub  { font-size:.7rem;color:rgba(192,57,43,.6);display:block;margin-top:1px; }
+    .toast-aktif { position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,#072d40,#0d9488);color:#fff;padding:14px 28px;border-radius:50px;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;box-shadow:0 8px 32px rgba(7,45,64,.35);z-index:3000;display:flex;align-items:center;gap:10px;transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .4s ease;opacity:0;pointer-events:none;white-space:nowrap; }
+    .toast-aktif.show { transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto; }
+    .logout-modal-backdrop{display:none;position:fixed;inset:0;background:rgba(7,45,64,.6);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;padding:20px;}
+    .logout-modal-backdrop.open{display:flex;}
+    .logout-modal{background:#fff;border-radius:20px;box-shadow:0 30px 80px rgba(7,45,64,.3);max-width:380px;width:100%;padding:36px 32px;text-align:center;}
+    .logout-modal .lm-icon{font-size:44px;margin-bottom:16px;}
+    .logout-modal h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:#072d40;margin-bottom:8px;}
+    .logout-modal p{font-size:.875rem;color:#8fa3ad;line-height:1.6;margin-bottom:28px;}
+    .logout-modal-btns{display:flex;gap:12px;}
+    .btn-cancel-logout{flex:1;padding:13px;border:2px solid #e5e7eb;border-radius:12px;background:#f5f0e8;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;color:#6b7280;cursor:pointer;}
+    .btn-confirm-logout{flex:1;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#e05050,#c0392b);font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(224,80,80,.3);}
+    @media(max-width:560px){.akun-dropdown{width:260px;right:-10px;}.akun-trigger span:not(.avatar){display:none;}}
+
+    /* ═══ HERO BUBBLE ANIMATION ═══ */
+    .hero { position: relative; }
+    .hero-bubbles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+    .hb {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.22), rgba(94,234,212,.08));
+      border: 1px solid rgba(255,255,255,.18);
+      animation: heroBubbleRise linear infinite;
+      will-change: transform, opacity;
+    }
+    .hb::after {
+      content: '';
+      position: absolute;
+      top: 20%; left: 20%;
+      width: 28%; height: 28%;
+      border-radius: 50%;
+      background: rgba(255,255,255,.3);
+    }
+    @keyframes heroBubbleRise {
+      0%   { transform: translateY(0) translateX(0);   opacity: 0; }
+      8%   { opacity: 1; }
+      80%  { opacity: .55; }
+      100% { transform: translateY(var(--rise)) translateX(var(--drift)); opacity: 0; }
+    }
+
+    /* 20 bubbles — varied sizes, positions, speeds */
+    .hb:nth-child(1)  { width:18px;height:18px; bottom:2%;  left:4%;   animation-duration:7s;  animation-delay:0s;    --rise:-480px; --drift:14px;  }
+    .hb:nth-child(2)  { width:10px;height:10px; bottom:5%;  left:11%;  animation-duration:5.5s;animation-delay:1.8s;  --rise:-520px; --drift:-9px;  }
+    .hb:nth-child(3)  { width:24px;height:24px; bottom:0%;  left:19%;  animation-duration:8.5s;animation-delay:0.4s;  --rise:-600px; --drift:20px;  }
+    .hb:nth-child(4)  { width:13px;height:13px; bottom:8%;  left:27%;  animation-duration:6.2s;animation-delay:3.1s;  --rise:-560px; --drift:-12px; }
+    .hb:nth-child(5)  { width:8px; height:8px;  bottom:3%;  left:35%;  animation-duration:5.0s;animation-delay:0.9s;  --rise:-490px; --drift:8px;   }
+    .hb:nth-child(6)  { width:20px;height:20px; bottom:1%;  left:43%;  animation-duration:7.8s;animation-delay:2.4s;  --rise:-580px; --drift:-16px; }
+    .hb:nth-child(7)  { width:11px;height:11px; bottom:6%;  left:51%;  animation-duration:5.8s;animation-delay:0.2s;  --rise:-510px; --drift:11px;  }
+    .hb:nth-child(8)  { width:28px;height:28px; bottom:0%;  left:58%;  animation-duration:9.2s;animation-delay:4.0s;  --rise:-620px; --drift:-22px; }
+    .hb:nth-child(9)  { width:9px; height:9px;  bottom:4%;  left:66%;  animation-duration:5.3s;animation-delay:1.5s;  --rise:-500px; --drift:7px;   }
+    .hb:nth-child(10) { width:16px;height:16px; bottom:2%;  left:73%;  animation-duration:6.7s;animation-delay:3.6s;  --rise:-545px; --drift:-14px; }
+    .hb:nth-child(11) { width:7px; height:7px;  bottom:7%;  left:80%;  animation-duration:4.8s;animation-delay:0.7s;  --rise:-470px; --drift:6px;   }
+    .hb:nth-child(12) { width:22px;height:22px; bottom:1%;  left:87%;  animation-duration:8.0s;animation-delay:2.0s;  --rise:-590px; --drift:-18px; }
+    .hb:nth-child(13) { width:12px;height:12px; bottom:5%;  left:93%;  animation-duration:5.9s;animation-delay:4.8s;  --rise:-515px; --drift:10px;  }
+    /* second wave — smaller, subtler, offset timing */
+    .hb:nth-child(14) { width:6px; height:6px;  bottom:10%; left:8%;   animation-duration:4.5s;animation-delay:5.5s;  --rise:-460px; --drift:-5px;  }
+    .hb:nth-child(15) { width:15px;height:15px; bottom:3%;  left:23%;  animation-duration:7.2s;animation-delay:6.2s;  --rise:-540px; --drift:13px;  }
+    .hb:nth-child(16) { width:9px; height:9px;  bottom:6%;  left:40%;  animation-duration:5.6s;animation-delay:7.0s;  --rise:-495px; --drift:-8px;  }
+    .hb:nth-child(17) { width:19px;height:19px; bottom:0%;  left:56%;  animation-duration:8.3s;animation-delay:5.1s;  --rise:-570px; --drift:17px;  }
+    .hb:nth-child(18) { width:8px; height:8px;  bottom:4%;  left:70%;  animation-duration:5.1s;animation-delay:8.0s;  --rise:-480px; --drift:-6px;  }
+    .hb:nth-child(19) { width:14px;height:14px; bottom:2%;  left:84%;  animation-duration:6.4s;animation-delay:6.8s;  --rise:-530px; --drift:12px;  }
+    .hb:nth-child(20) { width:26px;height:26px; bottom:0%;  left:96%;  animation-duration:9.5s;animation-delay:3.3s;  --rise:-630px; --drift:-20px; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="home.html" class="nav-logo">
+    <div class="logo-icon" style="background:none;padding:0;overflow:hidden;">
+      <img src="logo_web.jpeg" style="width:38px;height:38px;border-radius:10px;object-fit:cover;" />
+    </div>
+    <div>
+      <div class="logo-text">Enggano Pedia</div>
+      <div class="logo-sub">Pariwisata</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="home.html" class="nav-link active"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span></a>
+    <a href="transport.html" class="nav-link"><span class="nav-icon">🚢</span><span class="nav-label">Transportasi</span></a>
+    <a href="destination.html" class="nav-link"><span class="nav-icon">🌴</span><span class="nav-label">Wisata</span></a>
+    <a href="product.html" class="nav-link"><span class="nav-icon">🛒</span><span class="nav-label">Produk</span></a>
+    <a href="homestay.html" class="nav-link"><span class="nav-icon">🏨</span><span class="nav-label">Penginapan</span></a>
+  </div>
+  <div class="nav-right" style="display:flex;align-items:center;gap:10px;">
+    <div id="mitraNavArea"></div>
+    <div class="akun-dropdown-wrap" id="akunWrap">
+      <button class="akun-trigger" id="akunTrigger" onclick="toggleDropdown()">
+        <div class="avatar">👤</div>
+        <span>Akun</span>
+        <svg class="dropdown-chevron" id="akunChevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="akun-dropdown" id="akunDropdown">
+        <div class="akun-dd-header">
+          <div class="akun-dd-avatar">👤</div>
+          <div class="akun-dd-info">
+            <span class="akun-dd-name" id="ddNama">Pengguna</span>
+            <span class="akun-dd-email">user@enggano.id</span>
+          </div>
+          <span class="akun-dd-badge" id="ddBadge">User</span>
+        </div>
+        <div class="akun-dd-divider"></div>
+        <div class="akun-dd-menu" id="akunDdMenu">
+          <a href="account.html" class="akun-dd-item" onclick="closeDropdown()">
+            <div class="dd-item-icon-wrap blue">👤</div>
+            <div class="dd-item-text">
+              <span class="dd-item-label">Profil Saya</span>
+              <span class="dd-item-desc">Lihat &amp; edit informasi akun</span>
+            </div>
+            <span class="dd-item-arrow">›</span>
+          </a>
+          <a href="setting.html" class="akun-dd-item" onclick="closeDropdown()">
+            <div class="dd-item-icon-wrap purple">⚙️</div>
+            <div class="dd-item-text">
+              <span class="dd-item-label">Pengaturan</span>
+              <span class="dd-item-desc">Konfigurasi website &amp; notifikasi</span>
+            </div>
+            <span class="dd-item-arrow">›</span>
+          </a>
+        </div>
+        <div class="akun-dd-logout-wrap">
+          <button type="button" class="akun-dd-logout" onclick="event.stopPropagation();closeDropdown();openLogout();">
+            <div class="dd-logout-icon">🚪</div>
+            <div>
+              <span class="dd-logout-text">Keluar dari Akun</span>
+              <span class="dd-logout-sub">Anda akan logout dari sesi ini</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="page-content">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+
+    <!-- ✦ BUBBLE LAYER ✦ -->
+    <div class="hero-bubbles">
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+      <div class="hb"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">✦ Pulau Terluar Bengkulu</div>
+      <h1>Selamat Datang di<br/>Pulau Enggano</h1>
+      <p>Temukan keindahan alam tersembunyi — pantai perawan, hutan tropis lebat, dan keanekaragaman hayati yang memukau di ujung barat Samudera Hindia.</p>
+      <div class="hero-actions">
+        <a href="transport.html" class="btn btn-primary">🚢 Pesan Tiket Sekarang</a>
+        <a href="destination.html" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.5)">🌴 Jelajahi Wisata</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-item"><span class="stat-num">400 km²</span><span class="stat-label">Luas Pulau</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">12+</span><span class="stat-label">Destinasi Wisata</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">2×</span><span class="stat-label">Kapal Per Minggu</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">5 Desa</span><span class="stat-label">Komunitas Lokal</span></div>
+    </div>
+  </div>
+
+  <section class="section" id="highlightSection" style="padding-bottom:48px;padding-left:0;padding-right:0;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div class="hero-badge" style="background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.3);color:var(--teal);">✦ Destinasi Unggulan</div>
+      <h2 class="section-title">Keindahan Enggano</h2>
+      <p class="section-sub" style="margin-bottom:0">Eksplorasi destinasi terbaik yang menanti Anda</p>
+    </div>
+    <div class="carousel-section" id="carouselSection">
+      <div class="carousel-track" id="carouselTrack">
+        <a href="destination.html" class="highlight-card"><img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&q=80" alt="Pantai"/><div class="overlay"><span class="hc-tag">🏖 Pantai</span><h3>Pantai Bak Blau</h3><p>Pasir putih dengan air kristal biru</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="WargaEnggano.jpeg" alt="Hutan"/><div class="overlay"><span class="hc-tag">🌿 Alam</span><h3>Hutan Tropis Enggano</h3><p>Biodiversitas unik flora dan fauna</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80" alt="Snorkeling"/><div class="overlay"><span class="hc-tag">🤿 Bawah Laut</span><h3>Snorkeling &amp; Diving</h3><p>Terumbu karang yang masih terjaga</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=800&q=80" alt="Sunset"/><div class="overlay"><span class="hc-tag">🌅 Panorama</span><h3>Sunset Samudera Hindia</h3><p>Matahari terbenam yang memukau</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="beo.jpg" alt="Satwa"/><div class="overlay"><span class="hc-tag">🦎 Satwa Liar</span><h3>Satwa Endemik</h3><p>Spesies langka hanya ada di Enggano</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="budaya.jpg" alt="Budaya"/><div class="overlay"><span class="hc-tag">🎭 Budaya</span><h3>Budaya Suku Enggano</h3><p>Tradisi dan adat istiadat autentik</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&q=80" alt="Pantai"/><div class="overlay"><span class="hc-tag">🏖 Pantai</span><h3>Pantai Bak Blau</h3><p>Pasir putih dengan air kristal biru</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="WargaEnggano.jpeg" alt="Hutan"/><div class="overlay"><span class="hc-tag">🌿 Alam</span><h3>Hutan Tropis Enggano</h3><p>Biodiversitas unik flora dan fauna</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80" alt="Snorkeling"/><div class="overlay"><span class="hc-tag">🤿 Bawah Laut</span><h3>Snorkeling &amp; Diving</h3><p>Terumbu karang yang masih terjaga</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=800&q=80" alt="Sunset"/><div class="overlay"><span class="hc-tag">🌅 Panorama</span><h3>Sunset Samudera Hindia</h3><p>Matahari terbenam yang memukau</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="beo.jpg" alt="Satwa"/><div class="overlay"><span class="hc-tag">🦎 Satwa Liar</span><h3>Satwa Endemik</h3><p>Spesies langka hanya ada di Enggano</p></div></a>
+        <a href="destination.html" class="highlight-card"><img src="budaya.jpg" alt="Budaya"/><div class="overlay"><span class="hc-tag">🎭 Budaya</span><h3>Budaya Suku Enggano</h3><p>Tradisi dan adat istiadat autentik</p></div></a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function(){
+      const track=document.getElementById('carouselTrack'),section=document.getElementById('carouselSection');
+      function syncMask(){let el=document.getElementById('highlightSection'),bg='transparent';while(el&&el!==document.documentElement){bg=getComputedStyle(el).backgroundColor;if(bg&&bg!=='rgba(0, 0, 0, 0)'&&bg!=='transparent')break;el=el.parentElement;}if(!bg||bg==='rgba(0, 0, 0, 0)')bg=getComputedStyle(document.body).backgroundColor;if(!bg||bg==='rgba(0, 0, 0, 0)')bg='#f0ebe0';section.style.setProperty('--section-bg',bg);}
+      syncMask();window.addEventListener('resize',syncMask);
+      section.addEventListener('mouseenter',()=>track.style.animationPlayState='paused');
+      section.addEventListener('mouseleave',()=>track.style.animationPlayState='running');
+      let drag=false,sx=0,ao=0;
+      function gx(el){return new DOMMatrix(window.getComputedStyle(el).transform).m41;}
+      section.addEventListener('mousedown',e=>{drag=true;sx=e.clientX;ao=gx(track);track.style.animation='none';track.style.transform=`translateX(${ao}px)`;});
+      section.addEventListener('touchstart',e=>{drag=true;sx=e.touches[0].clientX;ao=gx(track);track.style.animation='none';track.style.transform=`translateX(${ao}px)`;},{passive:true});
+      function mv(x){if(!drag)return;track.style.transform=`translateX(${ao+x-sx}px)`;}
+      window.addEventListener('mousemove',e=>mv(e.clientX));
+      window.addEventListener('touchmove',e=>mv(e.touches[0].clientX),{passive:true});
+      function end(){if(!drag)return;drag=false;track.style.animation='carouselSlide 32s linear infinite';track.style.animationPlayState='running';}
+      window.addEventListener('mouseup',end);window.addEventListener('touchend',end);
+    })();
+  </script>
+
+  <div class="transport-section">
+    <div class="transport-inner">
+      <div class="hero-badge" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.8);margin-bottom:12px;">🚢 Akses Transportasi</div>
+      <h2 class="section-title">Cara Menuju Enggano</h2>
+      <p class="section-sub">Pilih transportasi yang paling sesuai untuk perjalanan Anda</p>
+      <div class="transport-cards">
+        <a href="transport.html#ferry" class="transport-card">
+          <div class="tc-icon">⛴️</div>
+          <div class="tc-info"><h3>Kapal Ferry</h3><p>Pelabuhan Pulau Baai → Enggano<br/>Jadwal 2× seminggu</p></div>
+          <span class="tc-arrow">→</span>
+        </a>
+        <a href="transport.html" class="transport-card">
+          <div class="tc-icon">✈️</div>
+          <div class="tc-info"><h3>Pesawat</h3><p>Bengkulu → Bandara Enggano<br/>Penerbangan charter tersedia</p></div>
+          <span class="tc-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<footer class="footer">
+  <p>© 2025 <span>Enggano Pedia</span> · Pulau Enggano, Bengkulu Utara · Dibuat dengan ❤️ untuk Pulau Enggano</p>
+</footer>
+
+<div class="logout-modal-backdrop" id="logoutModal">
+  <div class="logout-modal">
+    <div class="lm-icon">🚪</div>
+    <h3>Keluar dari Akun?</h3>
+    <p>Anda akan diarahkan kembali ke halaman utama. Sampai jumpa kembali!</p>
+    <div class="logout-modal-btns">
+      <button class="btn-cancel-logout" onclick="closeLogout()">Batal</button>
+      <button class="btn-confirm-logout" onclick="doLogout()">Ya, Keluar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-aktif" id="toastAktif">🎉 Selamat! Akun mitra Anda telah aktif — etalase siap digunakan!</div>
+
+<script>
+  var pollingInterval=null, navCountdown=null, sudahTampilToast=false;
+  function getMitraStatus(){ try{return localStorage.getItem('enggano_mitra_status');}catch(e){return null;} }
+  function getAktivasiAt() { try{return parseInt(localStorage.getItem('enggano_mitra_aktivasi_at')||'0',10);}catch(e){return 0;} }
+  function getMitraData()  { try{return JSON.parse(localStorage.getItem('enggano_mitra_data')||'null');}catch(e){return null;} }
+  function upgradeKeAktif(){ try{localStorage.setItem('enggano_mitra_status','aktif');}catch(e){} try{localStorage.removeItem('enggano_mitra_aktivasi_at');}catch(e){} }
+  function cekAktivasi()   { var at=getAktivasiAt(); if(at&&Date.now()>=at){upgradeKeAktif();return true;} return false; }
+
+  function renderMitraUI(status, isUpgradeEvent) {
+    var data=getMitraData(), navArea=document.getElementById('mitraNavArea'),
+        ddMenu=document.getElementById('akunDdMenu'), ddNama=document.getElementById('ddNama'),
+        ddBadge=document.getElementById('ddBadge');
+    if(data&&data.nama) ddNama.textContent=data.nama;
+    var old=document.getElementById('menuEtalase'); if(old) old.remove();
+    if(!status) {
+      navArea.innerHTML='<a href="daftar-mitra.html" class="btn-daftar-mitra">🤝 Daftar Mitra</a>';
+    } else if(status==='pending') {
+      var at=getAktivasiAt(), sisaDetik=Math.ceil(Math.max(0,at-Date.now())/1000);
+      navArea.innerHTML='<div class="mitra-pending-badge" id="pendingBadge">⏳ Menunggu Verifikasi'+(sisaDetik>0?'<span class="countdown-pill" id="navCountdownNum">'+sisaDetik+'d</span>':'')+'</div>';
+      if(navCountdown) clearInterval(navCountdown);
+      if(sisaDetik>0){ navCountdown=setInterval(function(){ var s=Math.ceil(Math.max(0,getAktivasiAt()-Date.now())/1000),el=document.getElementById('navCountdownNum'); if(el) el.textContent=s+'d'; if(s<=0&&navCountdown) clearInterval(navCountdown); },1000); }
+      ddMenu.insertAdjacentHTML('afterbegin',
+        '<a href="etalase.html" id="menuEtalase" class="akun-dd-item" style="opacity:.6;pointer-events:none;cursor:default;">'+
+        '<div class="dd-item-icon-wrap gold">🏪</div>'+
+        '<div class="dd-item-text"><span class="dd-item-label">Kelola Etalase</span>'+
+        '<span class="dd-item-desc" style="color:#e8c96a;font-size:.7rem;">⏳ Menunggu verifikasi selesai</span></div>'+
+        '<span class="dd-item-arrow">›</span></a>');
+      ddBadge.textContent='Mitra'; ddBadge.style.color='#e8c96a'; ddBadge.style.borderColor='rgba(232,200,106,.4)'; ddBadge.style.background='rgba(232,200,106,.15)';
+    } else if(status==='aktif') {
+      if(isUpgradeEvent&&!sudahTampilToast){ sudahTampilToast=true; tampilkanToastAktif(); }
+      navArea.innerHTML='<div class="mitra-aktif-badge">✅ Mitra Aktif</div>';
+      ddMenu.insertAdjacentHTML('afterbegin',
+        '<a href="etalase.html" id="menuEtalase" class="akun-dd-item" onclick="closeDropdown()">'+
+        '<div class="dd-item-icon-wrap gold">🏪</div>'+
+        '<div class="dd-item-text"><span class="dd-item-label">Kelola Etalase</span>'+
+        '<span class="dd-item-desc">Upload &amp; kelola produk/usaha Anda</span></div>'+
+        '<span class="dd-item-arrow">›</span></a>');
+      ddBadge.textContent='Mitra ✓'; ddBadge.style.color='#14b8a6'; ddBadge.style.borderColor='rgba(20,184,166,.4)'; ddBadge.style.background='rgba(20,184,166,.2)';
+      if(pollingInterval){clearInterval(pollingInterval);pollingInterval=null;}
+      if(navCountdown){clearInterval(navCountdown);navCountdown=null;}
+    }
+  }
+
+  function tampilkanToastAktif(){ var t=document.getElementById('toastAktif'); if(!t)return; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},5000); }
+  function initMitraUI(){ var status=getMitraStatus(); if(status==='pending'){ if(cekAktivasi()){renderMitraUI('aktif',true);return;} renderMitraUI('pending',false); mulaiPolling(); } else { renderMitraUI(status,false); } }
+  function mulaiPolling(){ if(pollingInterval) return; pollingInterval=setInterval(function(){ var status=getMitraStatus(); if(status!=='pending'){clearInterval(pollingInterval);pollingInterval=null;return;} if(cekAktivasi()){clearInterval(pollingInterval);pollingInterval=null;if(navCountdown){clearInterval(navCountdown);navCountdown=null;}renderMitraUI('aktif',true);}},1000); }
+
+  var akunWrap=document.getElementById("akunWrap"),akunTrigger=document.getElementById("akunTrigger"),
+      akunDropdown=document.getElementById("akunDropdown"),akunChevron=document.getElementById("akunChevron"),dropdownOpen=false;
+  function openDropdown() {dropdownOpen=true; akunDropdown.classList.add("open"); akunTrigger.classList.add("open"); akunChevron.classList.add("rotated");}
+  function closeDropdown(){dropdownOpen=false;akunDropdown.classList.remove("open"); akunTrigger.classList.remove("open"); akunChevron.classList.remove("rotated");}
+  function toggleDropdown(){dropdownOpen?closeDropdown():openDropdown();}
+  document.addEventListener("click",function(e){if(akunWrap&&!akunWrap.contains(e.target))closeDropdown();});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeDropdown();closeLogout();}});
+  function openLogout() {document.getElementById("logoutModal").classList.add("open");}
+  function closeLogout(){document.getElementById("logoutModal").classList.remove("open");}
+  function doLogout(){if(pollingInterval)clearInterval(pollingInterval);if(navCountdown)clearInterval(navCountdown);window.location.href="index.html";}
+  document.getElementById("logoutModal").addEventListener("click",function(e){if(e.target===this)closeLogout();});
+  initMitraUI();
+</script>
+</body>
+</html>

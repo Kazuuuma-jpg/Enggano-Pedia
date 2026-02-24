@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Produk Lokal – Enggano Pedia</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ─── HERO ─── */
+    .hero { height: 400px; }
+    .hero-bg {
+      background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&q=80');
+    }
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar {
+      background: var(--white);
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--sand-dk);
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+      position: sticky; top: var(--nav-h); z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    }
+    .filter-btn {
+      padding: 7px 18px;
+      border-radius: 50px;
+      border: 2px solid var(--sand-dk);
+      background: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-size: .85rem; font-weight: 500;
+      color: var(--text-md); cursor: pointer;
+      transition: var(--trans);
+    }
+    .filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .filter-btn.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+    /* ─── PRODUK GRID ─── */
+    .produk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 36px;
+    }
+
+    /* ─── PRODUK CARD ─── */
+    .produk-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: var(--trans);
+      cursor: pointer;
+      border: 2px solid transparent;
+      /* ✅ FIX: flex column agar footer selalu di bawah */
+      display: flex;
+      flex-direction: column;
+    }
+    .produk-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(13,148,136,.2);
+    }
+
+    .pc-img {
+      height: 210px;
+      position: relative;
+      overflow: hidden;
+      background: var(--sand);
+      flex-shrink: 0;
+    }
+    .pc-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .5s ease;
+    }
+    .produk-card:hover .pc-img img { transform: scale(1.08); }
+
+    .pc-kategori {
+      position: absolute; top: 12px; left: 12px;
+      padding: 4px 12px;
+      background: rgba(7,45,64,.78);
+      backdrop-filter: blur(4px);
+      border-radius: 20px;
+      font-size: .72rem; color: var(--white);
+      letter-spacing: 1px; font-weight: 500;
+    }
+
+    .pc-badge {
+      position: absolute; top: 12px; right: 12px;
+      padding: 4px 10px;
+      background: var(--gold);
+      border-radius: 20px;
+      font-size: .72rem; color: var(--white);
+      font-weight: 600; letter-spacing: .5px;
+    }
+
+    .pc-body {
+      padding: 18px 20px 14px;
+      /* ✅ FIX: flex-grow supaya body mengisi ruang, dorong footer ke bawah */
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .pc-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.22rem; font-weight: 700;
+      color: var(--ocean-dk); margin-bottom: 5px;
+    }
+    .pc-desc {
+      font-size: .84rem; color: var(--text-lt);
+      line-height: 1.55; margin-bottom: 12px;
+    }
+
+    .pc-tags {
+      display: flex; gap: 7px; flex-wrap: wrap;
+      /* ✅ FIX: margin-top auto dorong tags ke bawah body, footer tetap sejajar */
+      margin-top: auto;
+    }
+    .pc-tag {
+      padding: 3px 10px;
+      background: rgba(13,148,136,.1);
+      border: 1px solid rgba(13,148,136,.2);
+      border-radius: 20px;
+      font-size: .75rem; color: var(--teal);
+    }
+
+    .pc-footer {
+      padding: 12px 20px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--sand);
+      gap: 10px;
+      flex-shrink: 0;
+      /* ✅ FIX: footer tidak ikut stretch */
+      margin-top: 12px;
+    }
+    .pc-harga {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 700; color: var(--teal);
+    }
+    .pc-harga-sub { font-size: .73rem; color: var(--text-lt); }
+
+    /* ─── HIGHLIGHT BANNER ─── */
+    .highlight-banner {
+      background: linear-gradient(135deg, var(--ocean-dk) 0%, var(--ocean) 60%, var(--teal) 100%);
+      padding: 48px 32px;
+      position: relative; overflow: hidden;
+    }
+    .highlight-banner::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,.02) 0, rgba(255,255,255,.02) 1px,
+        transparent 1px, transparent 24px
+      );
+    }
+    .highlight-inner {
+      max-width: 1200px; margin: 0 auto;
+      position: relative; z-index: 1;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      gap: 32px; flex-wrap: wrap;
+    }
+    .highlight-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--white); margin-bottom: 8px;
+    }
+    .highlight-text p { color: rgba(255,255,255,.65); font-size: .93rem; max-width: 440px; line-height: 1.6; }
+    .highlight-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ─── KEUNGGULAN GRID ─── */
+    .keunggulan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px; margin-top: 36px;
+    }
+    .keunggulan-item {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 22px 18px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: var(--trans);
+    }
+    .keunggulan-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .ki-icon { font-size: 32px; margin-bottom: 10px; }
+    .ki-title { font-weight: 600; font-size: .92rem; color: var(--text); margin-bottom: 4px; }
+    .ki-desc { font-size: .8rem; color: var(--text-lt); line-height: 1.5; }
+
+    /* ══ NAVBAR DROPDOWN AKUN ══ */
+    .akun-dropdown-wrap { position: relative; }
+    .akun-trigger {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px 8px 10px;
+      background: rgba(20,184,166,.15);
+      border: 1.5px solid rgba(20,184,166,.4);
+      border-radius: 50px;
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-size: .875rem; font-weight: 600;
+      cursor: pointer; transition: all .25s ease; white-space: nowrap;
+    }
+    .akun-trigger:hover { background: rgba(20,184,166,.28); border-color: rgba(20,184,166,.7); box-shadow: 0 4px 18px rgba(20,184,166,.25); }
+    .akun-trigger.open  { background: rgba(20,184,166,.3);  border-color: rgba(20,184,166,.8); }
+    .akun-trigger .avatar { width:28px;height:28px;background:rgba(20,184,166,.3);border-radius:50%;display:grid;place-items:center;font-size:14px;border:1.5px solid rgba(20,184,166,.5); }
+    .dropdown-chevron { transition: transform .3s cubic-bezier(.34,1.56,.64,1); color: rgba(255,255,255,.8); flex-shrink: 0; }
+    .dropdown-chevron.rotated { transform: rotate(180deg); }
+    .akun-dropdown {
+      position: absolute; top: calc(100% + 12px); right: 0; width: 280px;
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,.04), 0 20px 60px rgba(7,45,64,.18), 0 0 0 1px rgba(13,148,136,.12);
+      overflow: hidden; z-index: 1000;
+      opacity: 0; visibility: hidden;
+      transform: translateY(-10px) scale(.97); transform-origin: top right;
+      transition: opacity .22s ease, transform .22s cubic-bezier(.34,1.2,.64,1), visibility .22s ease;
+    }
+    .akun-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+    .akun-dropdown::before { content:''; position: absolute; top: -7px; right: 22px; width: 14px; height: 14px; background: #fff; border-radius: 3px; transform: rotate(45deg); box-shadow: -2px -2px 5px rgba(0,0,0,.04); z-index: -1; }
+    .akun-dd-header { display:flex;align-items:center;gap:12px;padding:18px 18px 16px; background:linear-gradient(135deg,#072d40 0%,#0e6074 100%); position:relative;overflow:hidden; }
+    .akun-dd-header::after { content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 1px,transparent 1px,transparent 18px); }
+    .akun-dd-avatar { width:44px;height:44px;background:linear-gradient(135deg,rgba(20,184,166,.5),rgba(20,184,166,.2));border-radius:50%;display:grid;place-items:center;font-size:20px;border:2px solid rgba(20,184,166,.5);flex-shrink:0;position:relative;z-index:1; }
+    .akun-dd-info { flex:1;min-width:0;position:relative;z-index:1; }
+    .akun-dd-name { display:block;font-size:.9rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .akun-dd-email { display:block;font-size:.72rem;color:rgba(255,255,255,.55);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .akun-dd-badge { font-size:.65rem;font-weight:700;color:#14b8a6;background:rgba(20,184,166,.2);border:1px solid rgba(20,184,166,.4);padding:3px 8px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;position:relative;z-index:1; }
+    .akun-dd-divider { height:1px;background:linear-gradient(90deg,transparent,#e5e7eb 20%,#e5e7eb 80%,transparent); }
+    .akun-dd-menu { padding: 8px; }
+    .akun-dd-item { display:flex;align-items:center;gap:13px;padding:11px 12px;border-radius:12px;text-decoration:none;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;font-family:'Outfit',sans-serif;transition:all .18s ease;position:relative;overflow:hidden; }
+    .akun-dd-item::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,148,136,.08),rgba(13,148,136,.03));opacity:0;transition:opacity .18s ease;border-radius:12px; }
+    .akun-dd-item:hover::before { opacity:1; }
+    .akun-dd-item:hover { transform: translateX(2px); }
+    .dd-item-icon-wrap { width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:17px;flex-shrink:0;transition:transform .2s ease; }
+    .akun-dd-item:hover .dd-item-icon-wrap { transform:scale(1.1) rotate(-3deg); }
+    .dd-item-icon-wrap.green  { background:rgba(16,185,129,.1); }
+    .dd-item-icon-wrap.blue   { background:rgba(59,130,246,.1); }
+    .dd-item-icon-wrap.purple { background:rgba(139,92,246,.1); }
+    .dd-item-text { flex:1;min-width:0; }
+    .dd-item-label { display:block;font-size:.875rem;font-weight:600;color:#1e3a4a;line-height:1.2; }
+    .dd-item-desc  { display:block;font-size:.72rem;color:#8fa3ad;margin-top:2px; }
+    .dd-item-arrow { color:#c4d4da;font-size:12px;transition:transform .18s ease,color .18s ease; }
+    .akun-dd-item:hover .dd-item-arrow { transform:translateX(3px);color:#14b8a6; }
+    .akun-dd-logout-wrap { padding:6px 8px 10px;border-top:1px solid #f0f4f5;margin-top:2px; }
+    .akun-dd-logout { display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;border:1.5px solid rgba(224,80,80,.15);background:rgba(224,80,80,.04);cursor:pointer;width:100%;font-family:'Outfit',sans-serif;transition:all .2s ease; }
+    .akun-dd-logout:hover { background:rgba(224,80,80,.1);border-color:rgba(224,80,80,.35);transform:translateY(-1px);box-shadow:0 4px 14px rgba(224,80,80,.15); }
+    .akun-dd-logout .dd-logout-icon { width:34px;height:34px;background:rgba(224,80,80,.1);border-radius:9px;display:grid;place-items:center;font-size:16px;flex-shrink:0;transition:transform .2s ease; }
+    .akun-dd-logout:hover .dd-logout-icon { transform:scale(1.1); }
+    .akun-dd-logout .dd-logout-text { font-size:.875rem;font-weight:700;color:#c0392b; }
+    .akun-dd-logout .dd-logout-sub  { font-size:.7rem;color:rgba(192,57,43,.6);display:block;margin-top:1px; }
+    /* Logout Modal */
+    .logout-modal-backdrop{display:none;position:fixed;inset:0;background:rgba(7,45,64,.6);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;padding:20px;}
+    .logout-modal-backdrop.open{display:flex;}
+    .logout-modal{background:#fff;border-radius:20px;box-shadow:0 30px 80px rgba(7,45,64,.3);max-width:380px;width:100%;padding:36px 32px;text-align:center;}
+    .logout-modal .lm-icon{font-size:44px;margin-bottom:16px;}
+    .logout-modal h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:#072d40;margin-bottom:8px;}
+    .logout-modal p{font-size:.875rem;color:#8fa3ad;line-height:1.6;margin-bottom:28px;}
+    .logout-modal-btns{display:flex;gap:12px;}
+    .btn-cancel-logout{flex:1;padding:13px;border:2px solid #e5e7eb;border-radius:12px;background:#f5f0e8;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;color:#6b7280;cursor:pointer;transition:all .2s;}
+    .btn-confirm-logout{flex:1;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#e05050,#c0392b);font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(224,80,80,.3);}
+    @media(max-width:560px){.akun-dropdown{width:260px;right:-10px;}.akun-trigger span:not(.avatar){display:none;}}
+    .btn-daftar-mitra { display:flex;align-items:center;gap:7px;padding:8px 18px;background:linear-gradient(135deg,#c9962a,#e8b84b);border-radius:30px;color:#fff !important;font-size:.82rem;font-weight:700;letter-spacing:.4px;text-decoration:none;transition:all .25s ease;white-space:nowrap;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(201,150,42,.35); }
+    .btn-daftar-mitra:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,150,42,.5); }
+    .mitra-pending-badge { display:flex;align-items:center;gap:7px;padding:8px 16px;background:rgba(201,150,42,.15);border:1.5px solid rgba(201,150,42,.4);border-radius:30px;color:#e8c96a;font-size:.78rem;font-weight:600;white-space:nowrap;cursor:default; }
+    .mitra-pending-badge .countdown-pill { background:rgba(201,150,42,.3);border-radius:20px;padding:2px 8px;font-size:.72rem;font-weight:700;color:#fde68a;min-width:32px;text-align:center; }
+    .mitra-aktif-badge { display:flex;align-items:center;gap:7px;padding:8px 16px;background:rgba(20,184,166,.15);border:1.5px solid rgba(20,184,166,.4);border-radius:30px;color:#5eead4;font-size:.78rem;font-weight:700;white-space:nowrap;animation:badgePop .5s cubic-bezier(.34,1.56,.64,1) both; }
+    @keyframes badgePop { from{opacity:0;transform:scale(.8)} to{opacity:1;transform:scale(1)} }
+    .dd-item-icon-wrap.gold { background:rgba(201,150,42,.12); }
+    .toast-aktif { position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,#072d40,#0d9488);color:#fff;padding:14px 28px;border-radius:50px;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;box-shadow:0 8px 32px rgba(7,45,64,.35);z-index:3000;display:flex;align-items:center;gap:10px;transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .4s ease;opacity:0;pointer-events:none;white-space:nowrap; }
+    .toast-aktif.show { transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <a href="home.html" class="nav-logo">
+    <div class="logo-icon" style="background:none;padding:0;overflow:hidden;">
+      <img src="logo_web.jpeg" style="width:38px;height:38px;border-radius:10px;object-fit:cover;" />
+    </div>
+    <div><div class="logo-text">Enggano Pedia</div><div class="logo-sub">Pariwisata</div></div>
+  </a>
+  <div class="nav-links">
+    <a href="home.html"        class="nav-link"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span></a>
+    <a href="transport.html"   class="nav-link"><span class="nav-icon">🚢</span><span class="nav-label">Transportasi</span></a>
+    <a href="destination.html" class="nav-link"><span class="nav-icon">🌴</span><span class="nav-label">Wisata</span></a>
+    <a href="product.html"     class="nav-link active"><span class="nav-icon">🛒</span><span class="nav-label">Produk</span></a><!-- ✅ FIX: active dipindah ke Produk -->
+    <a href="homestay.html"    class="nav-link"><span class="nav-icon">🏨</span><span class="nav-label">Penginapan</span></a>
+  </div>
+  <div class="nav-right" style="display:flex;align-items:center;gap:10px;">
+    <div id="mitraNavArea"></div>
+    <div class="akun-dropdown-wrap" id="akunWrap">
+      <button class="akun-trigger" id="akunTrigger" onclick="event.stopPropagation();toggleDropdown()">
+        <div class="avatar">👤</div>
+        <span>Akun</span>
+        <svg class="dropdown-chevron" id="akunChevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="akun-dropdown" id="akunDropdown">
+        <div class="akun-dd-header">
+          <div class="akun-dd-avatar">👤</div>
+          <div class="akun-dd-info">
+            <span class="akun-dd-name" id="ddNama">Pengguna</span>
+            <span class="akun-dd-email">enggano@gmail.com</span>
+          </div>
+          <span class="akun-dd-badge" id="ddBadge">User</span>
+        </div>
+        <div class="akun-dd-divider"></div>
+        <div class="akun-dd-menu" id="akunDdMenu">
+          <a href="account.html" class="akun-dd-item" onclick="closeDropdown()">
+            <div class="dd-item-icon-wrap blue">👤</div>
+            <div class="dd-item-text">
+              <span class="dd-item-label">Profil Saya</span>
+              <span class="dd-item-desc">Lihat &amp; edit informasi akun</span>
+            </div>
+            <span class="dd-item-arrow">›</span>
+          </a>
+          <a href="setting.html" class="akun-dd-item" onclick="closeDropdown()">
+            <div class="dd-item-icon-wrap purple">⚙️</div>
+            <div class="dd-item-text">
+              <span class="dd-item-label">Pengaturan</span>
+              <span class="dd-item-desc">Konfigurasi website &amp; notifikasi</span>
+            </div>
+            <span class="dd-item-arrow">›</span>
+          </a>
+        </div>
+        <div class="akun-dd-logout-wrap">
+          <button type="button" class="akun-dd-logout" onclick="event.stopPropagation();closeDropdown();openLogout();">
+            <div class="dd-logout-icon">🚪</div>
+            <div>
+              <span class="dd-logout-text">Keluar dari Akun</span>
+              <span class="dd-logout-sub">Anda akan logout dari sesi ini</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ CONTENT ═══════════════ -->
+<div class="page-content">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🛒 Produk Unggulan</div>
+      <h1>Produk Lokal<br/>Pulau Enggano</h1>
+      <p>Hasil bumi dan produk unggulan asli Enggano — segar, alami, dan langsung dari tangan petani lokal</p>
+    </div>
+  </section>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterProduk('semua', this)">🌿 Semua</button>
+    <button class="filter-btn" onclick="filterProduk('buah', this)">🍌 Buah</button>
+    <button class="filter-btn" onclick="filterProduk('polong', this)">🌱 Polong & Biji</button>
+  </div>
+
+  <!-- PRODUK LIST -->
+  <section class="section">
+    <h2 class="section-title">Produk Unggulan Enggano</h2>
+    <p class="section-sub">Dipesan langsung dari petani lokal Pulau Enggano</p>
+
+    <div class="produk-grid">
+
+      <!-- 1. Pisang Kepok Putih -->
+      <div class="produk-card" data-kategori="buah">
+        <div class="pc-img">
+          <img src="pisang.jpg" alt="Pisang Kepok Putih"/>
+          <span class="pc-kategori">🍌 Buah</span>
+          <span class="pc-badge">⭐ Unggulan</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Pisang Kepok Putih</div>
+          <p class="pc-desc">Pisang kepok putih khas Enggano terkenal dengan daging buah yang lebih tebal, manis, dan aroma khas yang harum. Cocok dikonsumsi langsung maupun diolah.</p>
+          <div class="pc-tags">
+            <span class="pc-tag">🌿 Organik</span>
+            <span class="pc-tag">🚫 Non-Pestisida</span>
+            <span class="pc-tag">🏝️ Khas Enggano</span>
+          </div>
+        </div>
+        <div class="pc-footer">
+          <div>
+            <div class="pc-harga">Rp 25.000</div>
+            <div class="pc-harga-sub">per sisir / ±1 kg</div>
+          </div>
+          <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20ingin%20memesan%20Pisang%20Kepok%20Putih%20dari%20Enggano" target="_blank" class="btn btn-wa">💬 Pesan</a>
+        </div>
+      </div>
+
+      <!-- 2. Jengkol -->
+      <div class="produk-card" data-kategori="polong">
+        <div class="pc-img">
+          <img src="jengkol.jpg" alt="Jengkol"/>
+          <span class="pc-kategori">🌱 Polong</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Jengkol Enggano</div>
+          <p class="pc-desc">Jengkol Enggano dikenal memiliki biji yang lebih besar dan rasa yang lebih gurih dibanding jengkol dari daerah lain. Favorit para pecinta kuliner nusantara.</p>
+          <div class="pc-tags">
+            <span class="pc-tag">🌿 Alami</span>
+            <span class="pc-tag">💪 Kaya Protein</span>
+            <span class="pc-tag">🏝️ Khas Enggano</span>
+          </div>
+        </div>
+        <div class="pc-footer">
+          <div>
+            <div class="pc-harga">Rp 20.000</div>
+            <div class="pc-harga-sub">per kg</div>
+          </div>
+          <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20ingin%20memesan%20Jengkol%20dari%20Enggano" target="_blank" class="btn btn-wa">💬 Pesan</a>
+        </div>
+      </div>
+
+      <!-- 3. Melinjo -->
+      <div class="produk-card" data-kategori="polong">
+        <div class="pc-img">
+          <img src="melinjo.jpg" alt="Melinjo"/>
+          <span class="pc-kategori">🌱 Polong & Biji</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Melinjo Enggano</div>
+          <p class="pc-desc">Melinjo segar berkualitas tinggi dari hutan-kebun Enggano. Dapat diolah menjadi emping, sayur, atau berbagai masakan tradisional khas Nusantara.</p>
+          <div class="pc-tags">
+            <span class="pc-tag">🌿 Segar</span>
+            <span class="pc-tag">🍃 Daun & Biji</span>
+            <span class="pc-tag">🏝️ Khas Enggano</span>
+          </div>
+        </div>
+        <div class="pc-footer">
+          <div>
+            <div class="pc-harga">Rp 15.000</div>
+            <div class="pc-harga-sub">per kg</div>
+          </div>
+          <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20ingin%20memesan%20Melinjo%20dari%20Enggano" target="_blank" class="btn btn-wa">💬 Pesan</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- KEUNGGULAN -->
+  <section class="section" style="padding-top: 0;">
+    <h2 class="section-title">Mengapa Produk Enggano?</h2>
+    <p class="section-sub">Keunggulan produk lokal dari pulau terpencil di Samudera Hindia</p>
+    <div class="keunggulan-grid">
+      <div class="keunggulan-item">
+        <div class="ki-icon">🌿</div>
+        <div class="ki-title">100% Organik</div>
+        <div class="ki-desc">Ditanam tanpa pestisida kimia, memanfaatkan kesuburan tanah alami pulau</div>
+      </div>
+      <div class="keunggulan-item">
+        <div class="ki-icon">✋</div>
+        <div class="ki-title">Dipanen Manual</div>
+        <div class="ki-desc">Setiap produk dipilih dan dipanen langsung oleh tangan petani lokal Enggano</div>
+      </div>
+      <div class="keunggulan-item">
+        <div class="ki-icon">🏝️</div>
+        <div class="ki-title">Khas Enggano</div>
+        <div class="ki-desc">Cita rasa unik yang hanya bisa ditemukan dari tanah Pulau Enggano</div>
+      </div>
+      <div class="keunggulan-item">
+        <div class="ki-icon">👨‍🌾</div>
+        <div class="ki-title">Dukung Petani Lokal</div>
+        <div class="ki-desc">Setiap pembelian langsung mendukung kesejahteraan petani asli Enggano</div>
+      </div>
+      <div class="keunggulan-item">
+        <div class="ki-icon">📦</div>
+        <div class="ki-title">Dikirim Langsung</div>
+        <div class="ki-desc">Produk segar dikirim via kapal ferry atau pesawat ke tujuan Anda</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="highlight-banner">
+    <div class="highlight-inner">
+      <div class="highlight-text">
+        <h2>🛒 Pesan Produk Enggano Sekarang</h2>
+        <p>Dapatkan produk segar langsung dari petani Enggano. Hubungi kami via WhatsApp untuk pemesanan, ketersediaan stok, dan pengiriman.</p>
+      </div>
+      <div class="highlight-actions">
+        <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20ingin%20memesan%20produk%20lokal%20Pulau%20Enggano.%20Bisa%20minta%20info%20lengkapnya%3F" target="_blank" class="btn btn-wa">
+          💬 Pesan via WhatsApp
+        </a>
+        <a href="transport.html" class="btn btn-outline" style="color:var(--white);border-color:rgba(255,255,255,.45);">
+          🚢 Info Pengiriman
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>© 2025 <span>Enggano Pedia</span> · Pulau Enggano, Bengkulu Utara</p>
+</footer>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-modal-backdrop" id="logoutModal">
+  <div class="logout-modal">
+    <div class="lm-icon">🚪</div>
+    <h3>Keluar dari Akun?</h3>
+    <p>Anda akan diarahkan kembali ke halaman utama. Sampai jumpa kembali!</p>
+    <div class="logout-modal-btns">
+      <button class="btn-cancel-logout" onclick="closeLogout()">Batal</button>
+      <button class="btn-confirm-logout" onclick="doLogout()">Ya, Keluar</button>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  function filterProduk(kategori, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.produk-card').forEach(card => {
+      if (kategori === 'semua' || card.dataset.kategori === kategori) {
+        card.style.display = '';
+        card.style.animation = 'fadeUp .4s ease both';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+<script>
+  /* ══ LOGIC MITRA ══ */
+  var pollingInterval=null, navCountdown=null, sudahTampilToast=false;
+  function getMitraStatus(){ try{return localStorage.getItem('enggano_mitra_status');}catch(e){return null;} }
+  function getAktivasiAt() { try{return parseInt(localStorage.getItem('enggano_mitra_aktivasi_at')||'0',10);}catch(e){return 0;} }
+  function getMitraData()  { try{return JSON.parse(localStorage.getItem('enggano_mitra_data')||'null');}catch(e){return null;} }
+  function upgradeKeAktif(){ try{localStorage.setItem('enggano_mitra_status','aktif');}catch(e){} try{localStorage.removeItem('enggano_mitra_aktivasi_at');}catch(e){} }
+  function cekAktivasi()   { var at=getAktivasiAt(); if(at&&Date.now()>=at){upgradeKeAktif();return true;} return false; }
+
+  function renderMitraUI(status, isUpgradeEvent) {
+    var data=getMitraData(), navArea=document.getElementById('mitraNavArea'),
+        ddMenu=document.getElementById('akunDdMenu'), ddNama=document.getElementById('ddNama'),
+        ddBadge=document.getElementById('ddBadge');
+    if(data&&data.nama) ddNama.textContent=data.nama;
+    var old=document.getElementById('menuEtalase'); if(old) old.remove();
+
+    if(!status) {
+      navArea.innerHTML='<a href="daftar-mitra.html" class="btn-daftar-mitra">🤝 Daftar Mitra</a>';
+    } else if(status==='pending') {
+      var at=getAktivasiAt(), sisaDetik=Math.ceil(Math.max(0,at-Date.now())/1000);
+      navArea.innerHTML='<div class="mitra-pending-badge" id="pendingBadge">⏳ Menunggu Verifikasi'+(sisaDetik>0?'<span class="countdown-pill" id="navCountdownNum">'+sisaDetik+'d</span>':'')+'</div>';
+      if(navCountdown) clearInterval(navCountdown);
+      if(sisaDetik>0){ navCountdown=setInterval(function(){ var s=Math.ceil(Math.max(0,getAktivasiAt()-Date.now())/1000),el=document.getElementById('navCountdownNum'); if(el) el.textContent=s+'d'; if(s<=0&&navCountdown) clearInterval(navCountdown); },1000); }
+      ddMenu.insertAdjacentHTML('afterbegin',
+        '<a href="etalase.html" id="menuEtalase" class="akun-dd-item" style="opacity:.6;pointer-events:none;cursor:default;">'+
+        '<div class="dd-item-icon-wrap gold">🏪</div>'+
+        '<div class="dd-item-text"><span class="dd-item-label">Kelola Etalase</span>'+
+        '<span class="dd-item-desc" style="color:#e8c96a;font-size:.7rem;">⏳ Menunggu verifikasi selesai</span></div>'+
+        '<span class="dd-item-arrow">›</span></a>');
+      ddBadge.textContent='Mitra'; ddBadge.style.color='#e8c96a'; ddBadge.style.borderColor='rgba(232,200,106,.4)'; ddBadge.style.background='rgba(232,200,106,.15)';
+    } else if(status==='aktif') {
+      if(isUpgradeEvent&&!sudahTampilToast){ sudahTampilToast=true; tampilkanToastAktif(); }
+      navArea.innerHTML='<div class="mitra-aktif-badge">✅ Mitra Aktif</div>';
+      ddMenu.insertAdjacentHTML('afterbegin',
+        '<a href="etalase.html" id="menuEtalase" class="akun-dd-item" onclick="closeDropdown()">'+
+        '<div class="dd-item-icon-wrap gold">🏪</div>'+
+        '<div class="dd-item-text"><span class="dd-item-label">Kelola Etalase</span>'+
+        '<span class="dd-item-desc">Upload &amp; kelola produk/usaha Anda</span></div>'+
+        '<span class="dd-item-arrow">›</span></a>');
+      ddBadge.textContent='Mitra ✓'; ddBadge.style.color='#14b8a6'; ddBadge.style.borderColor='rgba(20,184,166,.4)'; ddBadge.style.background='rgba(20,184,166,.2)';
+      if(pollingInterval){clearInterval(pollingInterval);pollingInterval=null;}
+      if(navCountdown){clearInterval(navCountdown);navCountdown=null;}
+    }
+  }
+
+  function tampilkanToastAktif(){ var t=document.getElementById('toastAktif'); if(!t)return; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},5000); }
+  function initMitraUI(){ var status=getMitraStatus(); if(status==='pending'){ if(cekAktivasi()){renderMitraUI('aktif',true);return;} renderMitraUI('pending',false); mulaiPolling(); } else { renderMitraUI(status,false); } }
+  function mulaiPolling(){ if(pollingInterval) return; pollingInterval=setInterval(function(){ var status=getMitraStatus(); if(status!=='pending'){clearInterval(pollingInterval);pollingInterval=null;return;} if(cekAktivasi()){clearInterval(pollingInterval);pollingInterval=null;if(navCountdown){clearInterval(navCountdown);navCountdown=null;}renderMitraUI('aktif',true);}},1000); }
+
+  var akunWrap=document.getElementById("akunWrap"),akunTrigger=document.getElementById("akunTrigger"),
+      akunDropdown=document.getElementById("akunDropdown"),akunChevron=document.getElementById("akunChevron"),dropdownOpen=false;
+  function openDropdown() {dropdownOpen=true; akunDropdown.classList.add("open"); akunTrigger.classList.add("open"); akunChevron.classList.add("rotated");}
+  function closeDropdown(){dropdownOpen=false;akunDropdown.classList.remove("open"); akunTrigger.classList.remove("open"); akunChevron.classList.remove("rotated");}
+  function toggleDropdown(){dropdownOpen?closeDropdown():openDropdown();}
+  document.addEventListener("click",function(e){if(akunWrap&&!akunWrap.contains(e.target))closeDropdown();});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeDropdown();closeLogout();}});
+  function openLogout() {document.getElementById("logoutModal").classList.add("open");}
+  function closeLogout(){document.getElementById("logoutModal").classList.remove("open");}
+  function doLogout(){if(pollingInterval)clearInterval(pollingInterval);if(navCountdown)clearInterval(navCountdown);window.location.href="index.html";}
+  document.getElementById("logoutModal").addEventListener("click",function(e){if(e.target===this)closeLogout();});
+  initMitraUI();
+</script>
+<div class="toast-aktif" id="toastAktif">🎉 Selamat! Akun mitra Anda telah aktif — etalase siap digunakan!</div>
+</body>
+</html>

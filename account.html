@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Akun – Enggano Pedia</title>
+  <link rel="stylesheet" href="style2.css"/>
+  <style>
+    .akun-wrap { max-width:680px; margin:72px auto 48px; padding:0 24px 100px; }
+    .akun-card { background:var(--white); border-radius:24px; box-shadow:var(--shadow-lg); overflow:hidden; }
+    .akun-header { background:linear-gradient(145deg,var(--ocean-dk) 0%,var(--ocean) 100%); padding:52px 40px 40px; text-align:center; position:relative; overflow:hidden; }
+    .akun-header::before { content:''; position:absolute; top:-60px; right:-60px; width:240px; height:240px; background:radial-gradient(circle,rgba(20,184,166,.22) 0%,transparent 70%); pointer-events:none; }
+    .akun-header::after { content:''; position:absolute; inset:0; background:repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 22px); pointer-events:none; }
+    .akun-avatar { width:84px; height:84px; background:linear-gradient(135deg,var(--teal),var(--teal-lt)); border-radius:50%; display:grid; place-items:center; font-size:36px; margin:0 auto 18px; border:4px solid rgba(255,255,255,.2); box-shadow:0 8px 28px rgba(0,0,0,.25); position:relative; z-index:1; }
+    .akun-header h2 { font-family:"Cormorant Garamond",serif; font-size:1.8rem; font-weight:700; color:var(--white); position:relative; z-index:1; margin-bottom:8px; }
+    .akun-header p { font-size:.875rem; color:rgba(255,255,255,.55); position:relative; z-index:1; line-height:1.6; max-width:320px; margin:0 auto; }
+    .akun-status { display:inline-flex; align-items:center; gap:6px; margin-top:14px; padding:5px 14px; background:rgba(20,184,166,.2); border:1px solid rgba(20,184,166,.45); border-radius:50px; font-size:.78rem; font-weight:600; color:var(--teal-lt); letter-spacing:.4px; position:relative; z-index:1; }
+    .status-dot { width:7px; height:7px; background:var(--teal-lt); border-radius:50%; animation:pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.85);} }
+    .profil-body { padding:40px 44px 44px; }
+    .profil-group { border:1.5px solid var(--sand-dk); border-radius:16px; overflow:hidden; margin-bottom:20px; }
+    .profil-group-header { padding:13px 20px; background:var(--sand); border-bottom:1.5px solid var(--sand-dk); font-size:.72rem; font-weight:700; color:var(--text-md); letter-spacing:.8px; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+    .profil-row { display:flex; align-items:center; justify-content:space-between; padding:15px 20px; border-bottom:1px solid var(--sand); gap:16px; }
+    .profil-row:last-child { border-bottom:none; }
+    .profil-row-label { font-size:.78rem; font-weight:600; color:var(--text-lt); letter-spacing:.4px; text-transform:uppercase; min-width:110px; }
+    .profil-row-value { font-size:.9rem; font-weight:500; color:var(--text); text-align:right; }
+    .profil-row-value.verified { display:flex; align-items:center; gap:6px; color:var(--teal); }
+    .section-hr { border:none; border-top:1.5px solid var(--sand-dk); margin:32px 0 24px; }
+    .section-label { font-size:.72rem; font-weight:700; color:var(--text-lt); letter-spacing:1.4px; text-transform:uppercase; margin-bottom:16px; }
+    .quick-links { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .quick-link { display:flex; align-items:center; gap:12px; padding:15px 16px; background:var(--sand); border-radius:14px; text-decoration:none; transition:var(--trans); border:2px solid transparent; }
+    .quick-link:hover { border-color:var(--teal); background:rgba(13,148,136,.06); transform:translateY(-2px); box-shadow:0 6px 20px rgba(13,148,136,.12); }
+    .quick-link .ql-icon { font-size:20px; line-height:1; flex-shrink:0; }
+    .quick-link .ql-text { font-size:.84rem; font-weight:500; color:var(--text); line-height:1.35; }
+
+    /* ── ETALASE SHORTCUT di body halaman ── */
+    .etalase-banner {
+      display:flex;align-items:center;gap:16px;
+      padding:20px 22px;margin-bottom:20px;
+      background:linear-gradient(135deg,rgba(13,148,136,.08),rgba(13,148,136,.04));
+      border:2px solid rgba(13,148,136,.2);border-radius:16px;
+      text-decoration:none;transition:var(--trans);
+    }
+    .etalase-banner:hover { border-color:var(--teal);background:rgba(13,148,136,.12);transform:translateY(-2px);box-shadow:0 6px 20px rgba(13,148,136,.14); }
+    .eb-icon { width:48px;height:48px;background:linear-gradient(135deg,var(--teal),var(--ocean-lt));border-radius:12px;display:grid;place-items:center;font-size:22px;flex-shrink:0; }
+    .eb-text strong { display:block;font-size:.95rem;font-weight:700;color:var(--ocean-dk);margin-bottom:2px; }
+    .eb-text span   { font-size:.8rem;color:var(--text-lt); }
+    .eb-arrow { margin-left:auto;color:var(--teal);font-size:20px;flex-shrink:0; }
+
+    .logout-wrap { margin-top:32px; }
+    .btn-logout { width:100%; justify-content:center; padding:15px 24px; font-size:.95rem; border-radius:12px; letter-spacing:.3px; background:linear-gradient(135deg,#e05050,#c0392b); color:var(--white); border:none; cursor:pointer; box-shadow:0 4px 16px rgba(224,80,80,.3); transition:var(--trans); display:flex; align-items:center; gap:8px; }
+    .btn-logout:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(224,80,80,.4); }
+    .save-toast { display:none; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:var(--teal); color:var(--white); padding:12px 26px; border-radius:50px; font-size:.9rem; font-weight:500; box-shadow:0 8px 24px rgba(13,148,136,.4); z-index:9999; white-space:nowrap; }
+    .logout-modal-backdrop { display:none; position:fixed; inset:0; background:rgba(7,45,64,.6); backdrop-filter:blur(6px); z-index:2000; align-items:center; justify-content:center; padding:20px; }
+    .logout-modal-backdrop.open { display:flex; }
+    .logout-modal { background:var(--white); border-radius:20px; box-shadow:0 30px 80px rgba(7,45,64,.3); max-width:380px; width:100%; padding:36px 32px; text-align:center; }
+    .logout-modal .lm-icon { font-size:44px; margin-bottom:16px; }
+    .logout-modal h3 { font-family:"Cormorant Garamond",serif; font-size:1.4rem; font-weight:700; color:var(--ocean-dk); margin-bottom:8px; }
+    .logout-modal p { font-size:.875rem; color:var(--text-lt); line-height:1.6; margin-bottom:28px; }
+    .logout-modal-btns { display:flex; gap:12px; }
+    .btn-cancel-logout { flex:1; padding:13px; border:2px solid var(--sand-dk); border-radius:12px; background:var(--sand); font-family:"Outfit",sans-serif; font-size:.9rem; font-weight:600; color:var(--text-md); cursor:pointer; transition:var(--trans); }
+    .btn-cancel-logout:hover { border-color:var(--text-lt); background:var(--sand-dk); }
+    .btn-confirm-logout { flex:1; padding:13px; border:none; border-radius:12px; background:linear-gradient(135deg,#e05050,#c0392b); font-family:"Outfit",sans-serif; font-size:.9rem; font-weight:600; color:var(--white); cursor:pointer; transition:var(--trans); box-shadow:0 4px 14px rgba(224,80,80,.3); }
+    .btn-confirm-logout:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(224,80,80,.4); }
+    .akun-dropdown-wrap { position:relative; }
+    .akun-trigger { display:flex; align-items:center; gap:8px; padding:8px 14px 8px 10px; background:rgba(20,184,166,.15); border:1.5px solid rgba(20,184,166,.4); border-radius:50px; color:var(--white); font-family:"Outfit",sans-serif; font-size:.875rem; font-weight:600; cursor:pointer; transition:all .25s ease; white-space:nowrap; }
+    .akun-trigger:hover { background:rgba(20,184,166,.28); border-color:rgba(20,184,166,.7); box-shadow:0 4px 18px rgba(20,184,166,.25); }
+    .akun-trigger.open { background:rgba(20,184,166,.3); border-color:rgba(20,184,166,.8); }
+    .akun-trigger .avatar { width:28px; height:28px; background:rgba(20,184,166,.3); border-radius:50%; display:grid; place-items:center; font-size:14px; border:1.5px solid rgba(20,184,166,.5); }
+    .dropdown-chevron { transition:transform .3s cubic-bezier(.34,1.56,.64,1); color:rgba(255,255,255,.8); flex-shrink:0; }
+    .dropdown-chevron.rotated { transform:rotate(180deg); }
+    .akun-dropdown { position:absolute; top:calc(100% + 12px); right:0; width:280px; background:#fff; border-radius:20px; box-shadow:0 4px 6px rgba(0,0,0,.04),0 20px 60px rgba(7,45,64,.18),0 0 0 1px rgba(13,148,136,.12); overflow:hidden; z-index:1000; opacity:0; visibility:hidden; transform:translateY(-10px) scale(.97); transform-origin:top right; transition:opacity .22s ease,transform .22s cubic-bezier(.34,1.2,.64,1),visibility .22s ease; }
+    .akun-dropdown.open { opacity:1; visibility:visible; transform:translateY(0) scale(1); }
+    .akun-dropdown::before { content:''; position:absolute; top:-7px; right:22px; width:14px; height:14px; background:#fff; border-radius:3px; transform:rotate(45deg); box-shadow:-2px -2px 5px rgba(0,0,0,.04); z-index:-1; }
+    .akun-dd-header { display:flex; align-items:center; gap:12px; padding:18px 18px 16px; background:linear-gradient(135deg,#072d40 0%,#0e6074 100%); position:relative; overflow:hidden; }
+    .akun-dd-header::after { content:''; position:absolute; inset:0; background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 1px,transparent 1px,transparent 18px); }
+    .akun-dd-avatar { width:44px; height:44px; background:linear-gradient(135deg,rgba(20,184,166,.5),rgba(20,184,166,.2)); border-radius:50%; display:grid; place-items:center; font-size:20px; border:2px solid rgba(20,184,166,.5); flex-shrink:0; position:relative; z-index:1; }
+    .akun-dd-info { flex:1; min-width:0; position:relative; z-index:1; }
+    .akun-dd-name { display:block; font-size:.9rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .akun-dd-email { display:block; font-size:.72rem; color:rgba(255,255,255,.55); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .akun-dd-badge { font-size:.65rem; font-weight:700; color:#14b8a6; background:rgba(20,184,166,.2); border:1px solid rgba(20,184,166,.4); padding:3px 8px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase; flex-shrink:0; position:relative; z-index:1; }
+    .akun-dd-divider { height:1px; background:linear-gradient(90deg,transparent,#e5e7eb 20%,#e5e7eb 80%,transparent); }
+    .akun-dd-menu { padding:8px; }
+    .akun-dd-item { display:flex; align-items:center; gap:13px; padding:11px 12px; border-radius:12px; text-decoration:none; cursor:pointer; border:none; background:transparent; width:100%; text-align:left; font-family:"Outfit",sans-serif; transition:all .18s ease; position:relative; overflow:hidden; }
+    .akun-dd-item::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(13,148,136,.08),rgba(13,148,136,.03)); opacity:0; transition:opacity .18s ease; border-radius:12px; }
+    .akun-dd-item:hover::before { opacity:1; }
+    .akun-dd-item:hover { transform:translateX(2px); }
+    .dd-item-icon-wrap { width:36px; height:36px; border-radius:10px; display:grid; place-items:center; font-size:17px; flex-shrink:0; transition:transform .2s ease; }
+    .akun-dd-item:hover .dd-item-icon-wrap { transform:scale(1.1) rotate(-3deg); }
+    .dd-item-icon-wrap.gold   { background:rgba(201,150,42,.12); }
+    .dd-item-icon-wrap.green  { background:rgba(16,185,129,.1); }
+    .dd-item-icon-wrap.blue   { background:rgba(59,130,246,.1); }
+    .dd-item-icon-wrap.purple { background:rgba(139,92,246,.1); }
+    .dd-item-text { flex:1; min-width:0; }
+    .dd-item-label { display:block; font-size:.875rem; font-weight:600; color:#1e3a4a; line-height:1.2; }
+    .dd-item-desc { display:block; font-size:.72rem; color:#8fa3ad; margin-top:2px; }
+    .dd-item-arrow { color:#c4d4da; font-size:12px; transition:transform .18s ease,color .18s ease; }
+    .akun-dd-item:hover .dd-item-arrow { transform:translateX(3px); color:#14b8a6; }
+    .akun-dd-logout-wrap { padding:6px 8px 10px; border-top:1px solid #f0f4f5; margin-top:2px; }
+    .akun-dd-logout { display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:12px; border:1.5px solid rgba(224,80,80,.15); background:rgba(224,80,80,.04); cursor:pointer; width:100%; font-family:"Outfit",sans-serif; transition:all .2s ease; }
+    .akun-dd-logout:hover { background:rgba(224,80,80,.1); border-color:rgba(224,80,80,.35); transform:translateY(-1px); box-shadow:0 4px 14px rgba(224,80,80,.15); }
+    .akun-dd-logout .dd-logout-icon { width:34px; height:34px; background:rgba(224,80,80,.1); border-radius:9px; display:grid; place-items:center; font-size:16px; flex-shrink:0; transition:transform .2s ease; }
+    .akun-dd-logout:hover .dd-logout-icon { transform:scale(1.1); }
+    .akun-dd-logout .dd-logout-text { font-size:.875rem; font-weight:700; color:#c0392b; }
+    .akun-dd-logout .dd-logout-sub { font-size:.7rem; color:rgba(192,57,43,.6); display:block; margin-top:1px; }
+    @media(max-width:560px){
+      .akun-wrap{margin:32px auto;padding:0 14px 80px;}
+      .akun-header{padding:40px 24px 36px;}
+      .profil-body{padding:24px 20px 30px;}
+      .quick-links{grid-template-columns:1fr;}
+      .profil-row{flex-direction:column;align-items:flex-start;gap:4px;}
+      .profil-row-value{text-align:left;}
+      .akun-dropdown{width:260px;right:-10px;}
+      .akun-trigger span:not(.avatar){display:none;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="home.html" class="nav-logo">
+    <div class="logo-icon" style="background:none;padding:0;overflow:hidden;">
+      <img src="logo_web.jpeg" style="width:38px;height:38px;border-radius:10px;object-fit:cover;" />
+    </div>
+    <div>
+      <div class="logo-text">Enggano Pedia</div>
+      <div class="logo-sub">Pariwisata</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="home.html"      class="nav-link"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span></a>
+    <a href="transport.html" class="nav-link"><span class="nav-icon">🚢</span><span class="nav-label">Transportasi</span></a>
+    <a href="destination.html"       class="nav-link"><span class="nav-icon">🌴</span><span class="nav-label">Wisata</span></a>
+    <a href="product.html"       class="nav-link"><span class="nav-icon">🛒</span><span class="nav-label">Produk</span></a>
+    <a href="homestay.html"   class="nav-link"><span class="nav-icon">🏨</span><span class="nav-label">Penginapan</span></a>
+  </div>
+  <div class="nav-right">
+    <div class="akun-dropdown-wrap" id="akunWrap">
+      <button class="akun-trigger" id="akunTrigger" onclick="toggleDropdown()">
+        <div class="avatar">👤</div>
+        <span>Akun</span>
+        <svg class="dropdown-chevron" id="akunChevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="akun-dropdown" id="akunDropdown">
+        <div class="akun-dd-header">
+          <div class="akun-dd-avatar">👤</div>
+          <div class="akun-dd-info">
+            <span class="akun-dd-name" id="ddNama">Pengguna</span>
+            <span class="akun-dd-email" id="ddEmail">user@enggano.id</span>
+          </div>
+          <span class="akun-dd-badge" id="ddBadge">User</span>
+        </div>
+
+        <div class="akun-dd-divider"></div>
+
+        <div class="akun-dd-menu">
+
+          <!-- ★ KELOLA ETALASE — hanya muncul jika status mitra aktif -->
+          <a href="../mitra/etalase.html" class="akun-dd-item" id="menuEtalase"
+             onclick="closeDropdown()" style="display:none;">
+            <div class="dd-item-icon-wrap gold">🏪</div>
+            <div class="dd-item-text">
+              <span class="dd-item-label">Kelola Etalase</span>
+              <span class="dd-item-desc">Upload &amp; kelola produk/usaha Anda</span>
+            </div>
+            <span class="dd-item-arrow">›</span>
+          </a>
+
+          <a href="account.html" class="akun-dd-item" onclick="closeDropdown()">
+            <div class="dd-item-icon-wrap blue">👤</div>
+            <div class="dd-item-text">
+              <span class="dd-item-label">Profil Saya</span>
+              <span class="dd-item-desc">Lihat &amp; edit informasi akun</span>
+            </div>
+            <span class="dd-item-arrow">›</span>
+          </a>
+
+          <a href="setting.html" class="akun-dd-item" onclick="closeDropdown()">
+            <div class="dd-item-icon-wrap purple">⚙️</div>
+            <div class="dd-item-text">
+              <span class="dd-item-label">Pengaturan</span>
+              <span class="dd-item-desc">Konfigurasi website &amp; notifikasi</span>
+            </div>
+            <span class="dd-item-arrow">›</span>
+          </a>
+        </div>
+
+        <div class="akun-dd-logout-wrap">
+          <button type="button" class="akun-dd-logout"
+                  onclick="event.stopPropagation(); closeDropdown(); openLogout();">
+            <div class="dd-logout-icon">🚪</div>
+            <div>
+              <span class="dd-logout-text">Keluar dari Akun</span>
+              <span class="dd-logout-sub">Anda akan logout dari sesi ini</span>
+            </div>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="page-content">
+  <div class="akun-wrap">
+    <div class="akun-card">
+      <div class="akun-header">
+        <div class="akun-avatar">👤</div>
+        <h2 id="headerNama">PENGGUNA</h2>
+        <p>Selamat datang kembali! Kelola akun dan konfigurasi website Anda</p>
+        <div class="akun-status">
+          <span class="status-dot"></span>
+          Sedang Login
+        </div>
+      </div>
+      <div id="panel-profil">
+        <div class="profil-body">
+
+          <div class="profil-group">
+            <div class="profil-group-header">👤 &nbsp;Informasi Akun</div>
+            <div class="profil-row">
+              <span class="profil-row-label">Nama</span>
+              <span class="profil-row-value" id="infNama">—</span>
+            </div>
+            <div class="profil-row">
+              <span class="profil-row-label">No. HP</span>
+              <span class="profil-row-value" id="infHp">—</span>
+            </div>
+            <div class="profil-row">
+              <span class="profil-row-label">Desa</span>
+              <span class="profil-row-value" id="infDesa">—</span>
+            </div>
+            <div class="profil-row">
+              <span class="profil-row-label">Status</span>
+              <span class="profil-row-value" id="infStatus">—</span>
+            </div>
+          </div>
+
+          <!-- ETALASE SHORTCUT — hanya muncul jika mitra aktif -->
+          <a href="etalase.html" class="etalase-banner" id="etalaseBanner" style="display:none;">
+            <div class="eb-icon">🏪</div>
+            <div class="eb-text">
+              <strong>Kelola Etalase Saya</strong>
+              <span>Tambah, ubah, dan hapus produk yang Anda jual</span>
+            </div>
+            <span class="eb-arrow">→</span>
+          </a>
+
+          <hr class="section-hr"/>
+          <p class="section-label">⚡ &nbsp;Akses Cepat</p>
+          <div class="quick-links">
+            <a href="transport.html" class="quick-link">
+              <span class="ql-icon">🚢</span>
+              <span class="ql-text">Pesan Tiket Ferry</span>
+            </a>
+            <a href="transport.html#pesawat" class="quick-link">
+              <span class="ql-icon">✈️</span>
+              <span class="ql-text">Pesan Tiket Pesawat</span>
+            </a>
+            <a href="destination.html" class="quick-link">
+              <span class="ql-icon">🌴</span>
+              <span class="ql-text">Lihat Destinasi</span>
+            </a>
+            <a href="home.html" class="quick-link">
+              <span class="ql-icon">🏨</span>
+              <span class="ql-text">Cari Penginapan</span>
+            </a>
+          </div>
+
+          <div class="logout-wrap">
+            <button class="btn-logout" onclick="openLogout()">
+              🚪 &nbsp;Keluar dari Akun
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-modal-backdrop" id="logoutModal">
+  <div class="logout-modal">
+    <div class="lm-icon">🚪</div>
+    <h3>Keluar dari Akun?</h3>
+    <p>Anda akan diarahkan kembali ke halaman utama. Sampai jumpa kembali!</p>
+    <div class="logout-modal-btns">
+      <button class="btn-cancel-logout" onclick="closeLogout()">Batal</button>
+      <button class="btn-confirm-logout" onclick="doLogout()">Ya, Keluar</button>
+    </div>
+  </div>
+</div>
+
+<div class="save-toast" id="toast">✅ Berhasil disimpan!</div>
+
+<footer class="footer">
+  <p>© 2025 <span>Enggano Pedia</span> · Pulau Enggano, Bengkulu Utara</p>
+</footer>
+
+<script>
+  /* ══════════════════════════════════════════
+     INISIALISASI — baca data dari localStorage
+  ══════════════════════════════════════════ */
+  function getMitraStatus() { try { return localStorage.getItem('enggano_mitra_status'); } catch(e){ return null; } }
+  function getMitraData()   { try { return JSON.parse(localStorage.getItem('enggano_mitra_data') || 'null'); } catch(e){ return null; } }
+
+  (function init() {
+    var status = getMitraStatus(); // null | 'pending' | 'aktif'
+    var data   = getMitraData();
+
+    /* ── Isi info profil ── */
+    if (data) {
+      var nama = data.nama || 'Pengguna';
+      document.getElementById('headerNama').textContent = nama.toUpperCase();
+      document.getElementById('ddNama').textContent     = nama;
+      document.getElementById('infNama').textContent    = nama;
+      document.getElementById('infHp').textContent      = data.hp   || '—';
+      document.getElementById('infDesa').textContent    = data.desa || '—';
+    }
+
+    /* ── Status badge ── */
+    var statusEl  = document.getElementById('infStatus');
+    var ddBadge   = document.getElementById('ddBadge');
+    var menuEt    = document.getElementById('menuEtalase');
+    var bannerEt  = document.getElementById('etalaseBanner');
+
+    if (status === 'aktif') {
+      statusEl.innerHTML  = '<span style="color:var(--teal);font-weight:700;">✅ Mitra Aktif</span>';
+      ddBadge.textContent = 'Mitra ✓';
+      ddBadge.style.color = '#14b8a6';
+      // Tampilkan menu & banner etalase
+      menuEt.style.display   = 'flex';
+      bannerEt.style.display = 'flex';
+
+    } else if (status === 'pending') {
+      statusEl.innerHTML  = '<span style="color:#e8c96a;font-weight:700;">⏳ Menunggu Verifikasi</span>';
+      ddBadge.textContent = 'Mitra';
+      ddBadge.style.color = '#e8c96a';
+      // Tampilkan menu etalase tapi nonaktif (terkunci)
+      menuEt.style.display   = 'flex';
+      menuEt.style.opacity   = '0.5';
+      menuEt.style.pointerEvents = 'none';
+      menuEt.querySelector('.dd-item-desc').textContent = '⏳ Menunggu verifikasi selesai';
+
+    } else {
+      statusEl.innerHTML = '<span style="color:var(--text-lt);">👤 Pengguna Umum</span>';
+      ddBadge.textContent = 'User';
+    }
+  })();
+
+  /* ── LOGOUT ── */
+  function doLogout() {
+    window.location.href = "index.html";
+  }
+
+  /* ── DROPDOWN ── */
+  var akunWrap     = document.getElementById("akunWrap");
+  var akunTrigger  = document.getElementById("akunTrigger");
+  var akunDropdown = document.getElementById("akunDropdown");
+  var akunChevron  = document.getElementById("akunChevron");
+  var dropdownOpen = false;
+  function openDropdown()  { dropdownOpen=true;  akunDropdown.classList.add("open");    akunTrigger.classList.add("open");    akunChevron.classList.add("rotated"); }
+  function closeDropdown() { dropdownOpen=false; akunDropdown.classList.remove("open"); akunTrigger.classList.remove("open"); akunChevron.classList.remove("rotated"); }
+  function toggleDropdown(){ dropdownOpen ? closeDropdown() : openDropdown(); }
+  document.addEventListener("click", function(e){ if(!akunWrap.contains(e.target)) closeDropdown(); });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape"){ closeDropdown(); closeLogout(); } });
+
+  /* ── LOGOUT MODAL ── */
+  function openLogout()  { document.getElementById("logoutModal").classList.add("open"); }
+  function closeLogout() { document.getElementById("logoutModal").classList.remove("open"); }
+  document.getElementById("logoutModal").addEventListener("click", function(e){ if(e.target===this) closeLogout(); });
+
+  function showToast(msg) {
+    var toast = document.getElementById("toast");
+    if (msg) toast.textContent = msg;
+    toast.style.display = "block";
+    setTimeout(function(){ toast.style.display="none"; }, 3000);
+  }
+</script>
+</body>
+</html>

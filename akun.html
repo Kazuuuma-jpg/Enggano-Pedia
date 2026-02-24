@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Akun – Enggano-Pedia</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── PERUBAHAN UTAMA: badge sekarang di tengah gap navbar ↔ card ── */
+    .akun-wrap {
+      max-width: 580px;
+      margin: 0 auto;           /* ← dihapus margin-top 72px, biar badge yg ngatur */
+      padding: 0 24px 100px;
+    }
+    .akun-badge-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80px;             /* ← tinggi ruang antara navbar dan card */
+      margin-bottom: 0;         /* ← tidak ada extra margin bawah */
+    }
+
+    .akun-card { background: var(--white); border-radius: 24px; box-shadow: var(--shadow-lg); overflow: hidden; }
+    .akun-header { background: linear-gradient(145deg, var(--ocean-dk) 0%, var(--ocean) 100%); padding: 56px 40px 48px; text-align: center; position: relative; overflow: hidden; }
+    .akun-header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(20,184,166,.22) 0%, transparent 70%); pointer-events: none; }
+    .akun-header::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 22px); pointer-events: none; }
+    .akun-avatar { width: 88px; height: 88px; background: linear-gradient(135deg, var(--teal), var(--teal-lt)); border-radius: 50%; display: grid; place-items: center; font-size: 38px; margin: 0 auto 22px; border: 4px solid rgba(255,255,255,.2); box-shadow: 0 8px 28px rgba(0,0,0,.25); position: relative; z-index: 1; }
+    .akun-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.85rem; font-weight: 700; color: var(--white); position: relative; z-index: 1; margin-bottom: 10px; letter-spacing: .2px; }
+    .akun-header p { font-size: .875rem; color: rgba(255,255,255,.58); position: relative; z-index: 1; line-height: 1.6; max-width: 320px; margin: 0 auto; }
+    .akun-body { padding: 44px 44px 44px; }
+    .form-group { margin-bottom: 24px; position: relative; }
+    .form-group label { display: block; font-size: .75rem; font-weight: 700; color: var(--text-md); margin-bottom: 8px; letter-spacing: .8px; text-transform: uppercase; }
+    .form-input { width: 100%; padding: 14px 18px; border: 2px solid var(--sand-dk); border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: .92rem; color: var(--text); transition: var(--trans); background: var(--sand); box-sizing: border-box; }
+    .form-input::placeholder { color: var(--text-lt); }
+    .form-input:focus { outline: none; border-color: var(--teal); background: var(--white); box-shadow: 0 0 0 4px rgba(13,148,136,.09); }
+    .form-input.input-error { border-color: #e05050; background: #fff8f8; box-shadow: 0 0 0 4px rgba(224,80,80,.08); }
+    .form-input.input-ok { border-color: var(--teal); background: var(--white); }
+    .field-msg { font-size: .78rem; font-weight: 500; margin-top: 6px; min-height: 18px; display: block; transition: var(--trans); }
+    .field-msg.error { color: #c0392b; }
+    .field-msg.ok    { color: var(--teal); }
+    .login-error-banner { display: none; background: #fff0f0; border: 1.5px solid #f5c6c6; border-radius: 10px; padding: 12px 16px; font-size: .85rem; color: #c0392b; font-weight: 500; margin-bottom: 20px; text-align: center; }
+    .login-error-banner.show { display: block; }
+    .login-success-banner { display: none; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 12px 16px; font-size: .85rem; color: #166534; font-weight: 500; margin-bottom: 20px; text-align: center; }
+    .login-success-banner.show { display: block; }
+    .btn-google { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 13px 24px; font-size: .95rem; font-weight: 600; border-radius: 12px; border: 2px solid #dadce0; background: #ffffff; color: #3c4043; cursor: pointer; text-decoration: none; transition: var(--trans); letter-spacing: .2px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+    .btn-google:hover { background: #f8f9fa; border-color: #bdc1c6; box-shadow: 0 4px 14px rgba(0,0,0,.12); transform: translateY(-1px); }
+    .google-icon { width: 20px; height: 20px; flex-shrink: 0; }
+    .btn-masuk-wrap { margin-top: 6px; }
+    .btn-loading { pointer-events: none; opacity: .75; }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-full { width: 100%; justify-content: center; padding: 15px 24px; font-size: .95rem; border-radius: 12px; letter-spacing: .3px; }
+    .form-divider { text-align: center; font-size: .78rem; font-weight: 600; color: var(--text-lt); letter-spacing: .8px; text-transform: uppercase; margin: 28px 0; position: relative; }
+    .form-divider::before, .form-divider::after { content: ''; position: absolute; top: 50%; width: calc(50% - 32px); height: 1px; background: var(--sand-dk); }
+    .form-divider::before { left: 0; }
+    .form-divider::after  { right: 0; }
+    .info-links { margin-top: 22px; text-align: center; }
+    .info-links a { color: var(--teal); font-size: .85rem; font-weight: 500; text-decoration: none; transition: var(--trans); }
+    .info-links a:hover { color: var(--ocean); text-decoration: underline; }
+    .info-links .dot { color: var(--sand-dk); margin: 0 10px; }
+    .section-hr { border: none; border-top: 1.5px solid var(--sand-dk); margin: 40px 0 32px; }
+    .section-label { font-size: .72rem; font-weight: 700; color: var(--text-lt); letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 18px; }
+    .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .quick-link { display: flex; align-items: center; gap: 12px; padding: 16px 18px; background: var(--sand); border-radius: 14px; text-decoration: none; transition: var(--trans); border: 2px solid transparent; }
+    .quick-link:hover { border-color: var(--teal); background: rgba(13,148,136,.06); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(13,148,136,.12); }
+    .quick-link .ql-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
+    .quick-link .ql-text { font-size: .84rem; font-weight: 500; color: var(--text); line-height: 1.35; }
+    .panel-hidden { display: none !important; }
+    .strength-bar-wrap { margin-top: 8px; height: 4px; background: var(--sand-dk); border-radius: 4px; overflow: hidden; }
+    .strength-bar { height: 100%; width: 0%; border-radius: 4px; transition: width .35s ease, background .35s ease; }
+    .strength-label { font-size: .72rem; font-weight: 600; margin-top: 5px; display: block; min-height: 16px; transition: color .3s; }
+    .check-group { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 24px; }
+    .check-group input[type="checkbox"] { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--teal); flex-shrink: 0; cursor: pointer; }
+    .check-group label { font-size: .82rem; color: var(--text-md); line-height: 1.5; cursor: pointer; text-transform: none; letter-spacing: 0; font-weight: 400; }
+    .check-group label a { color: var(--teal); text-decoration: none; font-weight: 600; }
+    .check-group label a:hover { text-decoration: underline; }
+    @media (max-width: 520px) {
+      .akun-wrap   { padding: 0 16px 80px; }
+      .akun-badge-wrap { height: 60px; }
+      .akun-header { padding: 44px 28px 40px; }
+      .akun-body   { padding: 32px 28px 32px; }
+      .quick-links { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ─────────────────────────────────────────────────────── -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon" style="background:none;padding:0;overflow:hidden;">
+      <img src="logo_web.jpeg" style="width:38px;height:38px;border-radius:10px;object-fit:cover;" />
+    </div>
+    <div>
+      <div class="logo-text">ENGGANO</div>
+      <div class="logo-sub">PEDIA</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html"      class="nav-link"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span></a>
+    <a href="transportasi.html" class="nav-link"><span class="nav-icon">🚢</span><span class="nav-label">Transportasi</span></a>
+    <a href="wisata.html"       class="nav-link"><span class="nav-icon">🌴</span><span class="nav-label">Wisata</span></a>
+    <a href="produk.html"       class="nav-link"><span class="nav-icon">🛒</span><span class="nav-label">Produk</span></a>
+    <a href="penginapan.html"   class="nav-link"><span class="nav-icon">🏨</span><span class="nav-label">Penginapan</span></a>
+  </div>
+  <div class="nav-right">
+    <a href="akun.html" class="btn-account" style="background:rgba(20,184,166,.2);border-color:rgba(20,184,166,.4);">
+      <div class="avatar">👤</div><span>Akun</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ── PAGE CONTENT ───────────────────────────────────────────────── -->
+<div class="page-content">
+  <div class="akun-wrap">
+
+    <!-- Badge tepat di tengah antara navbar dan card -->
+    <div class="akun-badge-wrap">
+      <span class="hero-badge">👤 &nbsp;Profil Pengguna</span>
+    </div>
+
+    <div class="akun-card">
+
+      <!-- Card Header -->
+      <div class="akun-header">
+        <div class="akun-avatar" id="headerAvatar">👤</div>
+        <h2 id="headerTitle">Masuk ke Akun</h2>
+        <p id="headerDesc">Kelola pemesanan tiket &amp; informasi perjalanan Anda</p>
+      </div>
+
+      <!-- Card Body -->
+      <div class="akun-body">
+
+        <!-- ══════════ PANEL LOGIN ══════════ -->
+        <div id="panelLogin">
+
+          <div class="login-error-banner" id="errorBanner"></div>
+
+          <div class="form-group">
+            <label>📧 &nbsp;Email / No. HP</label>
+            <input type="text" id="inputEmail" class="form-input" placeholder="email@contoh.com atau 08xxx"
+              oninput="clearFieldError('inputEmail','msgEmail')" />
+            <span class="field-msg" id="msgEmail"></span>
+          </div>
+
+          <div class="form-group">
+            <label>🔒 &nbsp;Password</label>
+            <input type="password" id="inputPassword" class="form-input" placeholder="••••••••"
+              oninput="clearFieldError('inputPassword','msgPassword')"
+              onkeydown="if(event.key==='Enter') doLogin()" />
+            <span class="field-msg" id="msgPassword"></span>
+          </div>
+
+          <div class="btn-masuk-wrap">
+            <button id="btnMasuk" class="btn btn-primary btn-full" onclick="doLogin()">
+              Masuk &rarr;
+            </button>
+          </div>
+
+          <div class="form-divider">atau</div>
+
+          <button class="btn-google" id="btnGoogleLogin" onclick="doGoogleLogin('btnGoogleLogin')">
+            <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Daftar / Masuk via Google
+          </button>
+
+          <div class="info-links">
+            <a href="#">Lupa password?</a>
+            <span class="dot">·</span>
+            <a href="#" onclick="showDaftar(); return false;">Daftar akun baru</a>
+          </div>
+
+        </div><!-- /panelLogin -->
+
+        <!-- ══════════ PANEL DAFTAR ══════════ -->
+        <div id="panelDaftar" class="panel-hidden">
+
+          <div class="login-success-banner" id="successBanner">
+            ✅ &nbsp;Akun berhasil dibuat! Silakan masuk.
+          </div>
+          <div class="login-error-banner" id="errorBannerDaftar"></div>
+
+          <div class="form-group">
+            <label>👤 &nbsp;Nama Lengkap</label>
+            <input type="text" id="daftarNama" class="form-input" placeholder="Nama lengkap Anda"
+              oninput="clearDaftarError('daftarNama','msgDaftarNama')" />
+            <span class="field-msg" id="msgDaftarNama"></span>
+          </div>
+
+          <div class="form-group">
+            <label>📧 &nbsp;Email</label>
+            <input type="email" id="daftarEmail" class="form-input" placeholder="email@contoh.com"
+              oninput="clearDaftarError('daftarEmail','msgDaftarEmail')" />
+            <span class="field-msg" id="msgDaftarEmail"></span>
+          </div>
+
+          <div class="form-group">
+            <label>📱 &nbsp;No. HP</label>
+            <input type="tel" id="daftarHp" class="form-input" placeholder="08xxxxxxxxxx"
+              oninput="clearDaftarError('daftarHp','msgDaftarHp')" />
+            <span class="field-msg" id="msgDaftarHp"></span>
+          </div>
+
+          <div class="form-group">
+            <label>🔒 &nbsp;Password</label>
+            <input type="password" id="daftarPass" class="form-input" placeholder="Minimal 8 karakter"
+              oninput="checkStrength(this.value); clearDaftarError('daftarPass','msgDaftarPass')" />
+            <div class="strength-bar-wrap"><div class="strength-bar" id="strengthBar"></div></div>
+            <span class="strength-label" id="strengthLabel"></span>
+            <span class="field-msg" id="msgDaftarPass"></span>
+          </div>
+
+          <div class="form-group">
+            <label>🔒 &nbsp;Konfirmasi Password</label>
+            <input type="password" id="daftarPassConf" class="form-input" placeholder="Ulangi password"
+              oninput="clearDaftarError('daftarPassConf','msgDaftarPassConf')" />
+            <span class="field-msg" id="msgDaftarPassConf"></span>
+          </div>
+
+          <div class="check-group">
+            <input type="checkbox" id="chkTerms" />
+            <label for="chkTerms">
+              Saya menyetujui <a href="#">Syarat &amp; Ketentuan</a> serta
+              <a href="#">Kebijakan Privasi</a> Enggano-Pedia.
+            </label>
+          </div>
+
+          <div class="btn-masuk-wrap">
+            <button id="btnDaftar" class="btn btn-primary btn-full" onclick="doDaftar()">
+              Buat Akun &rarr;
+            </button>
+          </div>
+
+          <div class="form-divider">atau</div>
+
+          <button class="btn-google" id="btnGoogleDaftar" onclick="doGoogleLogin('btnGoogleDaftar')">
+            <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Daftar via Google
+          </button>
+
+          <div class="info-links" style="margin-top:20px;">
+            <a href="#" onclick="showLogin(); return false;">← Sudah punya akun? Masuk</a>
+          </div>
+
+        </div><!-- /panelDaftar -->
+
+        <hr class="section-hr"/>
+        <p class="section-label">⚡ &nbsp;Akses Cepat</p>
+        <div class="quick-links">
+          <a href="transportasi.html" class="quick-link"><span class="ql-icon">🚢</span><span class="ql-text">Pesan Tiket Ferry</span></a>
+          <a href="transportasi.html#pesawat" class="quick-link"><span class="ql-icon">✈️</span><span class="ql-text">Pesan Tiket Pesawat</span></a>
+          <a href="wisata.html" class="quick-link"><span class="ql-icon">🌴</span><span class="ql-text">Lihat Destinasi</span></a>
+          <a href="penginapan.html" class="quick-link"><span class="ql-icon">🏨</span><span class="ql-text">Cari Penginapan</span></a>
+        </div>
+
+      </div><!-- /akun-body -->
+    </div><!-- /akun-card -->
+  </div><!-- /akun-wrap -->
+</div><!-- /page-content -->
+
+<footer class="footer">
+  <p>© 2025 <span>ENGGANO-PEDIA</span> · Pulau Enggano, Bengkulu Utara</p>
+</footer>
+
+<script>
+  const LOGIN_REDIRECT = 'home.html';
+
+  function showDaftar() {
+    document.getElementById('panelLogin').classList.add('panel-hidden');
+    document.getElementById('panelDaftar').classList.remove('panel-hidden');
+    document.getElementById('headerAvatar').textContent = '✨';
+    document.getElementById('headerTitle').textContent  = 'Buat Akun Baru';
+    document.getElementById('headerDesc').textContent   = 'Bergabunglah dan nikmati kemudahan eksplorasi Pulau Enggano';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showLogin() {
+    document.getElementById('panelDaftar').classList.add('panel-hidden');
+    document.getElementById('panelLogin').classList.remove('panel-hidden');
+    document.getElementById('headerAvatar').textContent = '👤';
+    document.getElementById('headerTitle').textContent  = 'Masuk ke Akun';
+    document.getElementById('headerDesc').textContent   = 'Kelola pemesanan tiket & informasi perjalanan Anda';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function checkStrength(val) {
+    const bar   = document.getElementById('strengthBar');
+    const label = document.getElementById('strengthLabel');
+    let score = 0;
+    if (val.length >= 8)           score++;
+    if (/[A-Z]/.test(val))         score++;
+    if (/[0-9]/.test(val))         score++;
+    if (/[^A-Za-z0-9]/.test(val))  score++;
+    const levels = [
+      { w: '0%',   bg: 'transparent', text: '',            color: '' },
+      { w: '25%',  bg: '#e05050',     text: 'Lemah',       color: '#c0392b' },
+      { w: '50%',  bg: '#f39c12',     text: 'Cukup',       color: '#b7770d' },
+      { w: '75%',  bg: '#27ae60',     text: 'Kuat',        color: '#1e8449' },
+      { w: '100%', bg: '#0d9488',     text: 'Sangat Kuat', color: '#0d6b62' },
+    ];
+    const lv = val.length === 0 ? levels[0] : levels[Math.max(1, score)];
+    bar.style.width      = lv.w;
+    bar.style.background = lv.bg;
+    label.textContent    = lv.text;
+    label.style.color    = lv.color;
+  }
+
+  function setError(inputId, msgId, text) {
+    document.getElementById(inputId).classList.add('input-error');
+    document.getElementById(inputId).classList.remove('input-ok');
+    const msg = document.getElementById(msgId);
+    msg.textContent = text; msg.className = 'field-msg error';
+  }
+  function setOk(inputId, msgId) {
+    document.getElementById(inputId).classList.remove('input-error');
+    document.getElementById(inputId).classList.add('input-ok');
+    const msg = document.getElementById(msgId);
+    msg.textContent = '✓ Terisi'; msg.className = 'field-msg ok';
+  }
+  function clearFieldError(inputId, msgId) {
+    document.getElementById(inputId).classList.remove('input-error');
+    document.getElementById(msgId).textContent = '';
+    document.getElementById('errorBanner').classList.remove('show');
+  }
+  function setDaftarError(inputId, msgId, text) {
+    document.getElementById(inputId).classList.add('input-error');
+    document.getElementById(inputId).classList.remove('input-ok');
+    const msg = document.getElementById(msgId);
+    msg.textContent = text; msg.className = 'field-msg error';
+  }
+  function setDaftarOk(inputId, msgId) {
+    document.getElementById(inputId).classList.remove('input-error');
+    document.getElementById(inputId).classList.add('input-ok');
+    const msg = document.getElementById(msgId);
+    msg.textContent = '✓ Terisi'; msg.className = 'field-msg ok';
+  }
+  function clearDaftarError(inputId, msgId) {
+    document.getElementById(inputId).classList.remove('input-error');
+    document.getElementById(msgId).textContent = '';
+    document.getElementById('errorBannerDaftar').classList.remove('show');
+  }
+
+  const GOOGLE_ICON_SVG = `<svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+  </svg>`;
+
+  function doGoogleLogin(btnId) {
+    const btn = document.getElementById(btnId);
+    const label = btnId === 'btnGoogleDaftar' ? 'Daftar via Google' : 'Daftar / Masuk via Google';
+    btn.innerHTML = `<span class="spinner" style="border-color:rgba(0,0,0,.2);border-top-color:#4285F4;"></span> Menghubungkan Google...`;
+    btn.style.pointerEvents = 'none';
+    setTimeout(() => {
+      alert('Konfigurasi Google OAuth diperlukan.\nSilakan isi CLIENT_ID di kode script.');
+      btn.innerHTML = GOOGLE_ICON_SVG + ' ' + label;
+      btn.style.pointerEvents = '';
+    }, 1000);
+  }
+
+  function doLogin() {
+    const emailVal = document.getElementById('inputEmail').value.trim();
+    const passVal  = document.getElementById('inputPassword').value.trim();
+    const banner   = document.getElementById('errorBanner');
+    const btn      = document.getElementById('btnMasuk');
+    let valid = true;
+
+    if (!emailVal) { setError('inputEmail','msgEmail','⚠ Email atau No. HP wajib diisi.'); valid = false; }
+    else { setOk('inputEmail','msgEmail'); }
+
+    if (!passVal) { setError('inputPassword','msgPassword','⚠ Password wajib diisi.'); valid = false; }
+    else if (passVal.length < 4) { setError('inputPassword','msgPassword','⚠ Password minimal 4 karakter.'); valid = false; }
+    else { setOk('inputPassword','msgPassword'); }
+
+    if (!valid) {
+      banner.textContent = '⚠️  Harap lengkapi semua field sebelum masuk.';
+      banner.classList.add('show'); return;
+    }
+
+    banner.classList.remove('show');
+    btn.classList.add('btn-loading');
+    btn.innerHTML = '<span class="spinner"></span> Memproses...';
+    setTimeout(() => { window.location.href = LOGIN_REDIRECT; }, 900);
+  }
+
+  function doDaftar() {
+    const nama     = document.getElementById('daftarNama').value.trim();
+    const email    = document.getElementById('daftarEmail').value.trim();
+    const hp       = document.getElementById('daftarHp').value.trim();
+    const pass     = document.getElementById('daftarPass').value.trim();
+    const passConf = document.getElementById('daftarPassConf').value.trim();
+    const terms    = document.getElementById('chkTerms').checked;
+    const banner   = document.getElementById('errorBannerDaftar');
+    const btn      = document.getElementById('btnDaftar');
+    let valid = true;
+
+    if (!nama) { setDaftarError('daftarNama','msgDaftarNama','⚠ Nama lengkap wajib diisi.'); valid = false; }
+    else { setDaftarOk('daftarNama','msgDaftarNama'); }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) { setDaftarError('daftarEmail','msgDaftarEmail','⚠ Email wajib diisi.'); valid = false; }
+    else if (!emailRegex.test(email)) { setDaftarError('daftarEmail','msgDaftarEmail','⚠ Format email tidak valid.'); valid = false; }
+    else { setDaftarOk('daftarEmail','msgDaftarEmail'); }
+
+    if (!hp) { setDaftarError('daftarHp','msgDaftarHp','⚠ No. HP wajib diisi.'); valid = false; }
+    else if (!/^08\d{8,12}$/.test(hp)) { setDaftarError('daftarHp','msgDaftarHp','⚠ Format No. HP tidak valid (contoh: 081234567890).'); valid = false; }
+    else { setDaftarOk('daftarHp','msgDaftarHp'); }
+
+    if (!pass) { setDaftarError('daftarPass','msgDaftarPass','⚠ Password wajib diisi.'); valid = false; }
+    else if (pass.length < 8) { setDaftarError('daftarPass','msgDaftarPass','⚠ Password minimal 8 karakter.'); valid = false; }
+    else { setDaftarOk('daftarPass','msgDaftarPass'); }
+
+    if (!passConf) { setDaftarError('daftarPassConf','msgDaftarPassConf','⚠ Konfirmasi password wajib diisi.'); valid = false; }
+    else if (pass !== passConf) { setDaftarError('daftarPassConf','msgDaftarPassConf','⚠ Password tidak cocok.'); valid = false; }
+    else if (pass.length >= 8) { setDaftarOk('daftarPassConf','msgDaftarPassConf'); }
+
+    if (!terms) {
+      banner.textContent = '⚠️  Harap centang persetujuan Syarat & Ketentuan.';
+      banner.classList.add('show'); valid = false;
+    }
+
+    if (!valid) {
+      if (terms) { banner.textContent = '⚠️  Harap lengkapi semua field dengan benar.'; banner.classList.add('show'); }
+      return;
+    }
+
+    banner.classList.remove('show');
+    btn.classList.add('btn-loading');
+    btn.innerHTML = '<span class="spinner"></span> Membuat akun...';
+
+    setTimeout(() => {
+      btn.classList.remove('btn-loading');
+      btn.innerHTML = 'Buat Akun &rarr;';
+      ['daftarNama','daftarEmail','daftarHp','daftarPass','daftarPassConf'].forEach(id => {
+        document.getElementById(id).value = '';
+        document.getElementById(id).classList.remove('input-ok','input-error');
+      });
+      document.getElementById('chkTerms').checked = false;
+      document.getElementById('strengthBar').style.width = '0%';
+      document.getElementById('strengthLabel').textContent = '';
+      document.getElementById('successBanner').classList.add('show');
+      setTimeout(() => {
+        document.getElementById('successBanner').classList.remove('show');
+        showLogin();
+      }, 2200);
+    }, 1200);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Transportasi – Enggano Pedia</title>
+  <link rel="stylesheet" href="style2.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ocean-dk: #072d40;
+      --ocean: #0e6074;
+      --ocean-lt: #1a8fa8;
+      --teal: #0d9488;
+      --teal-lt: #5eead4;
+      --sand: #f5f0e8;
+      --sand-dk: #e8dfc8;
+      --white: #ffffff;
+      --text: #1e3a4a;
+      --text-lt: #6b8fa0;
+      --nav-h: 64px;
+      --radius: 18px;
+      --trans: all .25s ease;
+      --shadow: 0 4px 24px rgba(7,45,64,.10);
+      --shadow-lg: 0 16px 56px rgba(7,45,64,.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Outfit', sans-serif; background: #f0ece3; color: var(--text); min-height: 100vh; }
+
+    /* ═══ HERO ═══ */
+    .hero {
+      position: relative;
+      height: calc(420px + var(--nav-h));
+      margin-top: calc(-1 * var(--nav-h));
+      overflow: hidden;
+      display: flex; align-items: flex-end;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://cdn.plnspttrs.net/12208/pk-vvf-susi-air-cessna-208b-grand-caravan_PlanespottersNet_1449560_12f7e90660_o.jpg');
+      background-size: cover; background-position: center 40%;
+      filter: brightness(.65) saturate(1.2);
+      transform: scale(1.04);
+      transition: transform 8s ease;
+    }
+    .hero:hover .hero-bg { transform: scale(1.0); }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(7,45,64,.92) 0%, rgba(7,45,64,.5) 45%, rgba(7,45,64,.1) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      padding: 48px 56px;
+      max-width: 720px;
+    }
+    .hero-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(20,184,166,.18);
+      border: 1px solid rgba(94,234,212,.3);
+      padding: 6px 16px; border-radius: 30px;
+      font-size: .75rem; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--teal-lt);
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 700; line-height: 1.12;
+      color: #fff; margin-bottom: 14px;
+      letter-spacing: -.5px;
+    }
+    .hero h1 em { color: var(--teal-lt); font-style: normal; }
+    .hero p { font-size: .95rem; color: rgba(255,255,255,.65); line-height: 1.7; }
+
+    /* ═══ TABS ═══ */
+    .tab-bar {
+      position: sticky; top: var(--nav-h); z-index: 100;
+      background: var(--ocean-dk);
+      display: flex; gap: 0;
+      padding: 0 40px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 4px 24px rgba(7,45,64,.25);
+    }
+    .tab-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 18px 28px;
+      border: none; background: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: .875rem; font-weight: 500;
+      color: rgba(255,255,255,.45);
+      cursor: pointer; transition: var(--trans);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      position: relative;
+    }
+    .tab-btn::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 0; right: 0;
+      height: 2px; background: var(--teal-lt);
+      transform: scaleX(0); transition: transform .3s ease;
+    }
+    .tab-btn:hover { color: rgba(255,255,255,.8); }
+    .tab-btn.active { color: #fff; font-weight: 600; }
+    .tab-btn.active::after { transform: scaleX(1); }
+    .tab-icon { font-size: 20px; }
+    .tab-label { letter-spacing: .2px; }
+
+    /* ═══ CONTENT ═══ */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeUp .4s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══ ROUTE STRIP ═══ */
+    .route-strip {
+      background: var(--ocean-dk);
+      padding: 28px 40px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .route-ports {
+      display: flex; align-items: center; justify-content: center; gap: 20px;
+    }
+    .port-block { text-align: center; }
+    .port-code {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 700; color: #fff;
+      line-height: 1;
+    }
+    .port-name {
+      font-size: .72rem; color: rgba(255,255,255,.45);
+      letter-spacing: 1px; text-transform: uppercase; margin-top: 4px;
+    }
+    .port-icon { font-size: .8rem; color: var(--teal-lt); margin-top: 4px; }
+    .route-connector {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 0 8px;
+    }
+    .route-line {
+      display: flex; align-items: center;
+    }
+    .route-line .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal-lt); flex-shrink: 0; }
+    .route-line .dash {
+      width: 80px; height: 1.5px;
+      background: linear-gradient(90deg, var(--teal-lt), rgba(94,234,212,.3));
+    }
+    .route-line .arrow { color: var(--teal-lt); font-size: 12px; }
+    .route-duration {
+      font-size: .7rem; color: rgba(255,255,255,.35);
+      letter-spacing: .5px; text-align: center;
+    }
+    .route-meta {
+      display: flex; gap: 12px;
+    }
+    .meta-pill {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; padding: 10px 16px;
+      text-align: center;
+    }
+    .meta-pill .mv {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 700; color: var(--teal-lt);
+      display: block;
+    }
+    .meta-pill .ml {
+      font-size: .65rem; color: rgba(255,255,255,.35);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+
+    /* ═══ CARDS SECTION ═══ */
+    .section {
+      padding: 48px 40px 64px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .section-header {
+      margin-bottom: 32px;
+    }
+    .section-label {
+      font-size: .72rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 700; color: var(--ocean-dk);
+      line-height: 1.2;
+    }
+
+    /* ═══ TRANSPORT CARDS ═══ */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    .t-card {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(7,45,64,.08);
+      transition: transform .3s ease, box-shadow .3s ease;
+      position: relative;
+    }
+    .t-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 56px rgba(7,45,64,.16);
+    }
+
+    .t-card-top {
+      position: relative;
+      padding: 28px 28px 20px;
+      background: linear-gradient(135deg, var(--ocean-dk) 0%, var(--ocean) 100%);
+    }
+    .t-card-top.plane-bg {
+      background: linear-gradient(135deg, #0a1a2e 0%, #0d3a5e 100%);
+    }
+    .t-card-bg-pattern {
+      position: absolute; inset: 0; opacity: .06;
+      background-image: repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%);
+      background-size: 20px 20px;
+    }
+    .t-card-icon {
+      position: absolute; right: 24px; top: 24px;
+      font-size: 42px; opacity: .18;
+      transform: rotate(-10deg);
+    }
+    .t-card-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 12px; border-radius: 20px;
+      font-size: .68rem; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; margin-bottom: 14px;
+    }
+    .badge-available {
+      background: rgba(20,184,166,.25); border: 1px solid rgba(94,234,212,.35);
+      color: var(--teal-lt);
+    }
+    .badge-limited {
+      background: rgba(201,150,42,.2); border: 1px solid rgba(232,184,74,.3);
+      color: #e8c96a;
+    }
+    .badge-subsidi {
+      background: rgba(99,102,241,.25); border: 1px solid rgba(165,180,252,.3);
+      color: #c4b5fd;
+    }
+
+    .t-card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: #fff; line-height: 1.2;
+      position: relative; z-index: 1;
+    }
+    .t-card-sub {
+      font-size: .78rem; color: rgba(255,255,255,.45);
+      margin-top: 4px; position: relative; z-index: 1;
+    }
+
+    /* Route row inside card */
+    .t-card-route {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 20px; position: relative; z-index: 1;
+    }
+    .t-port { flex: 1; }
+    .t-port .tp-code {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 700; color: #fff;
+    }
+    .t-port .tp-name {
+      font-size: .68rem; color: rgba(255,255,255,.4);
+      letter-spacing: .5px; margin-top: 2px;
+    }
+    .t-arrow {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      flex-shrink: 0;
+    }
+    .t-arrow-line {
+      width: 48px; height: 1px;
+      background: linear-gradient(90deg, rgba(94,234,212,.6), rgba(94,234,212,.1));
+    }
+    .t-arrow-icon { font-size: 10px; color: rgba(94,234,212,.5); margin-top: -2px; }
+    .t-arrow-time { font-size: .62rem; color: rgba(255,255,255,.25); letter-spacing: .5px; }
+
+    /* Card body */
+    .t-card-body {
+      padding: 24px 28px;
+    }
+
+    /* Price display */
+    .t-price-row {
+      display: flex; align-items: baseline; gap: 8px;
+      margin-bottom: 20px;
+    }
+    .t-price-label { font-size: .72rem; color: var(--text-lt); font-weight: 500; }
+    .t-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 700; color: var(--teal);
+      line-height: 1;
+    }
+    .t-price-unit { font-size: .75rem; color: var(--text-lt); }
+
+    /* Where to buy */
+    .t-buy-label {
+      font-size: .68rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--text-lt);
+      margin-bottom: 10px;
+    }
+    .t-buy-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px;
+      background: var(--sand);
+      border: 1.5px solid var(--sand-dk);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all .25s ease;
+      cursor: pointer;
+      width: 100%;
+    }
+    .t-buy-btn:hover {
+      background: #fff;
+      border-color: var(--teal);
+      box-shadow: 0 4px 20px rgba(13,148,136,.12);
+      transform: translateY(-1px);
+    }
+    .t-buy-left {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .t-buy-logo {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .t-buy-site { font-size: .85rem; font-weight: 600; color: var(--text); }
+    .t-buy-desc { font-size: .72rem; color: var(--text-lt); margin-top: 1px; }
+    .t-buy-arrow {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: var(--teal); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .t-buy-btn:hover .t-buy-arrow {
+      background: var(--ocean); transform: translateX(2px);
+    }
+
+    /* Divider */
+    .t-divider {
+      height: 1px; background: var(--sand-dk);
+      margin: 18px 0;
+    }
+
+    /* Info row */
+    .t-info-row {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .t-info-tag {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 12px;
+      background: var(--sand);
+      border-radius: 20px;
+      font-size: .75rem; color: var(--text-lt); font-weight: 500;
+    }
+    .t-info-tag span { font-size: .9rem; }
+
+    /* ═══ HERO CARD (special wide card) ═══ */
+    .hero-info-card {
+      background: linear-gradient(135deg, var(--teal), var(--ocean));
+      border-radius: 20px;
+      padding: 32px 36px;
+      display: flex; align-items: flex-start; gap: 20px;
+      box-shadow: 0 8px 32px rgba(13,148,136,.25);
+    }
+    .hic-icon { font-size: 40px; flex-shrink: 0; }
+    .hic-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 700; color: #fff;
+      margin-bottom: 12px;
+    }
+    .hic-tips {
+      list-style: none;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .hic-tips li {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .82rem; color: rgba(255,255,255,.75);
+    }
+    .hic-tips li::before {
+      content: '✓'; color: var(--teal-lt);
+      font-weight: 700; flex-shrink: 0;
+    }
+
+    /* ═══ BUBBLE ANIMATION (Ferry) ═══ */
+    .bubble-wrap {
+      position: absolute; inset: 0;
+      overflow: hidden; pointer-events: none; z-index: 0;
+    }
+    .bubble {
+      position: absolute; bottom: -30px;
+      border-radius: 50%;
+      background: rgba(94,234,212,0.18);
+      border: 1px solid rgba(94,234,212,0.25);
+      animation: bubbleRise linear infinite;
+      will-change: transform, opacity;
+    }
+    .bubble::after {
+      content: '';
+      position: absolute; top: 25%; left: 25%;
+      width: 30%; height: 30%;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+    }
+    @keyframes bubbleRise {
+      0%   { transform: translateY(0) translateX(0) scale(1);   opacity: 0; }
+      10%  { opacity: 1; }
+      85%  { opacity: 0.6; }
+      100% { transform: translateY(-220px) translateX(var(--drift)) scale(0.6); opacity: 0; }
+    }
+    /* staggered sizes & positions */
+    .bubble:nth-child(1)  { width:10px;height:10px; left:5%;   animation-duration:5.5s; animation-delay:0s;    --drift:8px; }
+    .bubble:nth-child(2)  { width:6px; height:6px;  left:12%;  animation-duration:4.8s; animation-delay:1.2s;  --drift:-5px; }
+    .bubble:nth-child(3)  { width:14px;height:14px; left:22%;  animation-duration:6.2s; animation-delay:0.5s;  --drift:12px; }
+    .bubble:nth-child(4)  { width:8px; height:8px;  left:33%;  animation-duration:5.0s; animation-delay:2.1s;  --drift:-8px; }
+    .bubble:nth-child(5)  { width:12px;height:12px; left:44%;  animation-duration:5.8s; animation-delay:0.8s;  --drift:6px; }
+    .bubble:nth-child(6)  { width:7px; height:7px;  left:55%;  animation-duration:4.5s; animation-delay:1.7s;  --drift:-10px; }
+    .bubble:nth-child(7)  { width:16px;height:16px; left:64%;  animation-duration:6.5s; animation-delay:0.3s;  --drift:14px; }
+    .bubble:nth-child(8)  { width:9px; height:9px;  left:73%;  animation-duration:5.2s; animation-delay:2.8s;  --drift:-6px; }
+    .bubble:nth-child(9)  { width:11px;height:11px; left:82%;  animation-duration:5.7s; animation-delay:1.0s;  --drift:9px; }
+    .bubble:nth-child(10) { width:6px; height:6px;  left:91%;  animation-duration:4.3s; animation-delay:2.3s;  --drift:-4px; }
+    .bubble:nth-child(11) { width:13px;height:13px; left:18%;  animation-duration:6.0s; animation-delay:3.5s;  --drift:11px; }
+    .bubble:nth-child(12) { width:5px; height:5px;  left:48%;  animation-duration:4.0s; animation-delay:0.0s;  --drift:-7px; }
+    .bubble:nth-child(13) { width:10px;height:10px; left:60%;  animation-duration:5.4s; animation-delay:4.0s;  --drift:5px; }
+    .bubble:nth-child(14) { width:8px; height:8px;  left:77%;  animation-duration:4.9s; animation-delay:1.5s;  --drift:-9px; }
+    .bubble:nth-child(15) { width:15px;height:15px; left:38%;  animation-duration:6.8s; animation-delay:3.0s;  --drift:13px; }
+
+    /* ═══ CLOUD ANIMATION (Pesawat) ═══ */
+    .cloud-wrap {
+      position: absolute; inset: 0;
+      overflow: hidden; pointer-events: none; z-index: 0;
+    }
+    .cloud {
+      position: absolute;
+      display: flex; align-items: center;
+      animation: cloudDrift linear infinite;
+      will-change: transform, opacity;
+    }
+    .cloud-body {
+      position: relative;
+    }
+    .cloud-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+    }
+    .cloud-base {
+      border-radius: 20px;
+      background: rgba(255,255,255,0.08);
+    }
+    @keyframes cloudDrift {
+      0%   { transform: translateX(-120px); opacity: 0; }
+      8%   { opacity: 1; }
+      90%  { opacity: 0.6; }
+      100% { transform: translateX(calc(100vw + 120px)); opacity: 0; }
+    }
+    /* cloud variants */
+    .cloud:nth-child(1) { top: 18%; animation-duration: 22s; animation-delay: 0s;   }
+    .cloud:nth-child(2) { top: 55%; animation-duration: 30s; animation-delay: 7s;   }
+    .cloud:nth-child(3) { top: 30%; animation-duration: 25s; animation-delay: 14s;  }
+    .cloud:nth-child(4) { top: 70%; animation-duration: 18s; animation-delay: 3s;   }
+    .cloud:nth-child(5) { top: 12%; animation-duration: 35s; animation-delay: 18s;  }
+    .cloud:nth-child(6) { top: 45%; animation-duration: 28s; animation-delay: 10s;  }
+
+    /* route-strip needs position:relative for absolute children */
+    .route-strip { position: relative; }
+    .route-strip > *:not(.bubble-wrap):not(.cloud-wrap) { position: relative; z-index: 1; }
+
+    /* ═══ PRICE TABLE ═══ */
+    .price-section {
+      padding: 0 40px 64px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .price-block {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(7,45,64,.08);
+    }
+    .price-block-header {
+      padding: 20px 28px 16px;
+      border-bottom: 1px solid var(--sand-dk);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .price-block-icon { font-size: 24px; }
+    .price-block-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 700; color: var(--ocean-dk);
+    }
+    .price-block-sub { font-size: .78rem; color: var(--text-lt); margin-top: 2px; }
+    .price-rows { padding: 8px 0; }
+    .price-row {
+      display: grid;
+      grid-template-columns: 1fr 160px 200px;
+      align-items: center;
+      padding: 16px 28px; gap: 16px;
+      border-bottom: 1px solid var(--sand);
+      transition: background .2s;
+    }
+    .price-row:last-child { border-bottom: none; }
+    .price-row:hover { background: var(--sand); }
+    .pr-name { font-weight: 600; font-size: .9rem; color: var(--text); }
+    .pr-desc { font-size: .78rem; color: var(--text-lt); margin-top: 2px; }
+    .pr-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; font-weight: 700; color: var(--teal);
+      text-align: center;
+    }
+    .pr-action {
+      display: flex; justify-content: flex-end;
+    }
+    .pr-action a {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 10px;
+      background: var(--ocean-dk); color: #fff;
+      text-decoration: none; font-size: .8rem; font-weight: 600;
+      transition: all .2s; white-space: nowrap;
+    }
+    .pr-action a:hover { background: var(--teal); transform: translateY(-1px); }
+
+    /* ═══ NAVBAR (kept from original) ═══ */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-h); z-index: 200;
+      background: var(--ocean-dk);
+      display: flex; align-items: center;
+      padding: 0 32px; gap: 32px;
+      box-shadow: 0 2px 20px rgba(7,45,64,.3);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .logo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 700; color: #fff;
+    }
+    .logo-sub { font-size: .65rem; color: rgba(255,255,255,.4); letter-spacing: 1px; }
+    .nav-links {
+      display: flex; align-items: center; gap: 4px; flex: 1;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 10px;
+      text-decoration: none;
+      font-size: .82rem; font-weight: 500;
+      color: rgba(255,255,255,.55);
+      transition: var(--trans);
+    }
+    .nav-link:hover { color: #fff; background: rgba(255,255,255,.08); }
+    .nav-link.active { color: var(--teal-lt); background: rgba(20,184,166,.12); }
+    .nav-icon { font-size: 15px; }
+    .page-content { padding-top: var(--nav-h); }
+
+    /* Akun dropdown kept simple */
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .akun-trigger {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px 8px 10px;
+      background: rgba(20,184,166,.15);
+      border: 1.5px solid rgba(20,184,166,.4);
+      border-radius: 50px;
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-size: .875rem; font-weight: 600;
+      cursor: pointer; transition: all .25s ease;
+    }
+    .akun-trigger:hover { background: rgba(20,184,166,.28); }
+    .akun-trigger .avatar {
+      width: 28px; height: 28px;
+      background: rgba(20,184,166,.3); border-radius: 50%;
+      display: grid; place-items: center; font-size: 14px;
+      border: 1.5px solid rgba(20,184,166,.5);
+    }
+
+    /* ═══ AKUN DROPDOWN ═══ */
+    .akun-dropdown-wrap { position: relative; }
+    .akun-dropdown {
+      position: absolute; top: calc(100% + 12px); right: 0; width: 280px;
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(7,45,64,.18), 0 0 0 1px rgba(13,148,136,.12);
+      overflow: hidden; z-index: 1000;
+      opacity: 0; visibility: hidden;
+      transform: translateY(-10px) scale(.97);
+      transition: all .22s ease;
+    }
+    .akun-dropdown.open { opacity: 1; visibility: visible; transform: none; }
+    .akun-dd-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 18px; background: linear-gradient(135deg, #072d40, #0e6074);
+    }
+    .akun-dd-avatar {
+      width: 44px; height: 44px;
+      background: rgba(20,184,166,.3); border-radius: 50%;
+      display: grid; place-items: center; font-size: 20px;
+      border: 2px solid rgba(20,184,166,.5); flex-shrink: 0;
+    }
+    .akun-dd-name { display: block; font-size: .9rem; font-weight: 700; color: #fff; }
+    .akun-dd-email { display: block; font-size: .72rem; color: rgba(255,255,255,.5); margin-top: 2px; }
+    .akun-dd-badge {
+      font-size: .65rem; font-weight: 700; color: #14b8a6;
+      background: rgba(20,184,166,.2); border: 1px solid rgba(20,184,166,.4);
+      padding: 3px 8px; border-radius: 20px; margin-left: auto; flex-shrink: 0;
+    }
+    .akun-dd-menu { padding: 8px; }
+    .akun-dd-item {
+      display: flex; align-items: center; gap: 13px;
+      padding: 11px 12px; border-radius: 12px;
+      text-decoration: none; cursor: pointer; border: none;
+      background: transparent; width: 100%; text-align: left;
+      font-family: 'Outfit', sans-serif; transition: all .18s ease;
+    }
+    .akun-dd-item:hover { background: var(--sand); }
+    .dd-item-icon-wrap {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: grid; place-items: center; font-size: 17px; flex-shrink: 0;
+    }
+    .dd-item-icon-wrap.blue { background: rgba(59,130,246,.1); }
+    .dd-item-icon-wrap.purple { background: rgba(139,92,246,.1); }
+    .dd-item-label { display: block; font-size: .875rem; font-weight: 600; color: #1e3a4a; }
+    .dd-item-desc { display: block; font-size: .72rem; color: #8fa3ad; margin-top: 2px; }
+    .dd-item-arrow { color: #c4d4da; font-size: 12px; margin-left: auto; }
+    .akun-dd-divider { height: 1px; background: #e5e7eb; }
+    .akun-dd-logout-wrap { padding: 6px 8px 10px; }
+    .akun-dd-logout {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px; border-radius: 12px;
+      border: 1.5px solid rgba(224,80,80,.15); background: rgba(224,80,80,.04);
+      cursor: pointer; width: 100%; font-family: 'Outfit', sans-serif;
+      transition: all .2s ease;
+    }
+    .akun-dd-logout:hover { background: rgba(224,80,80,.1); border-color: rgba(224,80,80,.35); }
+    .dd-logout-icon {
+      width: 34px; height: 34px; background: rgba(224,80,80,.1);
+      border-radius: 9px; display: grid; place-items: center; font-size: 16px;
+    }
+    .dd-logout-text { font-size: .875rem; font-weight: 700; color: #c0392b; }
+    .dd-logout-sub { font-size: .7rem; color: rgba(192,57,43,.6); display: block; margin-top: 1px; }
+    .dropdown-chevron { transition: transform .3s ease; color: rgba(255,255,255,.8); }
+    .dropdown-chevron.rotated { transform: rotate(180deg); }
+    #mitraNavArea { display: flex; align-items: center; }
+    .btn-daftar-mitra {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 18px;
+      background: linear-gradient(135deg,#c9962a,#e8b84b);
+      border-radius: 30px; color: #fff !important;
+      font-size: .82rem; font-weight: 700;
+      text-decoration: none; transition: all .25s ease;
+      border: none; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(201,150,42,.35);
+    }
+    .btn-daftar-mitra:hover { transform: translateY(-2px); }
+    .mitra-aktif-badge {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 16px;
+      background: rgba(20,184,166,.15); border: 1.5px solid rgba(20,184,166,.4);
+      border-radius: 30px; color: #5eead4; font-size: .78rem; font-weight: 700;
+    }
+    .mitra-pending-badge {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 16px;
+      background: rgba(201,150,42,.15); border: 1.5px solid rgba(201,150,42,.4);
+      border-radius: 30px; color: #e8c96a; font-size: .78rem; font-weight: 600;
+    }
+    .countdown-pill {
+      background: rgba(201,150,42,.3); border-radius: 20px;
+      padding: 2px 8px; font-size: .72rem; font-weight: 700; color: #fde68a;
+    }
+    .dd-item-icon-wrap.gold { background: rgba(201,150,42,.12); }
+    .logout-modal-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(7,45,64,.6); backdrop-filter: blur(6px);
+      z-index: 2000; align-items: center; justify-content: center; padding: 20px;
+    }
+    .logout-modal-backdrop.open { display: flex; }
+    .logout-modal {
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(7,45,64,.3);
+      max-width: 380px; width: 100%; padding: 36px 32px; text-align: center;
+    }
+    .logout-modal .lm-icon { font-size: 44px; margin-bottom: 16px; }
+    .logout-modal h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 700; color: #072d40; margin-bottom: 8px;
+    }
+    .logout-modal p { font-size: .875rem; color: #8fa3ad; line-height: 1.6; margin-bottom: 28px; }
+    .logout-modal-btns { display: flex; gap: 12px; }
+    .btn-cancel-logout {
+      flex: 1; padding: 13px; border: 2px solid #e5e7eb;
+      border-radius: 12px; background: #f5f0e8;
+      font-family: 'Outfit', sans-serif; font-size: .9rem; font-weight: 600;
+      color: #6b7280; cursor: pointer;
+    }
+    .btn-confirm-logout {
+      flex: 1; padding: 13px; border: none; border-radius: 12px;
+      background: linear-gradient(135deg,#e05050,#c0392b);
+      font-family: 'Outfit', sans-serif; font-size: .9rem; font-weight: 600;
+      color: #fff; cursor: pointer;
+    }
+    .toast-aktif {
+      position: fixed; bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: linear-gradient(135deg,#072d40,#0d9488);
+      color: #fff; padding: 14px 28px; border-radius: 50px;
+      font-family: 'Outfit', sans-serif; font-size: .9rem; font-weight: 600;
+      box-shadow: 0 8px 32px rgba(7,45,64,.35); z-index: 3000;
+      display: flex; align-items: center; gap: 10px;
+      transition: transform .5s cubic-bezier(.34,1.56,.64,1), opacity .4s ease;
+      opacity: 0; pointer-events: none; white-space: nowrap;
+    }
+    .toast-aktif.show { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
+
+    /* Footer */
+    .footer {
+      background: var(--ocean-dk);
+      text-align: center; padding: 24px;
+      color: rgba(255,255,255,.35); font-size: .82rem;
+    }
+    .footer span { color: var(--teal-lt); }
+
+    @media (max-width: 768px) {
+      .hero-content { padding: 32px 24px; }
+      .route-strip, .section, .price-section { padding-left: 20px; padding-right: 20px; }
+      .tab-bar { padding: 0 20px; }
+      .hic-tips { grid-template-columns: 1fr; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .price-row { flex-wrap: wrap; gap: 10px; }
+      .pr-price { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <a href="home.html" class="nav-logo">
+    <div style="background:none;padding:0;overflow:hidden;">
+      <img src="logo_web.jpeg" style="width:38px;height:38px;border-radius:10px;object-fit:cover;" />
+    </div>
+    <div>
+      <div class="logo-text">Enggano Pedia</div>
+      <div class="logo-sub">Pariwisata</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="home.html" class="nav-link"><span class="nav-icon">🏠</span><span>Beranda</span></a>
+    <a href="transport.html" class="nav-link active"><span class="nav-icon">🚢</span><span>Transportasi</span></a>
+    <a href="destination.html" class="nav-link"><span class="nav-icon">🌴</span><span>Wisata</span></a>
+    <a href="product.html" class="nav-link"><span class="nav-icon">🛒</span><span>Produk</span></a>
+    <a href="homestay.html" class="nav-link"><span class="nav-icon">🏨</span><span>Penginapan</span></a>
+  </div>
+  <div class="nav-right">
+    <div id="mitraNavArea"></div>
+    <div class="akun-dropdown-wrap" id="akunWrap">
+      <button class="akun-trigger" id="akunTrigger" onclick="event.stopPropagation();toggleDropdown()">
+        <div class="avatar">👤</div>
+        <span>Akun</span>
+        <svg class="dropdown-chevron" id="akunChevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="akun-dropdown" id="akunDropdown">
+        <div class="akun-dd-header">
+          <div class="akun-dd-avatar">👤</div>
+          <div>
+            <span class="akun-dd-name" id="ddNama">Pengguna</span>
+            <span class="akun-dd-email">enggano@gmail.com</span>
+          </div>
+          <span class="akun-dd-badge" id="ddBadge">User</span>
+        </div>
+        <div class="akun-dd-divider"></div>
+        <div class="akun-dd-menu" id="akunDdMenu">
+          <a href="account.html" class="akun-dd-item" onclick="closeDropdown()">
+            <div class="dd-item-icon-wrap blue">👤</div>
+            <div>
+              <span class="dd-item-label">Profil Saya</span>
+              <span class="dd-item-desc">Lihat &amp; edit informasi akun</span>
+            </div>
+            <span class="dd-item-arrow">›</span>
+          </a>
+          <a href="setting.html" class="akun-dd-item" onclick="closeDropdown()">
+            <div class="dd-item-icon-wrap purple">⚙️</div>
+            <div>
+              <span class="dd-item-label">Pengaturan</span>
+              <span class="dd-item-desc">Konfigurasi website &amp; notifikasi</span>
+            </div>
+            <span class="dd-item-arrow">›</span>
+          </a>
+        </div>
+        <div class="akun-dd-logout-wrap">
+          <button type="button" class="akun-dd-logout" onclick="event.stopPropagation();closeDropdown();openLogout();">
+            <div class="dd-logout-icon">🚪</div>
+            <div>
+              <span class="dd-logout-text">Keluar dari Akun</span>
+              <span class="dd-logout-sub">Anda akan logout dari sesi ini</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ PAGE CONTENT ═══════════════ -->
+<div class="page-content">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-chip">🧭 Panduan Perjalanan</div>
+      <h1>Menuju<br/><em>Pulau Enggano</em></h1>
+      <p>Temukan pilihan transportasi terbaik — kapal laut atau penerbangan — dengan informasi harga, rute, dan pemesanan tiket.</p>
+    </div>
+  </section>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('ferry', this)">
+      <span class="tab-icon">⛴️</span>
+      <span class="tab-label">Kapal Ferry</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('pesawat', this)">
+      <span class="tab-icon">✈️</span>
+      <span class="tab-label">Pesawat</span>
+    </button>
+  </div>
+
+  <!-- ══════════ TAB FERRY ══════════ -->
+  <div id="content-ferry" class="tab-content active">
+
+    <!-- Route Strip -->
+    <div class="route-strip">
+      <!-- Bubble Animation -->
+      <div class="bubble-wrap">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+      </div>
+      <div class="route-ports">
+        <div class="port-block">
+          <div class="port-code">BKS</div>
+          <div class="port-name">Pelabuhan Pulau Baai</div>
+          <div class="port-icon">⚓ Bengkulu</div>
+        </div>
+        <div class="route-connector">
+          <div class="route-line">
+            <div class="dot"></div>
+            <div class="dash"></div>
+            <div class="arrow">▶</div>
+          </div>
+          <div class="route-duration">±12 jam perjalanan</div>
+        </div>
+        <div class="port-block">
+          <div class="port-code">ENG</div>
+          <div class="port-name">Pelabuhan Malakoni</div>
+          <div class="port-icon">⚓ Enggano</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-label">⛴️ Armada Kapal</div>
+        <h2 class="section-title">Pilihan Kapal Ferry</h2>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- CARD: KM Enggano Jaya -->
+        <div class="t-card">
+          <div class="t-card-top">
+            <div class="t-card-bg-pattern"></div>
+            <div class="t-card-icon">⛴️</div>
+            <div class="t-card-badge badge-available">● Tersedia</div>
+            <div class="t-card-name">KM Enggano Jaya</div>
+            <div class="t-card-sub">Kapal Motor Penumpang · PELNI</div>
+            <div class="t-card-route">
+              <div class="t-port">
+                <div class="tp-code">Baai</div>
+                <div class="tp-name">Pelabuhan Pulau Baai</div>
+              </div>
+              <div class="t-arrow">
+                <div class="t-arrow-line"></div>
+                <div class="t-arrow-icon">▶</div>
+                <div class="t-arrow-time">±12 jam</div>
+              </div>
+              <div class="t-port" style="text-align:right">
+                <div class="tp-code">Malakoni</div>
+                <div class="tp-name">Pelabuhan Malakoni</div>
+              </div>
+            </div>
+          </div>
+          <div class="t-card-body">
+            <div class="t-price-row">
+              <div>
+                <div class="t-price-label">Harga mulai dari</div>
+                <div class="t-price">Rp 68.000</div>
+              </div>
+              <div class="t-price-unit" style="margin-left:auto;font-size:.75rem;color:var(--text-lt);">/ orang</div>
+            </div>
+            <div class="t-buy-label">Beli Tiket Di</div>
+            <a class="t-buy-btn" href="https://www.easybook.com/id-id" target="_blank" rel="noopener">
+              <div class="t-buy-left">
+                <div class="t-buy-logo" style="background:#e8f5ff;font-size:22px;">🌊</div>
+                <div>
+                  <div class="t-buy-site">EasyBook</div>
+                  <div class="t-buy-desc">easybook.com/id-id · Pesan online</div>
+                </div>
+              </div>
+              <div class="t-buy-arrow">→</div>
+            </a>
+          </div>
+        </div>
+
+        <!-- CARD: KMP Baai Indah -->
+        <div class="t-card">
+          <div class="t-card-top" style="background: linear-gradient(135deg, #1a4060, #2a6090);">
+            <div class="t-card-bg-pattern"></div>
+            <div class="t-card-icon">⛴️</div>
+            <div class="t-card-badge badge-limited">◆ Terbatas</div>
+            <div class="t-card-name">KMP Baai Indah</div>
+            <div class="t-card-sub">Kapal Motor Penumpang & Barang</div>
+            <div class="t-card-route">
+              <div class="t-port">
+                <div class="tp-code">Baai</div>
+                <div class="tp-name">Pelabuhan Pulau Baai</div>
+              </div>
+              <div class="t-arrow">
+                <div class="t-arrow-line"></div>
+                <div class="t-arrow-icon">▶</div>
+                <div class="t-arrow-time">±14 jam</div>
+              </div>
+              <div class="t-port" style="text-align:right">
+                <div class="tp-code">Malakoni</div>
+                <div class="tp-name">Pelabuhan Malakoni</div>
+              </div>
+            </div>
+          </div>
+          <div class="t-card-body">
+            <div class="t-price-row">
+              <div>
+                <div class="t-price-label">Harga mulai dari</div>
+                <div class="t-price">Rp 68.000</div>
+              </div>
+              <div class="t-price-unit" style="margin-left:auto;font-size:.75rem;color:var(--text-lt);">/ orang</div>
+            </div>
+            <div class="t-buy-label">Beli Tiket Di</div>
+            <a class="t-buy-btn" href="https://www.easybook.com/id-id" target="_blank" rel="noopener">
+              <div class="t-buy-left">
+                <div class="t-buy-logo" style="background:#e8f5ff;font-size:22px;">🌊</div>
+                <div>
+                  <div class="t-buy-site">EasyBook</div>
+                  <div class="t-buy-desc">easybook.com/id-id · Pesan online</div>
+                </div>
+              </div>
+              <div class="t-buy-arrow">→</div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Tips Card -->
+        <div class="t-card" style="background:transparent;box-shadow:none;">
+          <div class="hero-info-card">
+            <div class="hic-icon">📋</div>
+            <div>
+              <div class="hic-title">Tips Perjalanan Ferry</div>
+              <ul class="hic-tips">
+                <li>Tiba 1 jam sebelum berangkat</li>
+                <li>Bawa KTP/identitas diri</li>
+                <li>Ada kantin di atas kapal</li>
+                <li>Siapkan obat anti mabuk laut</li>
+                <li>Jadwal bisa berubah karena cuaca</li>
+                <li>Kuota terbatas — pesan lebih awal</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Price Table -->
+    <div class="price-section">
+      <div class="section-header">
+        <div class="section-label">💰 Tarif Resmi</div>
+        <h2 class="section-title">Daftar Harga Tiket Kapal</h2>
+      </div>
+      <div class="price-block">
+        <div class="price-block-header">
+          <div class="price-block-icon">⛴️</div>
+          <div>
+            <div class="price-block-title">Ferry Bengkulu → Enggano</div>
+            <div class="price-block-sub">Pelabuhan Pulau Baai → Pelabuhan Malakoni</div>
+          </div>
+        </div>
+        <div class="price-rows">
+          <div class="price-row">
+            <div>
+              <div class="pr-name">KM Enggano Jaya — Kelas Ekonomi</div>
+              <div class="pr-desc">Selasa & Jumat · 08:00 WIB</div>
+            </div>
+            <div class="pr-price">Rp 68.000</div>
+            <div class="pr-action">
+              <a href="https://www.easybook.com/id-id" target="_blank" rel="noopener">🌊 Pesan di EasyBook →</a>
+            </div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="pr-name">KMP Baai Indah — Kelas Ekonomi</div>
+              <div class="pr-desc">Selasa & Sabtu · 07:30 WIB</div>
+            </div>
+            <div class="pr-price">Rp 68.000</div>
+            <div class="pr-action">
+              <a href="https://www.easybook.com/id-id" target="_blank" rel="noopener">🌊 Pesan di EasyBook →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ TAB PESAWAT ══════════ -->
+  <div id="content-pesawat" class="tab-content">
+
+    <!-- Route Strip -->
+    <div class="route-strip" style="background: linear-gradient(135deg, #0a1a2e 0%, #0d3060 100%);">
+      <!-- Cloud Animation -->
+      <div class="cloud-wrap">
+        <!-- Cloud 1: small -->
+        <div class="cloud">
+          <div class="cloud-body" style="width:60px;height:22px;">
+            <div class="cloud-base" style="width:60px;height:18px;bottom:0;position:absolute;"></div>
+            <div class="cloud-circle" style="width:28px;height:28px;bottom:6px;left:10px;"></div>
+            <div class="cloud-circle" style="width:20px;height:20px;bottom:6px;left:30px;"></div>
+          </div>
+        </div>
+        <!-- Cloud 2: big -->
+        <div class="cloud">
+          <div class="cloud-body" style="width:100px;height:36px;">
+            <div class="cloud-base" style="width:100px;height:26px;bottom:0;position:absolute;"></div>
+            <div class="cloud-circle" style="width:44px;height:44px;bottom:10px;left:16px;"></div>
+            <div class="cloud-circle" style="width:32px;height:32px;bottom:10px;left:50px;"></div>
+            <div class="cloud-circle" style="width:24px;height:24px;bottom:8px;left:4px;"></div>
+          </div>
+        </div>
+        <!-- Cloud 3: medium -->
+        <div class="cloud">
+          <div class="cloud-body" style="width:75px;height:28px;">
+            <div class="cloud-base" style="width:75px;height:20px;bottom:0;position:absolute;"></div>
+            <div class="cloud-circle" style="width:34px;height:34px;bottom:7px;left:12px;"></div>
+            <div class="cloud-circle" style="width:26px;height:26px;bottom:7px;left:38px;"></div>
+          </div>
+        </div>
+        <!-- Cloud 4: tiny -->
+        <div class="cloud">
+          <div class="cloud-body" style="width:48px;height:18px;">
+            <div class="cloud-base" style="width:48px;height:14px;bottom:0;position:absolute;"></div>
+            <div class="cloud-circle" style="width:22px;height:22px;bottom:5px;left:8px;"></div>
+            <div class="cloud-circle" style="width:16px;height:16px;bottom:4px;left:26px;"></div>
+          </div>
+        </div>
+        <!-- Cloud 5: large -->
+        <div class="cloud">
+          <div class="cloud-body" style="width:120px;height:42px;">
+            <div class="cloud-base" style="width:120px;height:30px;bottom:0;position:absolute;"></div>
+            <div class="cloud-circle" style="width:52px;height:52px;bottom:12px;left:20px;"></div>
+            <div class="cloud-circle" style="width:38px;height:38px;bottom:12px;left:62px;"></div>
+            <div class="cloud-circle" style="width:28px;height:28px;bottom:10px;left:5px;"></div>
+          </div>
+        </div>
+        <!-- Cloud 6: small -->
+        <div class="cloud">
+          <div class="cloud-body" style="width:55px;height:20px;">
+            <div class="cloud-base" style="width:55px;height:15px;bottom:0;position:absolute;"></div>
+            <div class="cloud-circle" style="width:25px;height:25px;bottom:6px;left:9px;"></div>
+            <div class="cloud-circle" style="width:18px;height:18px;bottom:5px;left:30px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="route-ports">
+        <div class="port-block">
+          <div class="port-code">BKS</div>
+          <div class="port-name">Bandara Fatmawati Soekarno</div>
+          <div class="port-icon">✈️ Bengkulu</div>
+        </div>
+        <div class="route-connector">
+          <div class="route-line">
+            <div class="dot"></div>
+            <div class="dash"></div>
+            <div class="arrow">▶</div>
+          </div>
+          <div class="route-duration">±45 menit penerbangan</div>
+        </div>
+        <div class="port-block">
+          <div class="port-code">ENG</div>
+          <div class="port-name">Bandara Enggano</div>
+          <div class="port-icon">✈️ Enggano</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-label">✈️ Penerbangan</div>
+        <h2 class="section-title">Pilihan Penerbangan</h2>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- CARD: Susi Air -->
+        <div class="t-card">
+          <div class="t-card-top plane-bg">
+            <div class="t-card-bg-pattern"></div>
+            <div class="t-card-icon">✈️</div>
+            <div class="t-card-badge badge-available">● Tersedia</div>
+            <div class="t-card-name">Susi Air Charter</div>
+            <div class="t-card-sub">Cessna Grand Caravan · 12 Penumpang</div>
+            <div class="t-card-route">
+              <div class="t-port">
+                <div class="tp-code">BKS</div>
+                <div class="tp-name">Bandara Fatmawati</div>
+              </div>
+              <div class="t-arrow">
+                <div class="t-arrow-line"></div>
+                <div class="t-arrow-icon">▶</div>
+                <div class="t-arrow-time">±45 menit</div>
+              </div>
+              <div class="t-port" style="text-align:right">
+                <div class="tp-code">ENG</div>
+                <div class="tp-name">Bandara Enggano</div>
+              </div>
+            </div>
+          </div>
+          <div class="t-card-body">
+            <div class="t-price-row">
+              <div>
+                <div class="t-price-label">Harga mulai dari</div>
+                <div class="t-price">Rp 750.000</div>
+              </div>
+              <div class="t-price-unit" style="margin-left:auto;font-size:.75rem;color:var(--text-lt);">/ orang</div>
+            </div>
+            <div class="t-buy-label">Beli Tiket Di</div>
+            <a class="t-buy-btn" href="https://www.traveloka.com/id-id/flight/fullsearch?ap=ENG.BKS&dt=27-2-2026.NA&sc=ECONOMY&far=SI" target="_blank" rel="noopener">
+              <div class="t-buy-left">
+                <div class="t-buy-logo" style="background:#e8f0ff;font-size:22px;">✈</div>
+                <div>
+                  <div class="t-buy-site">Traveloka</div>
+                  <div class="t-buy-desc">traveloka.com · Pesan online</div>
+                </div>
+              </div>
+              <div class="t-buy-arrow">→</div>
+            </a>
+          </div>
+        </div>
+
+        <!-- CARD: Penerbangan Perintis -->
+        <div class="t-card">
+          <div class="t-card-top" style="background: linear-gradient(135deg, #1a0a30, #3a1060);">
+            <div class="t-card-bg-pattern"></div>
+            <div class="t-card-icon">🛫</div>
+            <div class="t-card-badge badge-subsidi">★ Bersubsidi</div>
+            <div class="t-card-name">Penerbangan Perintis</div>
+            <div class="t-card-sub">Twin Otter DHC-6 · Subsidi Pemerintah</div>
+            <div class="t-card-route">
+              <div class="t-port">
+                <div class="tp-code">BKS</div>
+                <div class="tp-name">Bandara Fatmawati</div>
+              </div>
+              <div class="t-arrow">
+                <div class="t-arrow-line"></div>
+                <div class="t-arrow-icon">▶</div>
+                <div class="t-arrow-time">±50 menit</div>
+              </div>
+              <div class="t-port" style="text-align:right">
+                <div class="tp-code">ENG</div>
+                <div class="tp-name">Bandara Enggano</div>
+              </div>
+            </div>
+          </div>
+          <div class="t-card-body">
+            <div class="t-price-row">
+              <div>
+                <div class="t-price-label">Harga mulai dari</div>
+                <div class="t-price">Rp 350.000</div>
+              </div>
+              <div class="t-price-unit" style="margin-left:auto;font-size:.75rem;color:var(--text-lt);">/ orang</div>
+            </div>
+            <div class="t-buy-label">Beli Tiket Di</div>
+            <a class="t-buy-btn" href="https://www.traveloka.com/id-id/flight/fullsearch?ap=ENG.BKS&dt=27-2-2026.NA&sc=ECONOMY&far=SI" target="_blank" rel="noopener">
+              <div class="t-buy-left">
+                <div class="t-buy-logo" style="background:#e8f0ff;font-size:22px;">✈</div>
+                <div>
+                  <div class="t-buy-site">Traveloka</div>
+                  <div class="t-buy-desc">traveloka.com · Pesan online</div>
+                </div>
+              </div>
+              <div class="t-buy-arrow">→</div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Tips Card -->
+        <div class="t-card" style="background:transparent;box-shadow:none;">
+          <div class="hero-info-card" style="background: linear-gradient(135deg, #0a1a2e, #0d3060);">
+            <div class="hic-icon">✈️</div>
+            <div>
+              <div class="hic-title">Tips Perjalanan Udara</div>
+              <ul class="hic-tips">
+                <li>Check-in 1.5 jam sebelum terbang</li>
+                <li>Bagasi maksimal 10 kg/orang</li>
+                <li>Bawa identitas asli</li>
+                <li>Penerbangan tergantung cuaca</li>
+                <li>Pesan minimal 2 hari sebelum</li>
+                <li>Kuota sangat terbatas</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Price Table Pesawat -->
+    <div class="price-section">
+      <div class="section-header">
+        <div class="section-label">💰 Tarif Penerbangan</div>
+        <h2 class="section-title">Daftar Harga Tiket Pesawat</h2>
+      </div>
+      <div class="price-block">
+        <div class="price-block-header">
+          <div class="price-block-icon">✈️</div>
+          <div>
+            <div class="price-block-title">Penerbangan Bengkulu → Enggano</div>
+            <div class="price-block-sub">Bandara Fatmawati Soekarno → Bandara Enggano</div>
+          </div>
+        </div>
+        <div class="price-rows">
+          <div class="price-row">
+            <div>
+              <div class="pr-name">Penerbangan Perintis</div>
+              <div class="pr-desc">Selasa & Kamis · 10:30 WIB · Bersubsidi pemerintah</div>
+            </div>
+            <div class="pr-price">Rp 350.000</div>
+            <div class="pr-action">
+              <a href="https://www.traveloka.com/id-id/flight/fullsearch?ap=ENG.BKS&dt=27-2-2026.NA&sc=ECONOMY&far=SI" target="_blank" rel="noopener">✈️ Pesan di Traveloka →</a>
+            </div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="pr-name">Susi Air — Per Orang</div>
+              <div class="pr-desc">Senin, Rabu, Jumat · 09:00 WIB · Charter reguler</div>
+            </div>
+            <div class="pr-price">Rp 750.000</div>
+            <div class="pr-action">
+              <a href="https://www.traveloka.com/id-id/flight/fullsearch?ap=ENG.BKS&dt=27-2-2026.NA&sc=ECONOMY&far=SI" target="_blank" rel="noopener">✈️ Pesan di Traveloka →</a>
+            </div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="pr-name">Susi Air — Charter Privat</div>
+              <div class="pr-desc">Sesuai permintaan · 1–12 orang per penerbangan</div>
+            </div>
+            <div class="pr-price">Rp 8.000.000</div>
+            <div class="pr-action">
+              <a href="https://www.traveloka.com/id-id/flight/fullsearch?ap=ENG.BKS&dt=27-2-2026.NA&sc=ECONOMY&far=SI" target="_blank" rel="noopener">✈️ Pesan di Traveloka →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- end tab pesawat -->
+
+</div><!-- end page-content -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>© 2025 <span>Enggano Pedia</span> · Pulau Enggano, Bengkulu Utara</p>
+</footer>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-modal-backdrop" id="logoutModal">
+  <div class="logout-modal">
+    <div class="lm-icon">🚪</div>
+    <h3>Keluar dari Akun?</h3>
+    <p>Anda akan diarahkan kembali ke halaman utama. Sampai jumpa kembali!</p>
+    <div class="logout-modal-btns">
+      <button class="btn-cancel-logout" onclick="closeLogout()">Batal</button>
+      <button class="btn-confirm-logout" onclick="doLogout()">Ya, Keluar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-aktif" id="toastAktif">🎉 Selamat! Akun mitra Anda telah aktif — etalase siap digunakan!</div>
+
+<script>
+  // Tab switching
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('content-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // URL hash
+  if (window.location.hash === '#pesawat') {
+    const btns = document.querySelectorAll('.tab-btn');
+    switchTab('pesawat', btns[1]);
+  }
+
+  // Dropdown
+  var akunWrap = document.getElementById("akunWrap"),
+      akunTrigger = document.getElementById("akunTrigger"),
+      akunDropdown = document.getElementById("akunDropdown"),
+      akunChevron = document.getElementById("akunChevron"),
+      dropdownOpen = false;
+
+  function openDropdown()  { dropdownOpen = true;  akunDropdown.classList.add("open"); akunChevron.classList.add("rotated"); }
+  function closeDropdown() { dropdownOpen = false; akunDropdown.classList.remove("open"); akunChevron.classList.remove("rotated"); }
+  function toggleDropdown() { dropdownOpen ? closeDropdown() : openDropdown(); }
+  document.addEventListener("click", function(e) { if (akunWrap && !akunWrap.contains(e.target)) closeDropdown(); });
+  document.addEventListener("keydown", function(e) { if (e.key === "Escape") { closeDropdown(); closeLogout(); } });
+
+  function openLogout()  { document.getElementById("logoutModal").classList.add("open"); }
+  function closeLogout() { document.getElementById("logoutModal").classList.remove("open"); }
+  function doLogout()    { window.location.href = "index.html"; }
+  document.getElementById("logoutModal").addEventListener("click", function(e) { if (e.target === this) closeLogout(); });
+
+  /* ═══ MITRA LOGIC ═══ */
+  var pollingInterval = null, navCountdown = null, sudahTampilToast = false;
+  function getMitraStatus() { try { return localStorage.getItem('enggano_mitra_status'); } catch(e) { return null; } }
+  function getAktivasiAt()  { try { return parseInt(localStorage.getItem('enggano_mitra_aktivasi_at') || '0', 10); } catch(e) { return 0; } }
+  function getMitraData()   { try { return JSON.parse(localStorage.getItem('enggano_mitra_data') || 'null'); } catch(e) { return null; } }
+  function upgradeKeAktif() { try { localStorage.setItem('enggano_mitra_status', 'aktif'); } catch(e) {} try { localStorage.removeItem('enggano_mitra_aktivasi_at'); } catch(e) {} }
+  function cekAktivasi()    { var at = getAktivasiAt(); if (at && Date.now() >= at) { upgradeKeAktif(); return true; } return false; }
+
+  function renderMitraUI(status, isUpgradeEvent) {
+    var data = getMitraData(), navArea = document.getElementById('mitraNavArea'),
+        ddMenu = document.getElementById('akunDdMenu'), ddNama = document.getElementById('ddNama'),
+        ddBadge = document.getElementById('ddBadge');
+    if (data && data.nama) ddNama.textContent = data.nama;
+    var old = document.getElementById('menuEtalase'); if (old) old.remove();
+    if (!status) {
+      navArea.innerHTML = '<a href="daftar-mitra.html" class="btn-daftar-mitra">🤝 Daftar Mitra</a>';
+    } else if (status === 'pending') {
+      var at = getAktivasiAt(), sisaDetik = Math.ceil(Math.max(0, at - Date.now()) / 1000);
+      navArea.innerHTML = '<div class="mitra-pending-badge" id="pendingBadge">⏳ Menunggu Verifikasi' + (sisaDetik > 0 ? '<span class="countdown-pill" id="navCountdownNum">' + sisaDetik + 'd</span>' : '') + '</div>';
+      if (navCountdown) clearInterval(navCountdown);
+      if (sisaDetik > 0) { navCountdown = setInterval(function() { var s = Math.ceil(Math.max(0, getAktivasiAt() - Date.now()) / 1000), el = document.getElementById('navCountdownNum'); if (el) el.textContent = s + 'd'; if (s <= 0 && navCountdown) clearInterval(navCountdown); }, 1000); }
+      ddBadge.textContent = 'Mitra'; ddBadge.style.color = '#e8c96a';
+      mulaiPolling();
+    } else if (status === 'aktif') {
+      if (isUpgradeEvent && !sudahTampilToast) { sudahTampilToast = true; var t = document.getElementById('toastAktif'); if (t) { t.classList.add('show'); setTimeout(function() { t.classList.remove('show'); }, 5000); } }
+      navArea.innerHTML = '<div class="mitra-aktif-badge">✅ Mitra Aktif</div>';
+      ddMenu.insertAdjacentHTML('afterbegin',
+        '<a href="etalase.html" id="menuEtalase" class="akun-dd-item" onclick="closeDropdown()"><div class="dd-item-icon-wrap gold">🏪</div><div><span class="dd-item-label">Kelola Etalase</span><span class="dd-item-desc">Upload &amp; kelola produk/usaha Anda</span></div><span class="dd-item-arrow">›</span></a>');
+      ddBadge.textContent = 'Mitra ✓';
+      if (pollingInterval) { clearInterval(pollingInterval); pollingInterval = null; }
+      if (navCountdown)    { clearInterval(navCountdown);    navCountdown = null;    }
+    }
+  }
+
+  function initMitraUI() { var s = getMitraStatus(); if (s === 'pending') { if (cekAktivasi()) { renderMitraUI('aktif', true); return; } renderMitraUI('pending', false); } else { renderMitraUI(s, false); } }
+  function mulaiPolling() { if (pollingInterval) return; pollingInterval = setInterval(function() { var s = getMitraStatus(); if (s !== 'pending') { clearInterval(pollingInterval); pollingInterval = null; return; } if (cekAktivasi()) { clearInterval(pollingInterval); pollingInterval = null; if (navCountdown) { clearInterval(navCountdown); navCountdown = null; } renderMitraUI('aktif', true); } }, 1000); }
+  initMitraUI();
+</script>
+</body>
+</html>

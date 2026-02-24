@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Produk Lokal – Enggano Pedia</title>
+
+  <!-- ✅ FONT (samain semua halaman) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    /* ✅ LOGO NAV (SAMAIN KAYAK LAMAN LOGIN) */
+    .nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none}
+    .logo-stack{display:flex;flex-direction:column;line-height:1.05}
+    .logo-text{
+      font-family:"Cormorant Garamond",serif;
+      font-weight:700;
+      font-size:28px;
+      color:#fff;
+      letter-spacing:.2px;
+      text-transform:none;
+    }
+    .logo-sub{
+      font-family:"Outfit",sans-serif;
+      font-weight:500;
+      font-size:12px;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      color:rgba(94,234,212,.95);
+      margin-top:6px;
+    }
+
+    /* ─── HERO ─── */
+    .hero { height: 400px; }
+    .hero-bg { background-image: url('https://images.pexels.com/photos/26690966/pexels-photo-26690966.jpeg'); }
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar {
+      background: var(--white); padding: 16px 32px;
+      border-bottom: 1px solid var(--sand-dk);
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+      position: sticky; top: var(--nav-h); z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    }
+    .filter-btn {
+      padding: 7px 18px; border-radius: 50px;
+      border: 2px solid var(--sand-dk); background: var(--white);
+      font-family: 'Outfit', sans-serif; font-size: .85rem; font-weight: 500;
+      color: var(--text-md); cursor: pointer; transition: var(--trans);
+    }
+    .filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .filter-btn.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+    /* ─── PRODUK GRID ─── */
+    .produk-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px; margin-top: 36px;
+    }
+
+    /* ─── PRODUK CARD ─── */
+    .produk-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden; transition: var(--trans);
+      cursor: pointer; border: 2px solid transparent;
+
+      /* ✅ SEJAJAR */
+      display: flex;
+      flex-direction: column;
+    }
+    .produk-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(13,148,136,.2);
+    }
+
+    .pc-img { height: 210px; position: relative; overflow: hidden; background: var(--sand); }
+    .pc-img img { width:100%; height:100%; object-fit:cover; transition: transform .5s ease; }
+    .produk-card:hover .pc-img img { transform: scale(1.08); }
+
+    .pc-kategori {
+      position: absolute; top: 12px; left: 12px; padding: 4px 12px;
+      background: rgba(7,45,64,.78); backdrop-filter: blur(4px);
+      border-radius: 20px; font-size: .72rem; color: var(--white);
+      letter-spacing: 1px; font-weight: 500;
+    }
+    .pc-badge {
+      position: absolute; top: 12px; right: 12px; padding: 4px 10px;
+      background: var(--gold); border-radius: 20px;
+      font-size: .72rem; color: var(--white); font-weight: 600; letter-spacing: .5px;
+    }
+
+    .pc-body { padding: 18px 20px 14px; flex: 1; }
+
+    .pc-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.22rem; font-weight: 700; color: var(--ocean-dk); margin-bottom: 5px;
+    }
+    .pc-desc { font-size: .84rem; color: var(--text-lt); line-height: 1.55; margin-bottom: 12px; }
+
+    .pc-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 4px; }
+    .pc-tag {
+      padding: 3px 10px; background: rgba(13,148,136,.1);
+      border: 1px solid rgba(13,148,136,.2); border-radius: 20px;
+      font-size: .75rem; color: var(--teal);
+    }
+
+    .pc-footer {
+      padding: 12px 20px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--sand); gap: 10px;
+      margin-top: auto; /* ✅ footer selalu bawah */
+    }
+
+    .pc-harga { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:700; color:var(--teal); }
+    .pc-harga-sub { font-size:.73rem; color:var(--text-lt); }
+
+    .btn-pesan {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 20px; border-radius: 50px; border: none;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: var(--white); font-family: 'Outfit', sans-serif;
+      font-size: .88rem; font-weight: 600; cursor: pointer;
+      transition: var(--trans); box-shadow: 0 4px 14px rgba(37,211,102,.3);
+      white-space: nowrap;
+    }
+    .btn-pesan:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(37,211,102,.4); }
+
+    /* ─── HIGHLIGHT BANNER ─── */
+    .highlight-banner {
+      background: linear-gradient(135deg, var(--ocean-dk) 0%, var(--ocean) 60%, var(--teal) 100%);
+      padding: 48px 32px; position: relative; overflow: hidden;
+    }
+    .highlight-banner::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,.02) 0, rgba(255,255,255,.02) 1px, transparent 1px, transparent 24px);
+    }
+    .highlight-inner {
+      max-width: 1200px; margin: 0 auto; position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 32px; flex-wrap: wrap;
+    }
+    .highlight-text h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.6rem,3vw,2.2rem); color:var(--white); margin-bottom:8px; }
+    .highlight-text p  { color:rgba(255,255,255,.65); font-size:.93rem; max-width:440px; line-height:1.6; }
+    .highlight-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ─── LOGIN GATE MODAL ─── */
+    .gate-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(7,45,64,.65); backdrop-filter: blur(8px);
+      z-index: 3000; align-items: center; justify-content: center; padding: 20px;
+    }
+    .gate-backdrop.open { display: flex; }
+    .gate-modal {
+      background: var(--white); border-radius: 24px;
+      box-shadow: 0 32px 80px rgba(7,45,64,.32);
+      max-width: 400px; width: 100%; overflow: hidden;
+      animation: fadeUp .35s cubic-bezier(.4,0,.2,1);
+    }
+    .gate-header {
+      background: linear-gradient(145deg, var(--ocean-dk), var(--ocean));
+      padding: 36px 32px 28px; text-align: center; position: relative; overflow: hidden;
+    }
+    .gate-header::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 22px);
+      pointer-events: none;
+    }
+    .gate-lock-icon { font-size: 48px; display: block; margin-bottom: 14px; position: relative; z-index: 1; }
+    .gate-header h3 { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:700; color:var(--white); position:relative; z-index:1; margin-bottom:8px; }
+    .gate-header p  { font-size:.85rem; color:rgba(255,255,255,.6); line-height:1.55; position:relative; z-index:1; }
+    .gate-body { padding: 28px 32px 32px; }
+    .gate-feature-list { list-style: none; margin-bottom: 24px; }
+    .gate-feature-list li { display:flex; align-items:center; gap:10px; font-size:.875rem; color:var(--text-md); padding:10px 0; border-bottom:1px solid var(--sand); }
+    .gate-feature-list li:last-child { border-bottom: none; }
+    .gf-icon { width:32px; height:32px; background:rgba(13,148,136,.1); border-radius:8px; display:grid; place-items:center; font-size:15px; flex-shrink:0; }
+    .gate-btns { display: flex; flex-direction: column; gap: 10px; }
+    .btn-gate-login {
+      width:100%; padding:14px; border:none; border-radius:12px;
+      background: linear-gradient(135deg, var(--teal), var(--ocean-lt));
+      color:var(--white); font-family:'Outfit',sans-serif;
+      font-size:.95rem; font-weight:600; cursor:pointer; transition:var(--trans);
+      box-shadow:0 4px 16px rgba(13,148,136,.3); letter-spacing:.3px;
+    }
+    .btn-gate-login:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(13,148,136,.4); }
+    .btn-gate-cancel {
+      width:100%; padding:13px; border:2px solid var(--sand-dk); border-radius:12px;
+      background:var(--sand); font-family:'Outfit',sans-serif; font-size:.9rem;
+      font-weight:600; color:var(--text-md); cursor:pointer; transition:var(--trans);
+    }
+    .btn-gate-cancel:hover { border-color:var(--text-lt); background:var(--sand-dk); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon" style="background:none;padding:0;overflow:hidden;">
+      <img src="logo_web.jpeg" style="width:38px;height:38px;border-radius:10px;object-fit:cover;" />
+    </div>
+
+    <!-- ✅ DIUBAH: samain jadi Enggano Pedia / PARIWISATA -->
+    <div class="logo-stack">
+      <div class="logo-text">Enggano Pedia</div>
+      <div class="logo-sub">PARIWISATA</div>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="index.html"      class="nav-link"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span></a>
+    <a href="transportasi.html" class="nav-link"><span class="nav-icon">🚢</span><span class="nav-label">Transportasi</span></a>
+    <a href="wisata.html"       class="nav-link"><span class="nav-icon">🌴</span><span class="nav-label">Wisata</span></a>
+    <a href="produk.html"       class="nav-link active"><span class="nav-icon">🛒</span><span class="nav-label">Produk</span></a>
+    <a href="penginapan.html"   class="nav-link"><span class="nav-icon">🏨</span><span class="nav-label">Penginapan</span></a>
+  </div>
+
+  <div class="nav-right">
+    <a href="akun.html" class="btn-account"><div class="avatar">👤</div><span>Akun</span></a>
+  </div>
+</nav>
+
+<!-- ═══════════════ CONTENT ═══════════════ -->
+<div class="page-content">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🛒 Produk Unggulan</div>
+      <h1>Produk Lokal<br/>Pulau Enggano</h1>
+      <p>Hasil bumi dan produk unggulan asli Enggano — segar, alami, dan langsung dari tangan petani lokal</p>
+    </div>
+  </section>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterProduk('semua', this)">🌿 Semua</button>
+    <button class="filter-btn" onclick="filterProduk('buah', this)">🍌 Buah</button>
+    <button class="filter-btn" onclick="filterProduk('polong', this)">🌱 Polong &amp; Biji</button>
+  </div>
+
+  <!-- PRODUK LIST -->
+  <section class="section">
+    <h2 class="section-title">Produk Unggulan Enggano</h2>
+    <p class="section-sub">Dipesan langsung dari petani lokal Pulau Enggano</p>
+
+    <div class="produk-grid">
+
+      <!-- 1. Pisang Kepok Putih -->
+      <div class="produk-card" data-kategori="buah">
+        <div class="pc-img">
+          <img src="pisang.jpg" alt="Pisang Kepok Putih"/>
+          <span class="pc-kategori">🍌 Buah</span>
+          <span class="pc-badge">⭐ Unggulan</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Pisang Kepok Putih</div>
+          <p class="pc-desc">Pisang kepok putih khas Enggano terkenal dengan daging buah yang lebih tebal, manis, dan aroma khas yang harum. Cocok dikonsumsi langsung maupun diolah.</p>
+          <div class="pc-tags">
+            <span class="pc-tag">🌿 Organik</span>
+            <span class="pc-tag">🚫 Non-Pestisida</span>
+            <span class="pc-tag">🏝️ Khas Enggano</span>
+          </div>
+        </div>
+        <div class="pc-footer">
+          <div>
+            <div class="pc-harga">Rp 25.000</div>
+            <div class="pc-harga-sub">per sisir / ±1 kg</div>
+          </div>
+          <button class="btn-pesan" onclick="requireLogin('Pisang Kepok Putih')">💬 Pesan</button>
+        </div>
+      </div>
+
+      <!-- 2. Jengkol -->
+      <div class="produk-card" data-kategori="polong">
+        <div class="pc-img">
+          <img src="jengkol.jpg" alt="Jengkol"/>
+          <span class="pc-kategori">🌱 Polong</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Jengkol Enggano</div>
+          <p class="pc-desc">Jengkol Enggano dikenal memiliki biji yang lebih besar dan rasa yang lebih gurih dibanding jengkol dari daerah lain. Favorit para pecinta kuliner nusantara.</p>
+          <div class="pc-tags">
+            <span class="pc-tag">🌿 Alami</span>
+            <span class="pc-tag">💪 Kaya Protein</span>
+            <span class="pc-tag">🏝️ Khas Enggano</span>
+          </div>
+        </div>
+        <div class="pc-footer">
+          <div>
+            <div class="pc-harga">Rp 20.000</div>
+            <div class="pc-harga-sub">per kg</div>
+          </div>
+          <button class="btn-pesan" onclick="requireLogin('Jengkol Enggano')">💬 Pesan</button>
+        </div>
+      </div>
+
+      <!-- 3. Melinjo -->
+      <div class="produk-card" data-kategori="polong">
+        <div class="pc-img">
+          <img src="melinjo.jpg" alt="Melinjo"/>
+          <span class="pc-kategori">🌱 Polong &amp; Biji</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Melinjo Enggano</div>
+          <p class="pc-desc">Melinjo segar berkualitas tinggi dari hutan-kebun Enggano. Dapat diolah menjadi emping, sayur, atau berbagai masakan tradisional khas Nusantara.</p>
+          <div class="pc-tags">
+            <span class="pc-tag">🌿 Segar</span>
+            <span class="pc-tag">🍃 Daun &amp; Biji</span>
+            <span class="pc-tag">🏝️ Khas Enggano</span>
+          </div>
+        </div>
+        <div class="pc-footer">
+          <div>
+            <div class="pc-harga">Rp 15.000</div>
+            <div class="pc-harga-sub">per kg</div>
+          </div>
+          <button class="btn-pesan" onclick="requireLogin('Melinjo Enggano')">💬 Pesan</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="highlight-banner">
+    <div class="highlight-inner">
+      <div class="highlight-text">
+        <h2>🛒 Pesan Produk Enggano Sekarang</h2>
+        <p>Dapatkan produk segar langsung dari petani Enggano. Hubungi kami via WhatsApp untuk pemesanan, ketersediaan stok, dan pengiriman.</p>
+      </div>
+      <div class="highlight-actions">
+        <button class="btn btn-wa" onclick="requireLogin('Pesan via WhatsApp')">
+          💬 Pesan via WhatsApp
+        </button>
+        <a href="transportasi.html" class="btn btn-outline" style="color:var(--white);border-color:rgba(255,255,255,.45);">
+          🚢 Info Pengiriman
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-content -->
+
+<!-- ═══════════════ LOGIN GATE MODAL ═══════════════ -->
+<div class="gate-backdrop" id="gateModal">
+  <div class="gate-modal">
+    <div class="gate-header">
+      <span class="gate-lock-icon">🔒</span>
+      <h3>Login Diperlukan</h3>
+      <p id="gateDesc">Silakan login terlebih dahulu untuk mengakses fitur ini.</p>
+    </div>
+    <div class="gate-body">
+      <ul class="gate-feature-list">
+        <li><span class="gf-icon">🛒</span>Pesan produk lokal langsung dari petani Enggano</li>
+        <li><span class="gf-icon">💬</span>Hubungi via WhatsApp untuk negosiasi &amp; stok</li>
+        <li><span class="gf-icon">📦</span>Cek ketersediaan &amp; info pengiriman produk</li>
+      </ul>
+      <div class="gate-btns">
+        <button class="btn-gate-login" onclick="goToLogin()">🔑 &nbsp;Masuk ke Akun</button>
+        <button class="btn-gate-cancel" onclick="closeGate()">Lanjut Melihat-lihat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>© 2025 <span>Enggano Pedia</span> · Pulau Enggano, Bengkulu Utara</p>
+</footer>
+
+<script>
+  /* ── Filter ─────────────────────────────────────── */
+  function filterProduk(kategori, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.produk-card').forEach(card => {
+      if (kategori === 'semua' || card.dataset.kategori === kategori) {
+        card.style.display = '';
+        card.style.animation = 'fadeUp .4s ease both';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  /* ── Login Gate ─────────────────────────────────── */
+  const LOGIN_PAGE = 'akun.html';
+
+  function requireLogin(namaFitur) {
+    document.getElementById('gateDesc').textContent =
+      `Silakan login terlebih dahulu untuk memesan "${namaFitur}".`;
+    document.getElementById('gateModal').classList.add('open');
+  }
+  function closeGate() {
+    document.getElementById('gateModal').classList.remove('open');
+  }
+  function goToLogin() {
+    window.location.href = LOGIN_PAGE;
+  }
+  document.getElementById('gateModal').addEventListener('click', function(e) {
+    if (e.target === this) closeGate();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGate(); });
+</script>
+
+</body>
+</html>

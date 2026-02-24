@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beranda – ENGGANO PEDIA</title>
+
+  <!-- Font (SAMAKAN seperti laman login) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    /* ─── BERANDA SPECIFIC ─── */
+    .hero { height: 100vh; max-height: 760px; }
+    .hero-bg { background-image: url('https://images.unsplash.com/photo-1537956965359-7573183d1f57?w=1600&q=80'); }
+    .hero-content { max-width: 700px; }
+    .hero-actions {
+      display: flex; gap: 14px;
+      justify-content: center; flex-wrap: wrap; margin-top: 28px;
+    }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar { background: var(--ocean-dk); padding: 24px 32px; }
+    .stats-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-around;
+      align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; color: var(--white); }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 700; color: var(--teal-lt); display: block;
+    }
+    .stat-label { font-size: .78rem; color: rgba(255,255,255,.55); letter-spacing: 1.5px; text-transform: uppercase; }
+    .stat-divider { width: 1px; height: 40px; background: rgba(255,255,255,.12); }
+
+    /* ─── CAROUSEL ─── */
+    .carousel-section {
+      position: relative; margin-top: 40px; overflow: hidden; padding: 12px 0 18px;
+    }
+    .carousel-section::before, .carousel-section::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 4; pointer-events: none;
+    }
+    .carousel-section::before { left: 0; background: linear-gradient(to right, var(--section-bg,#f0ebe0) 0%, transparent 100%); }
+    .carousel-section::after  { right: 0; background: linear-gradient(to left,  var(--section-bg,#f0ebe0) 0%, transparent 100%); }
+    .carousel-track {
+      display: flex; gap: 20px; padding: 8px 160px;
+      width: max-content; animation: carouselSlide 32s linear infinite; will-change: transform;
+    }
+    @keyframes carouselSlide { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+    .highlight-card {
+      border-radius: 18px; overflow: hidden; position: relative;
+      width: 320px; height: 360px; flex-shrink: 0; cursor: pointer;
+      text-decoration: none; box-shadow: 0 8px 30px rgba(0,0,0,.18);
+      transition: transform .4s cubic-bezier(.25,.8,.25,1), box-shadow .4s ease;
+    }
+    .highlight-card:hover { transform: translateY(-8px) scale(1.025); box-shadow: 0 22px 52px rgba(0,0,0,.32); }
+    .highlight-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+    .highlight-card:hover img { transform: scale(1.1); }
+    .highlight-card .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, rgba(4,32,46,.92) 0%, rgba(4,32,46,.1) 55%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; transition: background .4s ease;
+    }
+    .highlight-card:hover .overlay { background: linear-gradient(0deg, rgba(4,32,46,.96) 0%, rgba(4,32,46,.35) 65%, transparent 100%); }
+    .highlight-card .hc-tag {
+      display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px;
+      background: rgba(20,184,166,.2); border: 1px solid rgba(20,184,166,.55);
+      border-radius: 30px; color: #5eead4; font-size: .68rem; letter-spacing: 1.8px;
+      text-transform: uppercase; margin-bottom: 10px; width: fit-content; backdrop-filter: blur(8px);
+    }
+    .highlight-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; color:#fff; font-weight:700; line-height:1.25; margin-bottom:6px; }
+    .highlight-card p { font-size:.81rem; color:rgba(255,255,255,.68); line-height:1.55; transform:translateY(5px); opacity:.8; transition: transform .35s ease, opacity .35s ease; }
+    .highlight-card:hover p { transform:translateY(0); opacity:1; }
+
+    /* ─── TRANSPORT ─── */
+    .transport-section { background: linear-gradient(135deg, var(--ocean-dk) 0%, var(--ocean) 100%); padding: 60px 32px; }
+    .transport-inner { max-width: 1200px; margin: 0 auto; }
+    .transport-inner .section-title { color: var(--white); }
+    .transport-inner .section-sub { color: rgba(255,255,255,.55); margin-bottom: 36px; }
+    .transport-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 580px) { .transport-cards { grid-template-columns: 1fr; } }
+    .transport-card {
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius); padding: 28px;
+      display: flex; align-items: center; gap: 20px;
+      text-decoration: none; transition: var(--trans); cursor: pointer;
+    }
+    .transport-card:hover { background: rgba(255,255,255,.13); border-color: rgba(20,184,166,.4); transform: translateY(-3px); }
+    .transport-card .tc-icon { width:60px; height:60px; background:linear-gradient(135deg,var(--teal),var(--ocean-lt)); border-radius:14px; display:grid; place-items:center; font-size:26px; flex-shrink:0; }
+    .transport-card .tc-info h3 { font-family:'Cormorant Garamond',serif; font-size:1.25rem; color:var(--white); font-weight:600; margin-bottom:4px; }
+    .transport-card .tc-info p { font-size:.82rem; color:rgba(255,255,255,.55); line-height:1.5; }
+    .transport-card .tc-arrow { margin-left:auto; color:var(--teal-lt); font-size:20px; flex-shrink:0; }
+
+    /* ─── INFO BANNER ─── */
+    .info-banner { background: linear-gradient(135deg, var(--teal), var(--teal-lt)); padding: 40px 32px; text-align: center; }
+    .info-banner h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.6rem,3vw,2.2rem); color:var(--white); margin-bottom:10px; }
+    .info-banner p { color:rgba(255,255,255,.82); font-size:.95rem; margin-bottom:22px; }
+
+    /* ─── LOGIN GATE MODAL ─── */
+    .gate-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(7,45,64,.65); backdrop-filter: blur(8px);
+      z-index: 3000; align-items: center; justify-content: center; padding: 20px;
+    }
+    .gate-backdrop.open { display: flex; }
+    .gate-modal {
+      background: var(--white); border-radius: 24px;
+      box-shadow: 0 32px 80px rgba(7,45,64,.32);
+      max-width: 400px; width: 100%; overflow: hidden;
+      animation: fadeUp .35s cubic-bezier(.4,0,.2,1);
+    }
+    .gate-header {
+      background: linear-gradient(145deg, var(--ocean-dk), var(--ocean));
+      padding: 36px 32px 28px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .gate-header::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 22px);
+      pointer-events: none;
+    }
+    .gate-lock-icon { font-size: 48px; display: block; margin-bottom: 14px; position: relative; z-index: 1; }
+    .gate-header h3 { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:700; color:var(--white); position:relative; z-index:1; margin-bottom:8px; }
+    .gate-header p  { font-size:.85rem; color:rgba(255,255,255,.6); line-height:1.55; position:relative; z-index:1; }
+    .gate-body { padding: 28px 32px 32px; }
+    .gate-feature-list { list-style: none; margin-bottom: 24px; }
+    .gate-feature-list li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: .875rem; color: var(--text-md);
+      padding: 10px 0; border-bottom: 1px solid var(--sand);
+    }
+    .gate-feature-list li:last-child { border-bottom: none; }
+    .gf-icon { width:32px; height:32px; background:rgba(13,148,136,.1); border-radius:8px; display:grid; place-items:center; font-size:15px; flex-shrink:0; }
+    .gate-btns { display: flex; flex-direction: column; gap: 10px; }
+    .btn-gate-login {
+      width:100%; padding:14px; border:none; border-radius:12px;
+      background: linear-gradient(135deg, var(--teal), var(--ocean-lt));
+      color:var(--white); font-family:'Outfit',sans-serif;
+      font-size:.95rem; font-weight:600; cursor:pointer; transition:var(--trans);
+      box-shadow:0 4px 16px rgba(13,148,136,.3); letter-spacing:.3px;
+    }
+    .btn-gate-login:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(13,148,136,.4); }
+    .btn-gate-cancel {
+      width:100%; padding:13px; border:2px solid var(--sand-dk);
+      border-radius:12px; background:var(--sand);
+      font-family:'Outfit',sans-serif; font-size:.9rem; font-weight:600;
+      color:var(--text-md); cursor:pointer; transition:var(--trans);
+    }
+    .btn-gate-cancel:hover { border-color:var(--text-lt); background:var(--sand-dk); }
+
+    /* ─── LOGO NAV (SAMAKAN SEMUA MENU) ─── */
+    .nav-logo { display:flex; align-items:center; gap:14px; text-decoration:none; }
+    .logo-stack { display:flex; flex-direction:column; line-height:1.05; }
+    .logo-text{
+      font-family:"Cormorant Garamond",serif;
+      font-weight:700;
+      font-size:28px;
+      color:#fff;
+      letter-spacing:.2px;
+      text-transform:none;
+    }
+    .logo-sub{
+      font-family:"Outfit",sans-serif;
+      font-weight:500;
+      font-size:12px;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      color:rgba(94,234,212,.95);
+      margin-top:6px;
+    }
+
+    /* ═══ HERO BUBBLE ANIMATION ═══ */
+    .hero { position: relative; }
+    .hero-bubbles {
+      position: absolute; inset: 0;
+      pointer-events: none; z-index: 2; overflow: hidden;
+    }
+    .hb {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.22), rgba(94,234,212,.08));
+      border: 1px solid rgba(255,255,255,.18);
+      animation: heroBubbleRise linear infinite;
+      will-change: transform, opacity;
+    }
+    .hb::after {
+      content: ''; position: absolute;
+      top: 20%; left: 20%; width: 28%; height: 28%;
+      border-radius: 50%; background: rgba(255,255,255,.3);
+    }
+    @keyframes heroBubbleRise {
+      0%   { transform: translateY(0) translateX(0);   opacity: 0; }
+      8%   { opacity: 1; }
+      80%  { opacity: .55; }
+      100% { transform: translateY(var(--rise)) translateX(var(--drift)); opacity: 0; }
+    }
+    .hb:nth-child(1)  { width:18px;height:18px; bottom:2%;  left:4%;   animation-duration:7s;   animation-delay:0s;    --rise:-480px; --drift:14px;  }
+    .hb:nth-child(2)  { width:10px;height:10px; bottom:5%;  left:11%;  animation-duration:5.5s; animation-delay:1.8s;  --rise:-520px; --drift:-9px;  }
+    .hb:nth-child(3)  { width:24px;height:24px; bottom:0%;  left:19%;  animation-duration:8.5s; animation-delay:0.4s;  --rise:-600px; --drift:20px;  }
+    .hb:nth-child(4)  { width:13px;height:13px; bottom:8%;  left:27%;  animation-duration:6.2s; animation-delay:3.1s;  --rise:-560px; --drift:-12px; }
+    .hb:nth-child(5)  { width:8px; height:8px;  bottom:3%;  left:35%;  animation-duration:5.0s; animation-delay:0.9s;  --rise:-490px; --drift:8px;   }
+    .hb:nth-child(6)  { width:20px;height:20px; bottom:1%;  left:43%;  animation-duration:7.8s; animation-delay:2.4s;  --rise:-580px; --drift:-16px; }
+    .hb:nth-child(7)  { width:11px;height:11px; bottom:6%;  left:51%;  animation-duration:5.8s; animation-delay:0.2s;  --rise:-510px; --drift:11px;  }
+    .hb:nth-child(8)  { width:28px;height:28px; bottom:0%;  left:58%;  animation-duration:9.2s; animation-delay:4.0s;  --rise:-620px; --drift:-22px; }
+    .hb:nth-child(9)  { width:9px; height:9px;  bottom:4%;  left:66%;  animation-duration:5.3s; animation-delay:1.5s;  --rise:-500px; --drift:7px;   }
+    .hb:nth-child(10) { width:16px;height:16px; bottom:2%;  left:73%;  animation-duration:6.7s; animation-delay:3.6s;  --rise:-545px; --drift:-14px; }
+    .hb:nth-child(11) { width:7px; height:7px;  bottom:7%;  left:80%;  animation-duration:4.8s; animation-delay:0.7s;  --rise:-470px; --drift:6px;   }
+    .hb:nth-child(12) { width:22px;height:22px; bottom:1%;  left:87%;  animation-duration:8.0s; animation-delay:2.0s;  --rise:-590px; --drift:-18px; }
+    .hb:nth-child(13) { width:12px;height:12px; bottom:5%;  left:93%;  animation-duration:5.9s; animation-delay:4.8s;  --rise:-515px; --drift:10px;  }
+    .hb:nth-child(14) { width:6px; height:6px;  bottom:10%; left:8%;   animation-duration:4.5s; animation-delay:5.5s;  --rise:-460px; --drift:-5px;  }
+    .hb:nth-child(15) { width:15px;height:15px; bottom:3%;  left:23%;  animation-duration:7.2s; animation-delay:6.2s;  --rise:-540px; --drift:13px;  }
+    .hb:nth-child(16) { width:9px; height:9px;  bottom:6%;  left:40%;  animation-duration:5.6s; animation-delay:7.0s;  --rise:-495px; --drift:-8px;  }
+    .hb:nth-child(17) { width:19px;height:19px; bottom:0%;  left:56%;  animation-duration:8.3s; animation-delay:5.1s;  --rise:-570px; --drift:17px;  }
+    .hb:nth-child(18) { width:8px; height:8px;  bottom:4%;  left:70%;  animation-duration:5.1s; animation-delay:8.0s;  --rise:-480px; --drift:-6px;  }
+    .hb:nth-child(19) { width:14px;height:14px; bottom:2%;  left:84%;  animation-duration:6.4s; animation-delay:6.8s;  --rise:-530px; --drift:12px;  }
+    .hb:nth-child(20) { width:10px;height:10px; bottom:9%;  left:96%;  animation-duration:5.9s; animation-delay:3.2s;  --rise:-505px; --drift:-11px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon" style="background:none;padding:0;overflow:hidden;">
+      <img src="logo_web.jpeg" style="width:38px;height:38px;border-radius:10px;object-fit:cover;" />
+    </div>
+
+    <!-- INI YANG DISAMAKAN seperti laman login -->
+    <div class="logo-stack">
+      <div class="logo-text">Enggano Pedia</div>
+      <div class="logo-sub">PARIWISATA</div>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="index.html" class="nav-link active"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span></a>
+    <a href="transportasi.html" class="nav-link"><span class="nav-icon">🚢</span><span class="nav-label">Transportasi</span></a>
+    <a href="wisata.html" class="nav-link"><span class="nav-icon">🌴</span><span class="nav-label">Wisata</span></a>
+    <a href="produk.html" class="nav-link"><span class="nav-icon">🛒</span><span class="nav-label">Produk</span></a>
+    <a href="penginapan.html" class="nav-link"><span class="nav-icon">🏨</span><span class="nav-label">Penginapan</span></a>
+  </div>
+
+  <div class="nav-right">
+    <a href="akun.html" class="btn-account">
+      <div class="avatar">👤</div><span>Akun</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════════ CONTENT ═══════════════ -->
+<div class="page-content">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-bubbles">
+      <div class="hb"></div><div class="hb"></div><div class="hb"></div><div class="hb"></div>
+      <div class="hb"></div><div class="hb"></div><div class="hb"></div><div class="hb"></div>
+      <div class="hb"></div><div class="hb"></div><div class="hb"></div><div class="hb"></div>
+      <div class="hb"></div><div class="hb"></div><div class="hb"></div><div class="hb"></div>
+      <div class="hb"></div><div class="hb"></div><div class="hb"></div><div class="hb"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">✦ Pulau Terluar Bengkulu</div>
+      <h1>Selamat Datang di<br/>Pulau Enggano</h1>
+      <p>Temukan keindahan alam tersembunyi — pantai perawan, hutan tropis lebat, dan keanekaragaman hayati yang memukau di ujung barat Samudera Hindia.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="requireLogin('Pesan Tiket Sekarang')">
+          🚢 Pesan Tiket Sekarang
+        </button>
+        <a href="wisata.html" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.5)">
+          🌴 Jelajahi Wisata
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-item"><span class="stat-num">400 km²</span><span class="stat-label">Luas Pulau</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">12+</span><span class="stat-label">Destinasi Wisata</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">2×</span><span class="stat-label">Kapal Per Minggu</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">5 Desa</span><span class="stat-label">Komunitas Lokal</span></div>
+    </div>
+  </div>
+
+  <!-- HIGHLIGHTS CAROUSEL -->
+  <section class="section" id="highlightSection" style="padding-bottom:48px;padding-left:0;padding-right:0;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div class="hero-badge" style="background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.3);color:var(--teal);">✦ Destinasi Unggulan</div>
+      <h2 class="section-title">Keindahan Enggano</h2>
+      <p class="section-sub" style="margin-bottom:0">Eksplorasi destinasi terbaik yang menanti Anda</p>
+    </div>
+
+    <div class="carousel-section" id="carouselSection">
+      <div class="carousel-track" id="carouselTrack">
+        <a href="wisata.html" class="highlight-card">
+          <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&q=80" alt="Pantai Bak Blau"/>
+          <div class="overlay"><span class="hc-tag">🏖 Pantai</span><h3>Pantai Bak Blau</h3><p>Pasir putih dengan air kristal biru — pantai terindah di Enggano</p></div>
+        </a>
+
+        <a href="wisata.html" class="highlight-card">
+          <img src="WargaEnggano.jpeg" alt="Hutan Tropis"/>
+          <div class="overlay"><span class="hc-tag">🌿 Alam</span><h3>Hutan Tropis Enggano</h3><p>Biodiversitas unik flora dan fauna yang tak ternilai</p></div>
+        </a>
+
+        <a href="wisata.html" class="highlight-card">
+          <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80" alt="Snorkeling"/>
+          <div class="overlay"><span class="hc-tag">🤿 Bawah Laut</span><h3>Snorkeling &amp; Diving</h3><p>Terumbu karang yang masih terjaga dan jernih</p></div>
+        </a>
+
+        <a href="wisata.html" class="highlight-card">
+          <img src="https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=800&q=80" alt="Sunset"/>
+          <div class="overlay"><span class="hc-tag">🌅 Panorama</span><h3>Sunset Samudera Hindia</h3><p>Matahari terbenam memukau dari ujung barat Bengkulu</p></div>
+        </a>
+
+        <a href="wisata.html" class="highlight-card">
+          <img src="beo.jpg" alt="Satwa"/>
+          <div class="overlay"><span class="hc-tag">🦎 Satwa Liar</span><h3>Satwa Endemik</h3><p>Rumah bagi spesies langka yang hanya ada di Enggano</p></div>
+        </a>
+
+        <a href="wisata.html" class="highlight-card">
+          <img src="budaya.jpg" alt="Budaya"/>
+          <div class="overlay"><span class="hc-tag">🎭 Budaya</span><h3>Budaya Suku Enggano</h3><p>Tradisi dan adat istiadat yang kaya dan autentik</p></div>
+        </a>
+
+        <!-- duplicate for loop -->
+        <a href="wisata.html" class="highlight-card">
+          <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&q=80" alt="Pantai Bak Blau"/>
+          <div class="overlay"><span class="hc-tag">🏖 Pantai</span><h3>Pantai Bak Blau</h3><p>Pasir putih dengan air kristal biru — pantai terindah di Enggano</p></div>
+        </a>
+
+        <a href="wisata.html" class="highlight-card">
+          <img src="WargaEnggano.jpeg" alt="Hutan Tropis"/>
+          <div class="overlay"><span class="hc-tag">🌿 Alam</span><h3>Hutan Tropis Enggano</h3><p>Biodiversitas unik flora dan fauna yang tak ternilai</p></div>
+        </a>
+
+        <a href="wisata.html" class="highlight-card">
+          <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80" alt="Snorkeling"/>
+          <div class="overlay"><span class="hc-tag">🤿 Bawah Laut</span><h3>Snorkeling &amp; Diving</h3><p>Terumbu karang yang masih terjaga dan jernih</p></div>
+        </a>
+
+        <a href="wisata.html" class="highlight-card">
+          <img src="https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=800&q=80" alt="Sunset"/>
+          <div class="overlay"><span class="hc-tag">🌅 Panorama</span><h3>Sunset Samudera Hindia</h3><p>Matahari terbenam memukau dari ujung barat Bengkulu</p></div>
+        </a>
+
+        <a href="wisata.html" class="highlight-card">
+          <img src="beo.jpg" alt="Satwa"/>
+          <div class="overlay"><span class="hc-tag">🦎 Satwa Liar</span><h3>Satwa Endemik</h3><p>Rumah bagi spesies langka yang hanya ada di Enggano</p></div>
+        </a>
+
+        <a href="wisata.html" class="highlight-card">
+          <img src="budaya.jpg" alt="Budaya"/>
+          <div class="overlay"><span class="hc-tag">🎭 Budaya</span><h3>Budaya Suku Enggano</h3><p>Tradisi dan adat istiadat yang kaya dan autentik</p></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function(){
+      const track = document.getElementById('carouselTrack');
+      const section = document.getElementById('carouselSection');
+
+      function syncMaskColor() {
+        let el = document.getElementById('highlightSection'), bg='transparent';
+        while (el && el !== document.documentElement) {
+          bg = getComputedStyle(el).backgroundColor;
+          if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') break;
+          el = el.parentElement;
+        }
+        if (!bg || bg === 'rgba(0, 0, 0, 0)') bg = getComputedStyle(document.body).backgroundColor;
+        if (!bg || bg === 'rgba(0, 0, 0, 0)') bg = '#f0ebe0';
+        section.style.setProperty('--section-bg', bg);
+      }
+
+      syncMaskColor();
+      window.addEventListener('resize', syncMaskColor);
+
+      section.addEventListener('mouseenter', () => track.style.animationPlayState = 'paused');
+      section.addEventListener('mouseleave', () => track.style.animationPlayState = 'running');
+
+      let isDragging=false, startX=0, animOffset=0;
+      function getX(el){ return new DOMMatrix(getComputedStyle(el).transform).m41; }
+
+      section.addEventListener('mousedown', e => {
+        isDragging=true; startX=e.clientX; animOffset=getX(track);
+        track.style.animation='none';
+        track.style.transform=`translateX(${animOffset}px)`;
+      });
+
+      section.addEventListener('touchstart', e => {
+        isDragging=true; startX=e.touches[0].clientX; animOffset=getX(track);
+        track.style.animation='none';
+        track.style.transform=`translateX(${animOffset}px)`;
+      },{passive:true});
+
+      function onMove(cx){
+        if(!isDragging) return;
+        track.style.transform=`translateX(${animOffset+(cx-startX)}px)`;
+      }
+
+      window.addEventListener('mousemove',e=>onMove(e.clientX));
+      window.addEventListener('touchmove',e=>onMove(e.touches[0].clientX),{passive:true});
+
+      function onEnd(){
+        if(!isDragging) return;
+        isDragging=false;
+        track.style.animation='carouselSlide 32s linear infinite';
+        track.style.animationPlayState='running';
+      }
+
+      window.addEventListener('mouseup',onEnd);
+      window.addEventListener('touchend',onEnd);
+    })();
+  </script>
+
+  <!-- TRANSPORT SHORTCUT -->
+  <div class="transport-section">
+    <div class="transport-inner">
+      <div class="hero-badge" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.8);margin-bottom:12px;">🚢 Akses Transportasi</div>
+      <h2 class="section-title">Cara Menuju Enggano</h2>
+      <p class="section-sub">Pilih transportasi yang paling sesuai untuk perjalanan Anda</p>
+      <div class="transport-cards">
+        <div class="transport-card" onclick="requireLogin('Pesan Tiket Ferry')">
+          <div class="tc-icon">⛴️</div>
+          <div class="tc-info"><h3>Kapal Ferry</h3><p>Pelabuhan Pulau Baai → Enggano<br/>Jadwal 2× seminggu</p></div>
+          <span class="tc-arrow">→</span>
+        </div>
+        <div class="transport-card" onclick="requireLogin('Pesan Tiket Pesawat')">
+          <div class="tc-icon">✈️</div>
+          <div class="tc-info"><h3>Pesawat</h3><p>Bengkulu → Bandara Enggano<br/>Penerbangan charter tersedia</p></div>
+          <span class="tc-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div><!-- /page-content -->
+
+<!-- ═══════════════ LOGIN GATE MODAL ═══════════════ -->
+<div class="gate-backdrop" id="gateModal">
+  <div class="gate-modal">
+    <div class="gate-header">
+      <span class="gate-lock-icon">🔒</span>
+      <h3>Login Diperlukan</h3>
+      <p id="gateDesc">Silakan login terlebih dahulu untuk mengakses fitur ini.</p>
+    </div>
+    <div class="gate-body">
+      <ul class="gate-feature-list">
+        <li><span class="gf-icon">🚢</span>Pesan tiket ferry &amp; pesawat ke Enggano</li>
+        <li><span class="gf-icon">💬</span>Hubungi admin via WhatsApp langsung</li>
+        <li><span class="gf-icon">🏝️</span>Akses penuh semua layanan wisata</li>
+      </ul>
+      <div class="gate-btns">
+        <button class="btn-gate-login" onclick="goToLogin()">🔑 &nbsp;Masuk ke Akun</button>
+        <button class="btn-gate-cancel" onclick="closeGate()">Lanjut Melihat-lihat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>© 2025 <span>ENGGANO PEDIA</span> · Pulau Enggano, Bengkulu Utara · Dibuat dengan ❤️ untuk Pulau Enggano</p>
+</footer>
+
+<script>
+  const LOGIN_PAGE = 'akun.html';
+
+  function requireLogin(namaFitur) {
+    document.getElementById('gateDesc').textContent =
+      `Silakan login terlebih dahulu untuk menggunakan fitur "${namaFitur}".`;
+    document.getElementById('gateModal').classList.add('open');
+  }
+
+  function closeGate() {
+    document.getElementById('gateModal').classList.remove('open');
+  }
+
+  function goToLogin() {
+    window.location.href = LOGIN_PAGE;
+  }
+
+  document.getElementById('gateModal').addEventListener('click', function(e) {
+    if (e.target === this) closeGate();
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGate(); });
+</script>
+
+</body>
+</html>
