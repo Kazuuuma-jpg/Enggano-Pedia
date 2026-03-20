@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wisata – Enggano Pedia</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .nav-logo { display:flex; align-items:center; gap:14px; text-decoration:none; }
+    .logo-stack { display:flex; flex-direction:column; line-height:1.05; }
+    .logo-text {
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 700; font-size: 28px; color: #fff;
+      letter-spacing: .2px; text-transform: none;
+    }
+    .logo-sub {
+      font-family: "Outfit", sans-serif;
+      font-weight: 500; font-size: 12px;
+      letter-spacing: 4px; text-transform: uppercase;
+      color: rgba(94,234,212,.95); margin-top: 6px;
+    }
+
+    .hero { height: 420px; position: relative; }
+    .hero-bg { background-image: url('https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=1600&q=80'); }
+
+    /* ═══ FALLING LEAVES ═══ */
+    .leaf-wrap { position:absolute; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
+    .leaf { position:absolute; top:-60px; font-size:var(--size); opacity:0; animation:leafFall linear infinite; will-change:transform,opacity; transform-origin:center; filter:drop-shadow(0 2px 4px rgba(0,0,0,.2)); }
+    @keyframes leafFall {
+      0%   { transform:translateY(0) translateX(0) rotate(0deg) scale(1); opacity:0; }
+      5%   { opacity:0.85; }
+      40%  { transform:translateY(var(--mid-y)) translateX(var(--sway-l)) rotate(var(--r1)) scale(.95); opacity:0.75; }
+      75%  { transform:translateY(var(--far-y)) translateX(var(--sway-r)) rotate(var(--r2)) scale(.9); opacity:0.6; }
+      95%  { opacity:0.3; }
+      100% { transform:translateY(520px) translateX(var(--sway-end)) rotate(var(--r3)) scale(.85); opacity:0; }
+    }
+    .leaf:nth-child(1)  { left:3%;  --size:18px; animation-duration:7.0s;  animation-delay:0.0s;  --mid-y:130px; --far-y:300px; --sway-l:-18px; --sway-r:14px;  --sway-end:-8px;  --r1:45deg;  --r2:110deg;  --r3:180deg;  }
+    .leaf:nth-child(2)  { left:9%;  --size:14px; animation-duration:9.5s;  animation-delay:1.8s;  --mid-y:160px; --far-y:340px; --sway-l:12px;  --sway-r:-20px; --sway-end:16px;  --r1:-30deg; --r2:60deg;   --r3:140deg;  }
+    .leaf:nth-child(3)  { left:16%; --size:22px; animation-duration:8.2s;  animation-delay:0.5s;  --mid-y:140px; --far-y:310px; --sway-l:-22px; --sway-r:18px;  --sway-end:-14px; --r1:60deg;  --r2:-80deg;  --r3:160deg;  }
+    .leaf:nth-child(4)  { left:24%; --size:16px; animation-duration:6.8s;  animation-delay:3.2s;  --mid-y:120px; --far-y:290px; --sway-l:16px;  --sway-r:-12px; --sway-end:10px;  --r1:-50deg; --r2:90deg;   --r3:-130deg; }
+    .leaf:nth-child(5)  { left:31%; --size:20px; animation-duration:10.0s; animation-delay:0.9s;  --mid-y:170px; --far-y:360px; --sway-l:-14px; --sway-r:22px;  --sway-end:-18px; --r1:75deg;  --r2:-100deg; --r3:200deg;  }
+    .leaf:nth-child(6)  { left:38%; --size:13px; animation-duration:7.5s;  animation-delay:4.5s;  --mid-y:110px; --far-y:270px; --sway-l:20px;  --sway-r:-16px; --sway-end:12px;  --r1:-40deg; --r2:70deg;   --r3:-150deg; }
+    .leaf:nth-child(7)  { left:46%; --size:24px; animation-duration:9.0s;  animation-delay:2.1s;  --mid-y:150px; --far-y:330px; --sway-l:-26px; --sway-r:20px;  --sway-end:-16px; --r1:55deg;  --r2:-85deg;  --r3:175deg;  }
+    .leaf:nth-child(8)  { left:53%; --size:15px; animation-duration:6.5s;  animation-delay:5.8s;  --mid-y:125px; --far-y:285px; --sway-l:14px;  --sway-r:-18px; --sway-end:8px;   --r1:-65deg; --r2:95deg;   --r3:-140deg; }
+    .leaf:nth-child(9)  { left:61%; --size:19px; animation-duration:8.7s;  animation-delay:1.4s;  --mid-y:145px; --far-y:320px; --sway-l:-16px; --sway-r:24px;  --sway-end:-20px; --r1:80deg;  --r2:-115deg; --r3:210deg;  }
+    .leaf:nth-child(10) { left:68%; --size:12px; animation-duration:7.2s;  animation-delay:3.7s;  --mid-y:105px; --far-y:260px; --sway-l:18px;  --sway-r:-14px; --sway-end:10px;  --r1:-35deg; --r2:65deg;   --r3:-120deg; }
+    .leaf:nth-child(11) { left:75%; --size:21px; animation-duration:9.8s;  animation-delay:0.3s;  --mid-y:165px; --far-y:350px; --sway-l:-20px; --sway-r:16px;  --sway-end:-12px; --r1:70deg;  --r2:-95deg;  --r3:185deg;  }
+    .leaf:nth-child(12) { left:82%; --size:14px; animation-duration:6.9s;  animation-delay:6.1s;  --mid-y:115px; --far-y:275px; --sway-l:22px;  --sway-r:-20px; --sway-end:14px;  --r1:-55deg; --r2:85deg;   --r3:-160deg; }
+    .leaf:nth-child(13) { left:89%; --size:17px; animation-duration:8.4s;  animation-delay:2.6s;  --mid-y:135px; --far-y:300px; --sway-l:-12px; --sway-r:18px;  --sway-end:-10px; --r1:65deg;  --r2:-105deg; --r3:195deg;  }
+    .leaf:nth-child(14) { left:95%; --size:11px; animation-duration:7.8s;  animation-delay:4.2s;  --mid-y:100px; --far-y:255px; --sway-l:10px;  --sway-r:-8px;  --sway-end:6px;   --r1:-25deg; --r2:55deg;   --r3:-100deg; }
+    .leaf:nth-child(15) { left:6%;  --size:15px; animation-duration:8.1s;  animation-delay:7.0s;  --mid-y:130px; --far-y:305px; --sway-l:14px;  --sway-r:-10px; --sway-end:8px;   --r1:40deg;  --r2:-70deg;  --r3:130deg;  }
+    .leaf:nth-child(16) { left:27%; --size:20px; animation-duration:9.3s;  animation-delay:8.5s;  --mid-y:155px; --far-y:340px; --sway-l:-18px; --sway-r:22px;  --sway-end:-16px; --r1:-60deg; --r2:100deg;  --r3:190deg;  }
+    .leaf:nth-child(17) { left:56%; --size:13px; animation-duration:7.6s;  animation-delay:9.2s;  --mid-y:118px; --far-y:270px; --sway-l:16px;  --sway-r:-12px; --sway-end:10px;  --r1:50deg;  --r2:-80deg;  --r3:145deg;  }
+    .leaf:nth-child(18) { left:78%; --size:18px; animation-duration:8.9s;  animation-delay:7.8s;  --mid-y:148px; --far-y:325px; --sway-l:-24px; --sway-r:18px;  --sway-end:-14px; --r1:-45deg; --r2:75deg;   --r3:170deg;  }
+    .leaf::before { content:var(--emoji,'🍃'); }
+    .leaf:nth-child(3n)   { --emoji:'🌿'; }
+    .leaf:nth-child(3n+1) { --emoji:'🍃'; }
+    .leaf:nth-child(3n+2) { --emoji:'🌱'; }
+    .leaf:nth-child(5)  { --emoji:'🍀'; }
+    .leaf:nth-child(11) { --emoji:'🍀'; }
+    .leaf:nth-child(7)  { --emoji:'🌿'; }
+    .leaf:nth-child(14) { --emoji:'🌱'; }
+
+    /* Filter Bar */
+    .filter-bar {
+      background: var(--white); padding: 18px 32px;
+      border-bottom: 1px solid var(--sand-dk);
+      display: flex; gap: 10px; flex-wrap: wrap;
+      position: sticky; top: var(--nav-h); z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    }
+    .filter-btn {
+      padding: 7px 18px; border-radius: 50px;
+      border: 2px solid var(--sand-dk); background: var(--white);
+      font-family: 'Outfit', sans-serif; font-size: .85rem; font-weight: 500;
+      color: var(--text-md); cursor: pointer; transition: var(--trans);
+    }
+    .filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .filter-btn.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+    /* Wisata Grid */
+    .wisata-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px; margin-top: 36px;
+    }
+    .wisata-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden; transition: var(--trans);
+      cursor: pointer;
+    }
+    .wisata-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+
+    /* Static image */
+    .wc-img { height: 200px; position: relative; overflow: hidden; }
+    .wc-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+    .wisata-card:hover .wc-img img { transform: scale(1.08); }
+
+    /* Slider */
+    .wc-slider {
+      position: relative; height: 200px; overflow: hidden;
+      background: var(--sand); user-select: none;
+    }
+    .slider-track {
+      display: flex; height: 100%;
+      transition: transform .4s cubic-bezier(.4,0,.2,1);
+    }
+    .slider-track img {
+      min-width: 100%; width: 100%; height: 100%;
+      object-fit: cover; flex-shrink: 0;
+    }
+    .slider-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(7,45,64,.55); backdrop-filter: blur(4px);
+      border: 1.5px solid rgba(255,255,255,.3);
+      color: #fff; font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s; z-index: 10; line-height: 1;
+    }
+    .slider-btn:hover { background: rgba(7,45,64,.85); }
+    .slider-btn.prev { left: 8px; }
+    .slider-btn.next { right: 8px; }
+    .slider-dots {
+      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 5px; z-index: 10;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.6);
+      cursor: pointer; transition: background .2s, transform .2s;
+    }
+    .dot.active { background: #fff; transform: scale(1.3); }
+
+    /* Shared overlays */
+    .wc-tag {
+      position: absolute; top: 14px; left: 14px;
+      padding: 4px 12px; background: rgba(7,45,64,.75);
+      backdrop-filter: blur(4px); border-radius: 20px;
+      font-size: .73rem; color: var(--white); letter-spacing: 1px; z-index: 10;
+    }
+    .wc-rating {
+      position: absolute; top: 14px; right: 14px;
+      padding: 4px 10px; background: rgba(255,255,255,.9);
+      border-radius: 20px; font-size: .78rem;
+      color: var(--gold); font-weight: 600; z-index: 10;
+    }
+    .wc-counter {
+      position: absolute; bottom: 14px; right: 14px;
+      background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
+      border-radius: 20px; padding: 3px 10px;
+      font-size: .7rem; color: rgba(255,255,255,.9); z-index: 10;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .wc-body { padding: 18px 20px; }
+    .wc-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.22rem; font-weight: 700;
+      color: var(--ocean-dk); margin-bottom: 6px;
+    }
+    .wc-desc { font-size: .84rem; color: var(--text-lt); line-height: 1.55; margin-bottom: 14px; }
+    .wc-meta {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      font-size: .78rem; color: var(--text-lt);
+    }
+    .wc-meta span { display: flex; align-items: center; gap: 4px; }
+    .wc-footer { padding: 12px 20px 18px; display: flex; gap: 10px; }
+
+    /* Map Banner */
+    .map-banner {
+      background: linear-gradient(135deg, var(--ocean-dk), var(--ocean));
+      padding: 48px 32px; text-align: center; color: var(--white);
+    }
+    .map-banner h2 { font-family:'Cormorant Garamond',serif; font-size:2rem; margin-bottom: 10px; }
+    .map-banner p { color:rgba(255,255,255,.65); margin-bottom: 22px; }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+    /* LOGIN GATE MODAL */
+    .gate-backdrop { display:none; position:fixed; inset:0; background:rgba(7,45,64,.65); backdrop-filter:blur(8px); z-index:3000; align-items:center; justify-content:center; padding:20px; }
+    .gate-backdrop.open { display:flex; }
+    .gate-modal { background:#fff; border-radius:24px; box-shadow:0 32px 80px rgba(7,45,64,.32); max-width:400px; width:100%; overflow:hidden; animation:fadeUp .35s cubic-bezier(.4,0,.2,1); }
+    .gate-header { background:linear-gradient(145deg,var(--ocean-dk),var(--ocean)); padding:36px 32px 28px; text-align:center; position:relative; overflow:hidden; }
+    .gate-header::after { content:''; position:absolute; inset:0; background:repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 22px); pointer-events:none; }
+    .gate-lock-icon { font-size:48px; display:block; margin-bottom:14px; position:relative; z-index:1; }
+    .gate-header h3 { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:700; color:#fff; position:relative; z-index:1; margin-bottom:8px; }
+    .gate-header p  { font-size:.85rem; color:rgba(255,255,255,.6); line-height:1.55; position:relative; z-index:1; }
+    .gate-body { padding:28px 32px 32px; }
+    .gate-feature-list { list-style:none; margin-bottom:24px; }
+    .gate-feature-list li { display:flex; align-items:center; gap:10px; font-size:.875rem; color:var(--text-md); padding:10px 0; border-bottom:1px solid var(--sand); }
+    .gate-feature-list li:last-child { border-bottom:none; }
+    .gf-icon { width:32px; height:32px; background:rgba(13,148,136,.1); border-radius:8px; display:grid; place-items:center; font-size:15px; flex-shrink:0; }
+    .gate-btns { display:flex; flex-direction:column; gap:10px; }
+    .btn-gate-login { width:100%; padding:14px; border:none; border-radius:12px; background:linear-gradient(135deg,var(--teal),var(--ocean-lt)); color:#fff; font-family:'Outfit',sans-serif; font-size:.95rem; font-weight:600; cursor:pointer; transition:var(--trans); box-shadow:0 4px 16px rgba(13,148,136,.3); }
+    .btn-gate-login:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(13,148,136,.4); }
+    .btn-gate-cancel { width:100%; padding:13px; border:2px solid var(--sand-dk); border-radius:12px; background:var(--sand); font-family:'Outfit',sans-serif; font-size:.9rem; font-weight:600; color:var(--text-md); cursor:pointer; transition:var(--trans); }
+    .btn-gate-cancel:hover { border-color:var(--text-lt); background:var(--sand-dk); }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon" style="background:none;padding:0;overflow:hidden;">
+      <img src="logo_web.jpeg" style="width:38px;height:38px;border-radius:10px;object-fit:cover;" />
+    </div>
+    <div class="logo-stack">
+      <div class="logo-text">Enggano Pedia</div>
+      <div class="logo-sub">PARIWISATA</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html"        class="nav-link"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span></a>
+    <a href="transportasi.html" class="nav-link"><span class="nav-icon">🚢</span><span class="nav-label">Transportasi</span></a>
+    <a href="wisata.html"       class="nav-link active"><span class="nav-icon">🌴</span><span class="nav-label">Wisata</span></a>
+    <a href="produk.html"       class="nav-link"><span class="nav-icon">🛒</span><span class="nav-label">Produk</span></a>
+    <a href="penginapan.html"   class="nav-link"><span class="nav-icon">🏨</span><span class="nav-label">Penginapan</span></a>
+  </div>
+  <div class="nav-right">
+    <a href="akun.html" class="btn-account">
+      <div class="avatar">👤</div><span>Akun</span>
+    </a>
+  </div>
+</nav>
+
+<div class="page-content">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="leaf-wrap">
+      <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+      <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+      <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+      <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+      <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+      <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">🌴 Destinasi Wisata</div>
+      <h1>Jelajahi Keindahan<br/>Pulau Enggano</h1>
+      <p>Dari pantai berpasir putih, hutan tropis hingga terumbu karang semua menanti Anda</p>
+    </div>
+  </section>
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterWisata('semua', this)">🗺️ Semua</button>
+    <button class="filter-btn" onclick="filterWisata('alam', this)">🌿 Alam</button>
+    <button class="filter-btn" onclick="filterWisata('bahari', this)">🤿 Bahari</button>
+  </div>
+
+  <section class="section">
+    <h2 class="section-title">Destinasi Wisata Populer</h2>
+    <p class="section-sub">4 destinasi pilihan di Pulau Enggano</p>
+
+    <div class="wisata-grid">
+
+
+
+      <!-- 2. Spot Bird Watching -->
+      <div class="wisata-card" data-kategori="alam">
+        <div class="wc-img">
+          <img src="https://i.pinimg.com/1200x/1c/9c/b3/1c9cb39d302d9bd8615ac7eac192a0df.jpg" alt="Bird Watching"/>
+          <span class="wc-tag">🦜 Bird Watching</span>
+          <span class="wc-rating">⭐ 4.9</span>
+        </div>
+        <div class="wc-body">
+          <div class="wc-title">Spot Bird Watching</div>
+          <p class="wc-desc">Keanekaragaman burung endemik yang tinggi dan habitat alam yang masih alami menjadikan Enggano sebagai surga para pengamat burung.</p>
+          <div class="wc-meta">
+            <span>📍 Teluk Burung</span>
+            <span>🌿 Level pemula–expert</span>
+          </div>
+        </div>
+        <div class="wc-footer">
+          <button onclick="requireLogin('Tanya Guide Bird Watching')" class="btn btn-wa" style="flex:1;justify-content:center;border:none;cursor:pointer;">💬 Tanya Guide</button>
+        </div>
+      </div>
+
+      <!-- 3. Kolam Podipo — SLIDER 5 FOTO -->
+      <div class="wisata-card" data-kategori="alam">
+        <div class="wc-slider">
+          <span class="wc-tag">💧 Kolam Alam</span>
+          <span class="wc-rating">⭐ 4.7</span>
+          <span class="wc-counter" id="counter-podipo">1 / 5</span>
+          <div class="slider-track" id="track-podipo">
+            <img src="podipo1.jpeg" alt="Kolam Podipo 1"/>
+            <img src="podipo2.jpeg" alt="Kolam Podipo 2"/>
+            <img src="podipo3.jpeg" alt="Kolam Podipo 3"/>
+            <img src="podipo4.jpeg" alt="Kolam Podipo 4"/>
+            <img src="podipo5.jpeg" alt="Kolam Podipo 5"/>
+          </div>
+          <button class="slider-btn prev" onclick="slide('podipo',-1)">&#8249;</button>
+          <button class="slider-btn next" onclick="slide('podipo', 1)">&#8250;</button>
+          <div class="slider-dots" id="dots-podipo">
+            <div class="dot active" onclick="goTo('podipo',0)"></div>
+            <div class="dot"        onclick="goTo('podipo',1)"></div>
+            <div class="dot"        onclick="goTo('podipo',2)"></div>
+            <div class="dot"        onclick="goTo('podipo',3)"></div>
+            <div class="dot"        onclick="goTo('podipo',4)"></div>
+          </div>
+        </div>
+        <div class="wc-body">
+          <div class="wc-title">Kolam Podipo</div>
+          <p class="wc-desc">Kolam alami tersembunyi di tengah hutan dengan air yang jernih dan sejuk. Spot berendam favorit warga lokal yang jarang diketahui wisatawan.</p>
+          <div class="wc-meta">
+            <span>📍 Desa Kahyapu</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Batu Lobang -->
+      <div class="wisata-card" data-kategori="alam">
+        <div class="wc-img">
+          <img src="batulubang.jpg" alt="Batu Lobang"/>
+          <span class="wc-tag">🪨 Geologi</span>
+          <span class="wc-rating">⭐ 4.6</span>
+        </div>
+        <div class="wc-body">
+          <div class="wc-title">Batu Lobang</div>
+          <p class="wc-desc">Formasi batu alam unik berlubang yang terbentuk secara alami oleh proses geologi ribuan tahun. Spot foto ikonik yang wajib dikunjungi.</p>
+          <div class="wc-meta">
+            <span>📍 Desa Banjarsari</span>
+            <span>🚗 Dapat ditempuh kendaraan</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Danau Bak Blau -->
+      <div class="wisata-card" data-kategori="alam">
+        <div class="wc-img">
+          <img src="https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=600&q=80" alt="Danau Bak Blau"/>
+          <span class="wc-tag">🏞️ Danau</span>
+          <span class="wc-rating">⭐ 4.9</span>
+        </div>
+        <div class="wc-body">
+          <div class="wc-title">Danau Bak Blau</div>
+          <p class="wc-desc">Danau alami dengan air jernih kehijauan yang dikelilingi hutan tropis lebat. Keindahan alam yang masih sangat terjaga dan memukau.</p>
+          <div class="wc-meta">
+            <span>📍 Desa Meok</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Map Banner -->
+  <div class="map-banner">
+    <h2>🗺️ Butuh Panduan Wisata?</h2>
+    <p>Tim lokal kami siap membantu merencanakan itinerary perjalanan terbaik Anda</p>
+    <button onclick="requireLogin('Hubungi Guide Lokal')" class="btn btn-wa" style="border:none;cursor:pointer;">
+      💬 Hubungi Guide Lokal
+    </button>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>© 2025 <span>Enggano Pedia</span> · Pulau Enggano, Bengkulu Utara</p>
+</footer>
+
+<!-- LOGIN GATE MODAL -->
+<div class="gate-backdrop" id="gateModal">
+  <div class="gate-modal">
+    <div class="gate-header">
+      <span class="gate-lock-icon">🔒</span>
+      <h3>Login Diperlukan</h3>
+      <p id="gateDesc">Silakan login terlebih dahulu untuk mengakses fitur ini.</p>
+    </div>
+    <div class="gate-body">
+      <ul class="gate-feature-list">
+        <li><span class="gf-icon">💬</span>Hubungi guide lokal via WhatsApp langsung</li>
+        <li><span class="gf-icon">🗺️</span>Dapatkan panduan wisata personal</li>
+        <li><span class="gf-icon">🏝️</span>Akses penuh semua layanan wisata</li>
+      </ul>
+      <div class="gate-btns">
+        <button class="btn-gate-login" onclick="window.location.href='akun.html'">🔑 &nbsp;Masuk ke Akun</button>
+        <button class="btn-gate-cancel" onclick="closeGate()">Lanjut Melihat-lihat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── SLIDER ──────────────────────────────────── */
+  const sliderState = {
+    podipo: { current: 0, total: 5 },
+  };
+
+  function updateSlider(id) {
+    const s = sliderState[id];
+    document.getElementById('track-' + id).style.transform = `translateX(-${s.current * 100}%)`;
+    document.getElementById('counter-' + id).textContent = `${s.current + 1} / ${s.total}`;
+    document.querySelectorAll('#dots-' + id + ' .dot').forEach((d, i) =>
+      d.classList.toggle('active', i === s.current)
+    );
+  }
+
+  function slide(id, dir) {
+    const s = sliderState[id];
+    s.current = (s.current + dir + s.total) % s.total;
+    updateSlider(id);
+  }
+
+  function goTo(id, idx) {
+    sliderState[id].current = idx;
+    updateSlider(id);
+  }
+
+  /* Swipe support */
+  document.querySelectorAll('.wc-slider').forEach(slider => {
+    let startX = 0;
+    slider.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    slider.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      const id = slider.querySelector('.slider-track').id.replace('track-', '');
+      if (Math.abs(diff) > 40) slide(id, diff > 0 ? 1 : -1);
+    });
+  });
+
+  /* ── FILTER ──────────────────────────────────── */
+  function filterWisata(kategori, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.wisata-card').forEach(card => {
+      if (kategori === 'semua' || card.dataset.kategori === kategori) {
+        card.style.display = '';
+        card.style.animation = 'fadeUp .4s ease both';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  /* ── LOGIN GATE ──────────────────────────────── */
+  function requireLogin(namaFitur) {
+    document.getElementById('gateDesc').textContent =
+      `Silakan login terlebih dahulu untuk menggunakan fitur "${namaFitur}".`;
+    document.getElementById('gateModal').classList.add('open');
+  }
+  function closeGate() {
+    document.getElementById('gateModal').classList.remove('open');
+  }
+  document.getElementById('gateModal').addEventListener('click', function(e) {
+    if (e.target === this) closeGate();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGate(); });
+</script>
+</body>
+</html>

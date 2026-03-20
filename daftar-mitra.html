@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daftar Mitra – Enggano Pedia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    :root {
+      --ocean-dk: #072d40; --ocean: #0e6074; --ocean-lt: #1a8fa3;
+      --teal: #0d9488; --teal-lt: #14b8a6; --gold: #c9962a;
+      --sand: #f5f0e8; --sand-dk: #e8dfc8; --white: #ffffff;
+      --text: #1e3a4a; --text-md: #4a6572; --text-lt: #8fa3ad;
+      --radius: 16px; --shadow: 0 2px 16px rgba(7,45,64,.08);
+      --shadow-lg: 0 8px 40px rgba(7,45,64,.16); --trans: all .25s ease; --nav-h: 68px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Outfit', sans-serif; background: var(--sand); color: var(--text); min-height: 100vh; }
+    .navbar { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); background: linear-gradient(135deg, var(--ocean-dk) 0%, var(--ocean) 100%); display: flex; align-items: center; padding: 0 32px; gap: 24px; z-index: 500; box-shadow: 0 4px 24px rgba(7,45,64,.3); }
+    .nav-logo { display:flex;align-items:center;gap:11px;text-decoration:none; }
+    .logo-text { font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:#fff;line-height:1.1; }
+    .logo-sub { font-size:.65rem;color:rgba(255,255,255,.55);letter-spacing:2px;text-transform:uppercase; }
+    .nav-links { display:flex;align-items:center;gap:4px;margin-left:auto; }
+    .nav-link { display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;text-decoration:none;color:rgba(255,255,255,.75);font-size:.84rem;font-weight:500;transition:var(--trans); }
+    .nav-link:hover,.nav-link.active { color:#fff;background:rgba(255,255,255,.12); }
+    .page-wrap { min-height: 100vh; padding-top: var(--nav-h); display: grid; grid-template-columns: 1fr 1fr; }
+    .left-panel { background: linear-gradient(160deg, var(--ocean-dk) 0%, var(--ocean) 55%, var(--teal) 100%); position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); display: flex; flex-direction: column; justify-content: flex-start; padding: 48px 56px 56px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: rgba(20,184,166,.4) transparent; }
+    .left-panel::-webkit-scrollbar { width: 4px; }
+    .left-panel::-webkit-scrollbar-thumb { background: rgba(20,184,166,.4); border-radius: 4px; }
+    .left-panel::before { content:''; position:absolute; inset:0; background: repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 28px); }
+    .left-panel::after { content:''; position:absolute; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(20,184,166,.18) 0%,transparent 70%); bottom:-120px; right:-120px; }
+    .bubbles-wrap { position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0; }
+    .bubble { position:absolute; bottom:-80px; border-radius:50%; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.25), rgba(20,184,166,.06)); border: 1px solid rgba(255,255,255,.18); animation: bubbleRise linear infinite; }
+    @keyframes bubbleRise { 0%{transform:translateY(0) translateX(0);opacity:0;} 8%{opacity:1;} 88%{opacity:.55;} 100%{transform:translateY(-115vh) translateX(var(--drift,0px));opacity:0;} }
+    .lp-badge { display:inline-flex;align-items:center;gap:8px;background:rgba(20,184,166,.2);border:1px solid rgba(20,184,166,.4);border-radius:30px;padding:7px 16px;font-size:.75rem;font-weight:600;color:var(--teal-lt);letter-spacing:1px;text-transform:uppercase;margin-bottom:28px;position:relative;z-index:1;width:fit-content; }
+    .lp-heading { font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.2vw,2.8rem);font-weight:700;color:#fff;line-height:1.2;margin-bottom:18px;position:relative;z-index:1; }
+    .lp-heading span { color:var(--teal-lt);font-style:italic; }
+    .lp-desc { font-size:.9rem;color:rgba(255,255,255,.62);line-height:1.75;max-width:380px;margin-bottom:44px;position:relative;z-index:1; }
+    .manfaat-list { display:flex;flex-direction:column;gap:16px;position:relative;z-index:1; }
+    .manfaat-item { display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 18px;transition:var(--trans); }
+    .manfaat-item:hover { background:rgba(255,255,255,.1);transform:translateX(4px); }
+    .mi-icon { width:40px;height:40px;background:linear-gradient(135deg,rgba(20,184,166,.35),rgba(20,184,166,.15));border:1px solid rgba(20,184,166,.4);border-radius:10px;display:grid;place-items:center;font-size:18px;flex-shrink:0; }
+    .mi-text .mi-title { font-size:.88rem;font-weight:600;color:#fff;margin-bottom:2px; }
+    .mi-text .mi-sub { font-size:.76rem;color:rgba(255,255,255,.5);line-height:1.45; }
+    .right-panel { padding:60px 56px 80px;display:flex;flex-direction:column;justify-content:flex-start; }
+    .form-header { margin-bottom:40px; }
+    .form-header h2 { font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--ocean-dk);margin-bottom:8px; }
+    .form-header p { font-size:.875rem;color:var(--text-lt);line-height:1.6; }
+    .step-indicator { display:flex;align-items:center;gap:0;margin-bottom:40px; }
+    .step { display:flex;align-items:center;gap:10px;flex:1; }
+    .step-num { width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:.78rem;font-weight:700;flex-shrink:0;transition:var(--trans); }
+    .step-num.active { background:var(--teal);color:#fff;box-shadow:0 4px 14px rgba(13,148,136,.35); }
+    .step-num.done { background:var(--ocean-dk);color:#fff; }
+    .step-num.idle { background:var(--sand-dk);color:var(--text-lt); }
+    .step-label { font-size:.75rem;font-weight:600;color:var(--text-md);white-space:nowrap; }
+    .step-label.active { color:var(--teal); }
+    .step-divider { flex:1;height:2px;background:var(--sand-dk);margin:0 8px; }
+    .step-divider.done { background:var(--ocean-dk); }
+    .form-grid { display:flex;flex-direction:column;gap:22px; }
+    .form-group { display:flex;flex-direction:column;gap:8px; }
+    .form-group label { font-size:.82rem;font-weight:600;color:var(--ocean-dk);display:flex;align-items:center;gap:6px; }
+    .label-required { color:#e05050;font-size:.7rem;background:rgba(224,80,80,.08);padding:2px 7px;border-radius:10px;font-weight:600; }
+    .form-note { font-size:.73rem;color:var(--text-lt);margin-top:-4px; }
+    .input-wrap { position:relative; }
+    .input-icon { position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none; }
+    input[type="text"],input[type="tel"],select,textarea { width:100%;padding:14px 16px 14px 44px;border:2px solid var(--sand-dk);border-radius:12px;font-family:'Outfit',sans-serif;font-size:.9rem;color:var(--text);background:#fff;transition:var(--trans);outline:none;appearance:none; }
+    input:focus,select:focus,textarea:focus { border-color:var(--teal);box-shadow:0 0 0 4px rgba(13,148,136,.12); }
+    input.error,select.error { border-color:#e05050;box-shadow:0 0 0 4px rgba(224,80,80,.1); }
+    .error-msg { font-size:.75rem;color:#e05050;display:none; }
+    .error-msg.show { display:block; }
+    .gender-group { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+    .gender-option { position:relative; }
+    .gender-option input[type="radio"] { display:none; }
+    .gender-label { display:flex;align-items:center;gap:12px;padding:14px 18px;border:2px solid var(--sand-dk);border-radius:12px;cursor:pointer;background:#fff;transition:var(--trans);font-size:.88rem;font-weight:500;color:var(--text-md); }
+    .gender-label:hover { border-color:var(--teal-lt); }
+    .gender-option input[type="radio"]:checked+.gender-label { border-color:var(--teal);background:rgba(13,148,136,.06);color:var(--teal);box-shadow:0 0 0 4px rgba(13,148,136,.1); }
+    .gender-icon { width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-size:17px;background:var(--sand);transition:var(--trans);flex-shrink:0; }
+    .gender-option input[type="radio"]:checked+.gender-label .gender-icon { background:rgba(13,148,136,.15); }
+    .gender-check { margin-left:auto;width:20px;height:20px;border:2px solid var(--sand-dk);border-radius:50%;transition:var(--trans);flex-shrink:0; }
+    .gender-option input[type="radio"]:checked+.gender-label .gender-check { border-color:var(--teal);background:var(--teal);box-shadow:inset 0 0 0 4px #fff; }
+    .phone-wrap { display:flex;gap:10px; }
+    .phone-prefix { display:flex;align-items:center;gap:6px;padding:14px 16px;background:var(--ocean-dk);border-radius:12px;font-size:.88rem;font-weight:600;color:#fff;white-space:nowrap;flex-shrink:0; }
+    .phone-prefix span { font-size:.8rem;opacity:.7; }
+    .phone-input { flex:1;padding:14px 16px !important; }
+    .btn-submit { width:100%;padding:16px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--ocean-dk),var(--teal));color:#fff;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:var(--trans);display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 24px rgba(13,148,136,.35);letter-spacing:.3px;margin-top:8px; }
+    .btn-submit:hover { transform:translateY(-2px);box-shadow:0 10px 32px rgba(13,148,136,.45); }
+    .btn-submit:active { transform:translateY(0); }
+    .btn-submit .btn-arrow { transition:transform .25s ease; }
+    .btn-submit:hover .btn-arrow { transform:translateX(4px); }
+    .btn-back { padding:16px 20px;border:2px solid var(--sand-dk);border-radius:14px;background:#fff;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;color:var(--text-md);cursor:pointer;transition:var(--trans);white-space:nowrap; }
+    .btn-back:hover { border-color:var(--ocean-dk);color:var(--ocean-dk);transform:translateY(-1px); }
+    .login-hint { text-align:center;font-size:.8rem;color:var(--text-lt);margin-top:20px; }
+    .login-hint a { color:var(--teal);font-weight:600;text-decoration:none; }
+    .success-overlay { display:none;position:fixed;inset:0;background:rgba(7,45,64,.7);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center;padding:20px; }
+    .success-overlay.open { display:flex; }
+    .success-card { background:#fff;border-radius:24px;box-shadow:0 30px 80px rgba(7,45,64,.3);max-width:460px;width:100%;padding:48px 40px;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both; }
+    @keyframes popIn { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+    .success-icon { width:80px;height:80px;background:linear-gradient(135deg,rgba(13,148,136,.15),rgba(13,148,136,.05));border:2px solid rgba(13,148,136,.2);border-radius:50%;display:grid;place-items:center;font-size:36px;margin:0 auto 24px; }
+    .success-card h3 { font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--ocean-dk);margin-bottom:10px; }
+    .success-card p { font-size:.875rem;color:var(--text-lt);line-height:1.65;margin-bottom:20px; }
+    .success-badge { display:inline-flex;align-items:center;gap:8px;background:rgba(13,148,136,.08);border:1px solid rgba(13,148,136,.2);border-radius:30px;padding:8px 20px;font-size:.8rem;font-weight:600;color:var(--teal);margin-bottom:24px; }
+    .btn-success { display:block;width:100%;padding:14px;background:linear-gradient(135deg,var(--ocean-dk),var(--teal));color:#fff;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:var(--trans);text-decoration:none;box-shadow:0 6px 20px rgba(13,148,136,.3); }
+    .btn-success:hover { transform:translateY(-2px);box-shadow:0 10px 28px rgba(13,148,136,.4); }
+
+    /* ══ TIMER COUNTDOWN ══ */
+    .timer-wrap {
+      margin: 0 auto 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .timer-ring-wrap {
+      position: relative;
+      width: 90px;
+      height: 90px;
+    }
+    .timer-ring-bg {
+      fill: none;
+      stroke: var(--sand-dk);
+      stroke-width: 6;
+    }
+    .timer-ring-progress {
+      fill: none;
+      stroke: var(--teal);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 226; /* 2 * π * 36 ≈ 226 */
+      stroke-dashoffset: 0;
+      transform: rotate(-90deg);
+      transform-origin: center;
+      transition: stroke-dashoffset 1s linear, stroke .5s ease;
+    }
+    .timer-ring-progress.done { stroke: #22c55e; }
+    .timer-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--ocean-dk);
+    }
+    .timer-label {
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--text-lt);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .timer-status {
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--teal);
+      min-height: 22px;
+      transition: all .3s ease;
+    }
+    .timer-status.done { color: #16a34a; }
+
+    /* Progress bar bawah */
+    .timer-bar-wrap {
+      width: 100%;
+      height: 6px;
+      background: var(--sand-dk);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .timer-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--teal-lt));
+      border-radius: 10px;
+      transition: width 1s linear;
+    }
+
+    @media(max-width:900px){ .page-wrap{grid-template-columns:1fr} .left-panel{position:static;height:auto;min-height:0;padding:48px 32px} .right-panel{padding:40px 32px} }
+    @media(max-width:560px){ .right-panel{padding:32px 20px} .left-panel{padding:40px 20px} .gender-group{grid-template-columns:1fr} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .form-group { animation:fadeUp .4s ease both; }
+    .form-group:nth-child(1){animation-delay:.05s} .form-group:nth-child(2){animation-delay:.1s} .form-group:nth-child(3){animation-delay:.15s} .form-group:nth-child(4){animation-delay:.2s} .form-group:nth-child(5){animation-delay:.25s}
+    .step-content { animation:fadeUp .35s ease both; }
+    .usaha-grid { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
+    .usaha-option { position:relative;background:#fff;border:2px solid var(--sand-dk);border-radius:14px;padding:16px 14px;cursor:pointer;transition:var(--trans);overflow:hidden; }
+    .usaha-option:hover { border-color:var(--teal-lt);transform:translateY(-2px); }
+    .usaha-option.selected { border-color:var(--teal);background:rgba(13,148,136,.05);box-shadow:0 0 0 4px rgba(13,148,136,.1); }
+    .uo-icon { font-size:26px;margin-bottom:6px; } .uo-name { font-size:.88rem;font-weight:700;color:var(--ocean-dk);margin-bottom:2px; } .uo-desc { font-size:.73rem;color:var(--text-lt);line-height:1.4; }
+    .uo-check { position:absolute;top:10px;right:10px;width:22px;height:22px;background:var(--teal);border-radius:50%;display:grid;place-items:center;font-size:11px;color:#fff;font-weight:700;opacity:0;transform:scale(0);transition:all .2s cubic-bezier(.34,1.56,.64,1); }
+    .usaha-option.selected .uo-check { opacity:1;transform:scale(1); }
+    .summary-box { background:#fff;border:2px solid var(--sand-dk);border-radius:14px;overflow:hidden; }
+    .summary-row { display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-bottom:1px solid var(--sand);font-size:.875rem; }
+    .summary-row:last-child { border-bottom:none; }
+    .sr-label { color:var(--text-lt);font-size:.78rem;min-width:120px;padding-top:2px; } .sr-val { color:var(--ocean-dk);font-weight:600;flex:1; } .sr-icon { font-size:16px;flex-shrink:0; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="home.html" class="nav-logo">
+    <div style="background:none;padding:0;overflow:hidden;">
+      <img src="logo_web.jpeg" style="width:38px;height:38px;border-radius:10px;object-fit:cover;" onerror="this.style.display='none'"/>
+    </div>
+    <div><div class="logo-text">Enggano Pedia</div><div class="logo-sub">Pariwisata</div></div>
+  </a>
+  <div class="nav-links" style="margin-left:auto;">
+    <a href="home.html" class="nav-link">🏠 Beranda</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="left-panel">
+    <div class="bubbles-wrap" id="bubblesWrap"></div>
+    <div class="lp-badge">🤝 Program Mitra Enggano</div>
+    <h2 class="lp-heading">Bergabung &amp;<br/><span>Jangkau Lebih</span><br/>Banyak Pembeli</h2>
+    <p class="lp-desc">Daftarkan diri sebagai mitra resmi Enggano Pedia dan mulai pasarkan produk atau layanan Anda kepada ribuan wisatawan dan pelanggan dari seluruh Indonesia.</p>
+    <div class="manfaat-list">
+      <div class="manfaat-item"><div class="mi-icon">🌾</div><div class="mi-text"><div class="mi-title">Upload Produk Hasil Tani</div><div class="mi-sub">Pisang, jengkol, melinjo, dan hasil bumi lainnya bisa dipasarkan langsung</div></div></div>
+      <div class="manfaat-item"><div class="mi-icon">🏨</div><div class="mi-text"><div class="mi-title">Promosi Penginapan</div><div class="mi-sub">Daftarkan homestay, villa, atau penginapan Anda agar mudah ditemukan wisatawan</div></div></div>
+      <div class="manfaat-item"><div class="mi-icon">🚀</div><div class="mi-text"><div class="mi-title">Akses Dashboard Mitra</div><div class="mi-sub">Kelola produk, lacak pesanan, dan pantau perkembangan usaha Anda</div></div></div>
+      <div class="manfaat-item"><div class="mi-icon">💬</div><div class="mi-text"><div class="mi-title">Terhubung via WhatsApp</div><div class="mi-sub">Calon pembeli langsung menghubungi Anda — tanpa perantara, tanpa komisi</div></div></div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="form-header">
+      <h2>Daftar Mitra</h2>
+      <p>Isi data diri Anda dengan lengkap dan benar sesuai KTP untuk proses verifikasi.</p>
+    </div>
+    <div class="step-indicator">
+      <div class="step"><div class="step-num active" id="step1num">1</div><span class="step-label active" id="step1lbl">Data Diri</span></div>
+      <div class="step-divider" id="div1"></div>
+      <div class="step"><div class="step-num idle" id="step2num">2</div><span class="step-label" id="step2lbl">Jenis Usaha</span></div>
+      <div class="step-divider" id="div2"></div>
+      <div class="step"><div class="step-num idle" id="step3num">3</div><span class="step-label" id="step3lbl">Verifikasi</span></div>
+    </div>
+
+    <form id="mitraForm" novalidate>
+      <!-- STEP 1 -->
+      <div class="step-content" id="stepContent1">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="namaLengkap">Nama Lengkap <span class="label-required">Wajib</span></label>
+            <p class="form-note">Sesuai dengan KTP / Kartu Tanda Penduduk</p>
+            <div class="input-wrap"><span class="input-icon">🪪</span><input type="text" id="namaLengkap" placeholder="Contoh: Budi Santoso" autocomplete="name"/></div>
+            <span class="error-msg" id="errNama">Nama lengkap tidak boleh kosong (min. 3 karakter)</span>
+          </div>
+          <div class="form-group">
+            <label>Jenis Kelamin <span class="label-required">Wajib</span></label>
+            <div class="gender-group">
+              <div class="gender-option"><input type="radio" name="jenisKelamin" id="laki" value="Laki-laki"/><label class="gender-label" for="laki"><div class="gender-icon">👨</div><span>Laki-laki</span><div class="gender-check"></div></label></div>
+              <div class="gender-option"><input type="radio" name="jenisKelamin" id="perempuan" value="Perempuan"/><label class="gender-label" for="perempuan"><div class="gender-icon">👩</div><span>Perempuan</span><div class="gender-check"></div></label></div>
+            </div>
+            <span class="error-msg" id="errGender">Pilih jenis kelamin terlebih dahulu</span>
+          </div>
+          <div class="form-group">
+            <label for="noHp">Nomor HP / WhatsApp <span class="label-required">Wajib</span></label>
+            <p class="form-note">Nomor aktif yang bisa dihubungi via WhatsApp</p>
+            <div class="phone-wrap"><div class="phone-prefix">🇮🇩 <span>+62</span></div><input type="tel" id="noHp" class="phone-input" placeholder="812 3456 7890" inputmode="numeric" maxlength="14" autocomplete="tel" style="padding-left:16px !important;"/></div>
+            <span class="error-msg" id="errHp">Masukkan nomor HP yang valid (min. 9 digit)</span>
+          </div>
+          <div class="form-group">
+            <label for="asalDesa">Desa / Kecamatan <span class="label-required">Wajib</span></label>
+            <div class="input-wrap"><span class="input-icon">📍</span>
+              <select id="asalDesa"><option value="" disabled selected>Pilih desa/kecamatan Anda</option><option>Apoho</option><option>Banjarsari</option><option>Kahyapu</option><option>Kaana</option><option>Malakoni</option><option>Meok</option><option>Sambodela</option><option>Lainnya</option></select>
+            </div>
+            <span class="error-msg" id="errDesa">Pilih desa/kecamatan Anda</span>
+          </div>
+          <button type="button" class="btn-submit" onclick="nextStep(1)"><span>Lanjut ke Jenis Usaha</span><span class="btn-arrow">→</span></button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-content" id="stepContent2" style="display:none;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Kategori Usaha <span class="label-required">Wajib</span></label>
+            <p class="form-note">Pilih satu atau lebih kategori yang sesuai dengan usaha Anda</p>
+            <div class="usaha-grid" id="usahaGrid" style="grid-template-columns:1fr 1fr 1fr;">
+              <div class="usaha-option" data-val="hasil-tani" onclick="toggleUsaha(this)"><div class="uo-icon">🌾</div><div class="uo-name">Hasil Tani</div><div class="uo-desc">Pisang, jengkol, melinjo, dll</div><div class="uo-check">✓</div></div>
+              <div class="usaha-option" data-val="penginapan" onclick="toggleUsaha(this)"><div class="uo-icon">🏨</div><div class="uo-name">Penginapan</div><div class="uo-desc">Homestay, villa, resort</div><div class="uo-check">✓</div></div>
+              <div class="usaha-option" data-val="wisata" onclick="toggleUsaha(this)"><div class="uo-icon">🌴</div><div class="uo-name">Wisata</div><div class="uo-desc">Paket tour, pemandu wisata</div><div class="uo-check">✓</div></div>
+            </div>
+            <span class="error-msg" id="errUsaha">Pilih minimal satu kategori usaha</span>
+          </div>
+          <div class="form-group">
+            <label for="namaUsaha">Nama Usaha / Toko <span class="label-required">Wajib</span></label>
+            <div class="input-wrap"><span class="input-icon">🏪</span><input type="text" id="namaUsaha" placeholder="Contoh: Tani Segar Enggano"/></div>
+            <span class="error-msg" id="errNamaUsaha">Nama usaha tidak boleh kosong</span>
+          </div>
+          <div class="form-group">
+            <label for="deskUsaha">Deskripsi Singkat <span class="label-required" style="background:rgba(100,120,130,.1);color:var(--text-lt);">Opsional</span></label>
+            <div class="input-wrap"><span class="input-icon" style="top:18px;transform:none;">📝</span><textarea id="deskUsaha" rows="3" placeholder="Ceritakan sedikit tentang produk/usaha Anda..." style="padding-top:14px;resize:vertical;"></textarea></div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <button type="button" class="btn-back" onclick="prevStep(2)">← Kembali</button>
+            <button type="button" class="btn-submit" style="flex:1;" onclick="nextStep(2)"><span>Lanjut ke Verifikasi</span><span class="btn-arrow">→</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-content" id="stepContent3" style="display:none;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Ringkasan Pendaftaran</label>
+            <p class="form-note">Periksa kembali data Anda sebelum mengirim</p>
+            <div class="summary-box" id="summaryBox"></div>
+          </div>
+          <div class="form-group">
+            <label style="flex-direction:row;align-items:flex-start;gap:10px;cursor:pointer;font-weight:400;color:var(--text-md);font-size:.82rem;line-height:1.55;">
+              <input type="checkbox" id="agree" style="margin-top:3px;accent-color:var(--teal);width:16px;height:16px;flex-shrink:0;cursor:pointer;"/>
+              Saya menyatakan bahwa data yang diisi adalah benar sesuai identitas saya, dan setuju dengan <a href="#" style="color:var(--teal);font-weight:600;">syarat &amp; ketentuan</a> program mitra Enggano Pedia.
+            </label>
+            <span class="error-msg" id="errAgree">Anda harus menyetujui syarat & ketentuan</span>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <button type="button" class="btn-back" onclick="prevStep(3)">← Kembali</button>
+            <button type="submit" class="btn-submit" style="flex:1;"><span>Kirim Pendaftaran</span><span class="btn-arrow">→</span></button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <p class="login-hint"><a href="login-mitra.html">---------</a></p>
+  </div>
+</div>
+
+<footer style="background:var(--ocean-dk);color:rgba(255,255,255,.45);text-align:center;padding:20px;font-size:.8rem;">
+  © 2025 <span style="color:var(--teal-lt);font-weight:600;">Enggano Pedia</span> · Pulau Enggano, Bengkulu Utara
+</footer>
+
+<!-- ═══════════════ SUCCESS MODAL dengan TIMER ═══════════════ -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon">🎉</div>
+    <h3>Pendaftaran Berhasil!</h3>
+    <p>Data Anda telah kami terima. Verifikasi akun mitra Anda sedang diproses — tunggu sebentar hingga akses etalase aktif.</p>
+
+    <!-- ══ COUNTDOWN RING ══ -->
+    <div class="timer-wrap">
+      <div class="timer-ring-wrap">
+        <svg width="90" height="90" viewBox="0 0 90 90">
+          <circle class="timer-ring-bg" cx="45" cy="45" r="36"/>
+          <circle class="timer-ring-progress" id="timerRing" cx="45" cy="45" r="36"/>
+        </svg>
+        <div class="timer-num" id="timerNum">60</div>
+      </div>
+      <div class="timer-label">detik tersisa</div>
+      <div class="timer-status" id="timerStatus">⏳ Memproses verifikasi...</div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="timer-bar-wrap">
+      <div class="timer-bar-fill" id="timerBar"></div>
+    </div>
+
+    <div class="success-badge" id="successBadge">⏳ Status: Menunggu Verifikasi</div>
+    <a href="home.html" class="btn-success" id="btnKembali">🏠 Kembali ke Beranda</a>
+  </div>
+</div>
+
+<script>
+  var currentStep = 1;
+  var selectedUsaha = [];
+  var countdownInterval = null;
+  var DURASI_DETIK = 60; // ← Ganti angka ini jika ingin durasi berbeda
+
+  document.getElementById('noHp').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '');
+  });
+
+  function updateStepUI(step) {
+    for (var i = 1; i <= 3; i++) {
+      var num = document.getElementById('step' + i + 'num');
+      var lbl = document.getElementById('step' + i + 'lbl');
+      var div = document.getElementById('div' + i);
+      if (i < step) {
+        num.className = 'step-num done'; num.innerHTML = '✓';
+        lbl.className = 'step-label';
+        if (div) div.className = 'step-divider done';
+      } else if (i === step) {
+        num.className = 'step-num active'; num.innerHTML = i;
+        lbl.className = 'step-label active';
+      } else {
+        num.className = 'step-num idle'; num.innerHTML = i;
+        lbl.className = 'step-label';
+      }
+    }
+  }
+
+  function showStep(step) {
+    document.querySelectorAll('.step-content').forEach(function(el){ el.style.display = 'none'; });
+    var el = document.getElementById('stepContent' + step);
+    el.style.display = 'block'; el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = 'fadeUp .35s ease both';
+    updateStepUI(step); currentStep = step;
+    var rp = document.querySelector('.right-panel');
+    if (rp) rp.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleUsaha(el) {
+    var val = el.dataset.val;
+    el.classList.toggle('selected');
+    if (el.classList.contains('selected')) { if (!selectedUsaha.includes(val)) selectedUsaha.push(val); }
+    else { selectedUsaha = selectedUsaha.filter(function(v){ return v !== val; }); }
+  }
+
+  function clearErrors() {
+    document.querySelectorAll('.error-msg').forEach(function(el){ el.classList.remove('show'); });
+    document.querySelectorAll('.error').forEach(function(el){ el.classList.remove('error'); });
+  }
+
+  function nextStep(from) {
+    clearErrors(); var valid = true;
+    if (from === 1) {
+      var nama = document.getElementById('namaLengkap'), hp = document.getElementById('noHp'), desa = document.getElementById('asalDesa');
+      var gender = document.querySelector('input[name="jenisKelamin"]:checked');
+      if (!nama.value.trim() || nama.value.trim().length < 3) { document.getElementById('errNama').classList.add('show'); nama.classList.add('error'); valid = false; }
+      if (!gender) { document.getElementById('errGender').classList.add('show'); valid = false; }
+      if (!hp.value.replace(/\s/g,'') || hp.value.replace(/\s/g,'').length < 9) { document.getElementById('errHp').classList.add('show'); hp.classList.add('error'); valid = false; }
+      if (!desa.value) { document.getElementById('errDesa').classList.add('show'); desa.classList.add('error'); valid = false; }
+    }
+    if (from === 2) {
+      var namaUsaha = document.getElementById('namaUsaha');
+      if (selectedUsaha.length === 0) { document.getElementById('errUsaha').classList.add('show'); valid = false; }
+      if (!namaUsaha.value.trim()) { document.getElementById('errNamaUsaha').classList.add('show'); namaUsaha.classList.add('error'); valid = false; }
+      if (valid) buildSummary();
+    }
+    if (valid) showStep(from + 1);
+  }
+
+  function prevStep(from) { clearErrors(); showStep(from - 1); }
+
+  var usahaLabels = { 'hasil-tani':'🌾 Hasil Tani', 'penginapan':'🏨 Penginapan', 'wisata':'🌴 Wisata' };
+
+  function buildSummary() {
+    var gender = document.querySelector('input[name="jenisKelamin"]:checked');
+    var rows = [
+      { icon:'🪪', label:'Nama Lengkap',   val: document.getElementById('namaLengkap').value },
+      { icon:'👤', label:'Jenis Kelamin',  val: gender ? gender.value : '-' },
+      { icon:'📱', label:'No. HP / WA',    val: '+62 ' + document.getElementById('noHp').value },
+      { icon:'📍', label:'Desa/Kecamatan', val: document.getElementById('asalDesa').value },
+      { icon:'🏪', label:'Nama Usaha',     val: document.getElementById('namaUsaha').value },
+      { icon:'📦', label:'Kategori Usaha', val: selectedUsaha.map(function(v){ return usahaLabels[v]||v; }).join(', ') }
+    ];
+    document.getElementById('summaryBox').innerHTML = rows.map(function(r){
+      return '<div class="summary-row"><span class="sr-icon">'+r.icon+'</span><span class="sr-label">'+r.label+'</span><span class="sr-val">'+r.val+'</span></div>';
+    }).join('');
+  }
+
+  /* ════════════════════════════════════════════════════════
+     COUNTDOWN TIMER — jalankan setelah modal terbuka
+  ════════════════════════════════════════════════════════ */
+  function startCountdown(totalDetik) {
+    var ring      = document.getElementById('timerRing');
+    var numEl     = document.getElementById('timerNum');
+    var statusEl  = document.getElementById('timerStatus');
+    var barEl     = document.getElementById('timerBar');
+    var badgeEl   = document.getElementById('successBadge');
+    var circumference = 226; // 2 * π * 36
+    var sisaDetik = totalDetik;
+
+    // Set kondisi awal
+    barEl.style.width = '100%';
+    ring.style.strokeDashoffset = '0';
+    numEl.textContent = sisaDetik;
+
+    countdownInterval = setInterval(function() {
+      sisaDetik--;
+
+      // Update angka
+      numEl.textContent = sisaDetik > 0 ? sisaDetik : '✓';
+
+      // Update ring progress (mengecil seiring waktu)
+      var pct    = sisaDetik / totalDetik;
+      var offset = circumference * (1 - pct);
+      ring.style.strokeDashoffset = offset;
+
+      // Update progress bar
+      barEl.style.width = (pct * 100) + '%';
+
+      // Pesan status tengah jalan
+      if (sisaDetik === 45) statusEl.textContent = '🔄 Memverifikasi data...';
+      if (sisaDetik === 30) statusEl.textContent = '📋 Memeriksa kelengkapan...';
+      if (sisaDetik === 15) statusEl.textContent = '✍️ Menyiapkan akses etalase...';
+      if (sisaDetik === 5)  statusEl.textContent = '🚀 Hampir selesai!';
+
+      if (sisaDetik <= 0) {
+        // ── Timer selesai: upgrade status ke AKTIF ──
+        clearInterval(countdownInterval);
+        try {
+          localStorage.setItem('enggano_mitra_status', 'aktif');
+        } catch(e) {}
+
+        ring.classList.add('done');
+        numEl.textContent = '✓';
+        statusEl.textContent = '✅ Verifikasi selesai! Akun mitra Anda aktif.';
+        statusEl.classList.add('done');
+        badgeEl.innerHTML   = '🏪 Status: Mitra Aktif — Etalase Siap Digunakan';
+        badgeEl.style.background   = 'rgba(34,197,94,.1)';
+        badgeEl.style.borderColor  = 'rgba(34,197,94,.3)';
+        badgeEl.style.color        = '#16a34a';
+        barEl.style.width          = '100%';
+        barEl.style.background     = 'linear-gradient(90deg,#22c55e,#4ade80)';
+      }
+    }, 1000);
+  }
+
+  /* ════ SUBMIT FORM ════ */
+  document.getElementById('mitraForm').addEventListener('submit', function(e) {
+    e.preventDefault(); clearErrors();
+    if (!document.getElementById('agree').checked) {
+      document.getElementById('errAgree').classList.add('show'); return;
+    }
+
+    var aktivasiAt = Date.now() + (DURASI_DETIK * 1000); // timestamp kapan status jadi aktif
+
+    try {
+      var gender = document.querySelector('input[name="jenisKelamin"]:checked');
+      localStorage.setItem('enggano_mitra_status',      'pending');
+      localStorage.setItem('enggano_mitra_aktivasi_at', aktivasiAt.toString()); // ← simpan waktu aktivasi
+      localStorage.setItem('enggano_mitra_data', JSON.stringify({
+        nama:      document.getElementById('namaLengkap').value,
+        gender:    gender ? gender.value : '',
+        hp:        '+62' + document.getElementById('noHp').value,
+        desa:      document.getElementById('asalDesa').value,
+        namaUsaha: document.getElementById('namaUsaha').value,
+        kategori:  selectedUsaha,
+        deskripsi: document.getElementById('deskUsaha').value,
+        terdaftar: new Date().toISOString()
+      }));
+    } catch(err) {}
+
+    updateStepUI(4);
+    setTimeout(function(){
+      document.getElementById('successOverlay').classList.add('open');
+      // Mulai countdown setelah modal muncul
+      setTimeout(function(){ startCountdown(DURASI_DETIK); }, 300);
+    }, 300);
+  });
+
+  document.getElementById('successOverlay').addEventListener('click', function(e){
+    if(e.target===this) {
+      // Biarkan modal tetap terbuka (jangan ditutup) selama timer berjalan
+      // Tapi kalau sudah selesai, boleh ditutup
+      try {
+        if (localStorage.getItem('enggano_mitra_status') === 'aktif') {
+          this.classList.remove('open');
+        }
+      } catch(e) {}
+    }
+  });
+
+  // ════ BUBBLES ════
+  (function() {
+    var wrap = document.getElementById('bubblesWrap');
+    if (!wrap) return;
+    for (var i = 0; i < 18; i++) {
+      (function(i) {
+        var b = document.createElement('div');
+        b.className = 'bubble';
+        var size  = 6 + Math.random() * 22;
+        var left  = 5 + Math.random() * 90;
+        var dur   = 7 + Math.random() * 12;
+        var delay = Math.random() * 15;
+        var drift = (Math.random() - 0.5) * 80;
+        b.style.cssText = ['width:'+size+'px','height:'+size+'px','left:'+left+'%',
+          'animation-duration:'+dur+'s','animation-delay:-'+delay+'s','--drift:'+drift+'px'].join(';');
+        wrap.appendChild(b);
+      })(i);
+    }
+  })();
+
+  showStep(1);
+</script>
+</body>
+</html>
